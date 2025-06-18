@@ -11,8 +11,8 @@ export default {
     extend: {
       fontFamily: {
         body: ['Inter', 'sans-serif'],
-        headline: ['Inter', 'sans-serif'],
-        code: ['monospace'],
+        headline: ['Space Grotesk', 'sans-serif'],
+        code: ['Source Code Pro', 'monospace'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -88,10 +88,28 @@ export default {
             height: '0',
           },
         },
+        'text-gradient-animation': { /* Added for animated-text-gradient */
+          'to': {
+            'background-position': '200% center',
+          },
+        },
+        'gradientBG': { /* Added for animated-liquid-gradient */
+          '0%': { 'background-position': '0% 50%' },
+          '50%': { 'background-position': '100% 50%' },
+          '100%': { 'background-position': '0% 50%' },
+        },
+        'animated-gradient-border-flow': { /* Added for focus-gradient-outline */
+          '0%': { 'background-position': '0% 50%' },
+          '50%': { 'background-position': '100% 50%' },
+          '100%': { 'background-position': '0% 50%' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'text-gradient': 'text-gradient-animation 4s linear infinite', /* Added for animated-text-gradient */
+        'liquid-gradient': 'gradientBG 20s ease infinite', /* Added for animated-liquid-gradient */
+        'gradient-border-flow': 'animated-gradient-border-flow 3s infinite linear', /* Added for focus-gradient-outline */
       },
     },
   },
