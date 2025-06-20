@@ -25,12 +25,11 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Search,
-  KeyRound, // Kept for potential future use if different from ShieldCheck
-  Briefcase, // For My Learning
+  KeyRound, 
+  Briefcase, 
   MessageSquare,
   StickyNote,
-  // BookCopy, // Replaced by FileCode or ScrollText
-  ClipboardList, // Can be used for tasks/assessments if needed
+  ClipboardList, 
   HelpCircle,
   Lightbulb, 
   Video,
@@ -38,9 +37,9 @@ import {
   Moon,
   Sun,
   Users, 
-  FileCode, // For Academic Research
-  ShieldCheck, // For API Management
-  ScrollText, // For App Documentations
+  FileCode, 
+  ShieldCheck, 
+  ScrollText, 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -72,14 +71,13 @@ const navItems = [
   { href: "/support", label: "Help & Support", icon: HelpCircle },
 ];
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default function AppLayout({ children: layoutChildren }: { children: React.ReactNode }) { // Renamed children to layoutChildren
   const pathname = usePathname();
   const { open, toggleSidebar, isMobile, state } = useSidebar();
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
-  const [isSidebarFixedOpen, setIsSidebarFixedOpen] = React.useState(false); // For pinning sidebar
-  const [currentTheme, setCurrentTheme] = React.useState("light"); // Default theme
+  const [isSidebarFixedOpen, setIsSidebarFixedOpen] = React.useState(false); 
+  const [currentTheme, setCurrentTheme] = React.useState("light"); 
 
-  // Determine effective sidebar open state for responsive label hiding
   const effectiveSidebarOpen = isMobile ? open : (isSidebarFixedOpen || state === 'expanded');
 
   const toggleTheme = () => {
@@ -111,7 +109,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Sidebar
         side="left"
         variant="sidebar"
-        collapsible="icon" // Default to icon-only view, hover expands
+        collapsible="icon" 
         className="border-r"
       >
         <SidebarHeader className="p-4 flex items-center justify-between">
@@ -124,7 +122,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               LMDpro
             </h1>
           </Link>
-          {/* Pin/Unpin button for desktop */}
           {!isMobile && (
              <Button
               variant="ghost"
@@ -141,7 +138,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <SidebarMenu>
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href}>
-                <Link href={item.href} passHref asChild>
+                <Link href={item.href} asChild>
                   <SidebarMenuButton
                     isActive={pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))}
                     tooltip={item.label}
@@ -162,18 +159,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col flex-1">
             <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-card/80 backdrop-blur-sm px-4 md:px-6">
             <div className="flex items-center gap-2">
-                {/* Mobile Menu Toggle */}
                 <Button variant="ghost" size="icon" onClick={toggleSidebar} className="md:hidden">
                 {open ? <PanelLeftClose /> : <PanelLeftOpen />}
                 <span className="sr-only">Toggle Menu</span>
                 </Button>
 
-                {/* Desktop Sidebar Toggle (when not pinned) */}
                 <div className="hidden md:block">
                     <SidebarTrigger onClick={() => setIsSidebarFixedOpen(false)} />
                 </div>
 
-                {/* Search Bar */}
                 <div className="relative flex items-center">
                 <Button
                     variant="ghost"
@@ -191,10 +185,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     className={cn(
                     "transition-all duration-300 ease-in-out",
                     isSearchExpanded ? "w-60 sm:w-72 opacity-100 px-3 py-2 h-10" : "w-0 opacity-0 p-0 border-none",
-                    !isSearchExpanded && !isMobile && "sm:opacity-100 sm:w-52 sm:px-3 sm:py-2 sm:h-10 sm:border" // Default visible on larger screens
+                    !isSearchExpanded && !isMobile && "sm:opacity-100 sm:w-52 sm:px-3 sm:py-2 sm:h-10 sm:border" 
                     )}
-                    onFocus={() => !isMobile && setIsSearchExpanded(true)} // Expand on focus for desktop
-                    onBlur={() => setIsSearchExpanded(false)} // Collapse on blur
+                    onFocus={() => !isMobile && setIsSearchExpanded(true)} 
+                    onBlur={() => setIsSearchExpanded(false)} 
                 />
                 </div>
             </div>
@@ -220,26 +214,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <Link href="/account?tab=profile" passHref>
+                    <Link href="/account?tab=profile" asChild>
                         <DropdownMenuItem><UserCircle className="mr-2"/>Profile</DropdownMenuItem>
                     </Link>
-                    <Link href="/account" passHref>
+                    <Link href="/account" asChild>
                          <DropdownMenuItem><Settings className="mr-2"/>Account Settings</DropdownMenuItem>
                     </Link>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Logout</DropdownMenuItem> {/* Add logout functionality later */}
+                    <DropdownMenuItem>Logout</DropdownMenuItem> 
                 </DropdownMenuContent>
                 </DropdownMenu>
             </div>
             </header>
             <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-            {children}
+            {layoutChildren}
             </main>
         </div>
 
-        {/* Right-hand Utility Column */}
         <aside className="hidden lg:flex flex-col w-72 border-l bg-card p-4 space-y-4 sticky top-0 h-screen overflow-y-auto">
-            {/* AI Assistant Panel */}
             <Card className="flex-shrink-0">
                 <CardHeader>
                     <CardTitle className="text-lg font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
@@ -252,7 +244,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </CardContent>
             </Card>
 
-            {/* Notepad Panel */}
             <Card className="flex-grow flex flex-col min-h-0">
                 <CardHeader>
                     <CardTitle className="text-lg font-headline flex items-center gap-2"><StickyNote className="h-5 w-5 text-primary" /> Notepad</CardTitle>
@@ -269,7 +260,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </CardFooter>
             </Card>
             
-            {/* Support Chat Panel */}
             <Card className="flex-shrink-0 mt-auto">
                 <CardHeader>
                     <CardTitle className="text-base font-headline flex items-center gap-2"><LifeBuoy className="h-5 w-5 text-primary"/> Support</CardTitle>
