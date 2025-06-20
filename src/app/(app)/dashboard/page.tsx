@@ -4,13 +4,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, RefreshCw, Activity, TrendingUp, Zap, Lightbulb, UserCircle, ImageIcon } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, RefreshCw, Activity, TrendingUp, Zap, Lightbulb, UserCircle, ImageIcon, ShieldCheck, DollarSign, Settings, Users as UsersIcon, Building, LifeBuoy, Handshake, HelpCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
 const ongoingCourses = [
-  { id: "1", title: "Advanced AI for Business Strategy", progress: 65, imageHint: "AI business", type: "Learning Path" },
-  { id: "2", title: "Strategic Communication & Negotiation", progress: 30, imageHint: "communication strategy", type: "Course"},
-  { id: "3", title: "Python for Data Science & ML", progress: 80, imageHint: "python code", type: "Course" },
+  { id: "1", title: "Advanced AI for Business Strategy", progress: 65, icon: Brain, type: "Learning Path" },
+  { id: "2", title: "Strategic Communication & Negotiation", progress: 30, icon: Handshake, type: "Course"},
+  { id: "3", title: "Python for Data Science & ML", progress: 80, icon: BookOpen, type: "Course" },
 ];
 
 const completedCourses = [
@@ -127,15 +127,19 @@ export default function DashboardPage() {
         </div>
         {ongoingCourses.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {ongoingCourses.map((course) => (
+          {ongoingCourses.map((course) => {
+             const Icon = course.icon || BookOpen;
+             return (
             <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="w-full h-40 bg-muted flex items-center justify-center rounded-t-lg">
-                <ImageIcon className="h-16 w-16 text-primary/30" data-ai-hint={course.imageHint} />
-              </div>
               <CardHeader>
-                <CardTitle className="font-headline text-lg">{course.title}</CardTitle>
-                <CardDescription>{course.type}</CardDescription>
-                <div className="flex items-center text-sm text-muted-foreground mt-1">
+                 <div className="flex justify-between items-start">
+                    <div>
+                        <CardTitle className="font-headline text-lg">{course.title}</CardTitle>
+                        <CardDescription>{course.type}</CardDescription>
+                    </div>
+                    <Icon className="h-8 w-8 text-primary/70"/>
+                 </div>
+                <div className="flex items-center text-sm text-muted-foreground mt-3">
                   <Clock className="mr-1.5 h-4 w-4" /> {course.progress}% complete
                 </div>
               </CardHeader>
@@ -148,7 +152,8 @@ export default function DashboardPage() {
                 </Link>
               </CardContent>
             </Card>
-          ))}
+             );
+            })}
         </div>
          ) : (
           <Card className="text-center py-10">
@@ -214,4 +219,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

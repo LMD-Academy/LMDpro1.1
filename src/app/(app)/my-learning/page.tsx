@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { BookOpen, CheckCircle, Clock, ArrowRight, TrendingUp, Star, ImageIcon, BookMarked } from "lucide-react"; 
 import { Progress } from "@/components/ui/progress";
-import Image from "next/image"; // Import next/image
 
 const inProgressCourses = [
   { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", progress: 45, type: "Learning Path", imageHint: "AI robot interface", lastAccessed: "2 days ago" },
@@ -46,9 +45,6 @@ export default function MyLearningPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {inProgressCourses.map((course) => (
               <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden rounded-lg">
-                <div className="w-full h-48 relative bg-muted">
-                  <Image src={`https://placehold.co/600x400.png`} alt={course.title} layout="fill" objectFit="cover" data-ai-hint={course.imageHint} />
-                </div>
                 <CardHeader>
                   <CardTitle className="font-headline text-lg">{course.title}</CardTitle>
                   <CardDescription>{course.type}</CardDescription>
@@ -96,12 +92,6 @@ export default function MyLearningPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {completedCourses.map((course) => (
               <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden rounded-lg">
-                <div className="w-full h-48 relative bg-muted">
-                   <Image src={`https://placehold.co/600x400.png`} alt={course.title} layout="fill" objectFit="cover" data-ai-hint={course.imageHint} />
-                   <div className="absolute inset-0 bg-green-500/30 flex items-center justify-center">
-                       <CheckCircle className="h-16 w-16 text-white/90" />
-                   </div>
-                </div>
                 <CardHeader>
                   <CardTitle className="font-headline text-lg flex items-center gap-2">
                     <CheckCircle className="text-green-500 h-5 w-5 shrink-0"/> {course.title}
@@ -139,12 +129,6 @@ export default function MyLearningPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {bookmarkedCourses.map((course) => (
               <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden rounded-lg">
-                <div className="w-full h-48 relative bg-muted">
-                   <Image src={`https://placehold.co/600x400.png`} alt={course.title} layout="fill" objectFit="cover" data-ai-hint={course.imageHint} />
-                    <div className="absolute top-2 right-2 bg-background/80 p-1.5 rounded-full">
-                        <BookMarked className="h-5 w-5 text-primary" />
-                    </div>
-                </div>
                 <CardHeader>
                   <CardTitle className="font-headline text-lg">{course.title}</CardTitle>
                   <CardDescription>{course.category}</CardDescription>
@@ -183,4 +167,8 @@ export default function MyLearningPage() {
                     <p className="text-sm p-4 text-center">Detailed Learning Statistics Chart Area (e.g., skills radar chart, activity heatmap, weekly learning time). Coming Soon!</p>
                 </div>
             </CardContent>
-         
+         </Card>
+      </section>
+    </div>
+  );
+}

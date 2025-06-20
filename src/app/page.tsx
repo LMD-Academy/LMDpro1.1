@@ -8,10 +8,8 @@ import { ArrowRight, Zap, Star, Lightbulb, Film, FileText as FileTextIcon, Gradu
 import Link from "next/link";
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-
 
 const featureCards = [
   {
@@ -21,8 +19,6 @@ const featureCards = [
     bgColor: "bg-blue-500/10 dark:bg-blue-900/30",
     textColor: "text-blue-600 dark:text-blue-400",
     href: "/learning-paths",
-    imagePlaceholder: "https://placehold.co/600x400.png",
-    imageHint: "AI learning path"
   },
   {
     title: "Automated Video Creation",
@@ -31,8 +27,6 @@ const featureCards = [
     bgColor: "bg-green-500/10 dark:bg-green-900/30",
     textColor: "text-green-600 dark:text-green-400",
     href: "/video-creation",
-    imagePlaceholder: "https://placehold.co/600x400.png",
-    imageHint: "video creation software"
   },
   {
     title: "Intelligent Resume Builder",
@@ -41,8 +35,6 @@ const featureCards = [
     bgColor: "bg-purple-500/10 dark:bg-purple-900/30",
     textColor: "text-purple-600 dark:text-purple-400",
     href: "/resume-builder",
-    imagePlaceholder: "https://placehold.co/600x400.png",
-    imageHint: "resume builder app"
   },
   {
     title: "AI Academic Research Agent",
@@ -51,8 +43,6 @@ const featureCards = [
     bgColor: "bg-orange-500/10 dark:bg-orange-900/30",
     textColor: "text-orange-600 dark:text-orange-400",
     href: "/academic-research",
-    imagePlaceholder: "https://placehold.co/600x400.png",
-    imageHint: "AI research tool"
   },
 ];
 
@@ -61,7 +51,6 @@ const pricingTiersHomepage = [
   { name: "Premium", price: "$5.80/mo", model: "Latest Flash AI Models", features: ["Unlimited Learning Paths & AI Generation", "Advanced Video Creation (No Watermark)", "All Resume Templates & AI Optimization", "Full Course Catalog Access"], cta: "Go Premium", href:"/register?tier=premium", popular: true },
   { name: "Teams", price: "$196/mo", model: "Latest Pro AI Models", features: ["All Premium Features", "Team Management & Analytics", "Shared Resources & Brand Kits", "Consolidated Billing"], cta: "Choose Teams", href:"/register?tier=teams" },
 ];
-
 
 const courseHighlights = [
   { id: "GM_L5_CAP", title: "Executive Leadership Capstone L5", icon: Building, type: "Learning Path", description: "Lead global organizations and master C-suite strategy, large-scale transformation, and executive-level governance.", imageHint: "executive leadership team", category: "Leadership" },
@@ -89,8 +78,7 @@ export default function HomePage() {
 
   useEffect(() => {
     // In a real app, fetch user name from auth context
-    // For now, can use a simple local storage check or keep placeholder
-    const storedUser = localStorage.getItem("lmdpro-user"); // Example
+    const storedUser = localStorage.getItem("lmdpro-user");
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
@@ -117,11 +105,6 @@ export default function HomePage() {
                 Start Your Learning Path <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-             <div className="mt-16">
-              <div className="w-full max-w-4xl h-[300px] md:h-[400px] bg-muted rounded-lg shadow-2xl mx-auto border flex items-center justify-center overflow-hidden">
-                <Image src="https://placehold.co/800x450.png" alt="LMDpro Platform Showcase" width={800} height={450} className="object-cover w-full h-full" data-ai-hint="platform learning dashboard"/>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -135,14 +118,13 @@ export default function HomePage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {featureCards.map((feature, index) => (
                 <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col overflow-hidden rounded-xl border border-border hover:border-primary/30">
-                   <div className="w-full h-48 relative">
-                    <Image src={feature.imagePlaceholder} alt={feature.title} layout="fill" objectFit="cover" data-ai-hint={feature.imageHint} className="rounded-t-xl" />
-                    <div className={cn("absolute top-4 left-4 p-2.5 rounded-full shadow-md", feature.bgColor)}>
-                      <feature.icon className={cn("h-7 w-7", feature.textColor)} />
-                    </div>
-                  </div>
                   <CardHeader className="pt-5">
-                    <CardTitle className="font-headline text-xl">{feature.title}</CardTitle>
+                    <div className="flex items-center gap-4">
+                        <div className={cn("p-3 rounded-full w-fit mb-3", feature.bgColor)}>
+                           <feature.icon className={cn("h-7 w-7", feature.textColor)} />
+                        </div>
+                        <CardTitle className="font-headline text-xl">{feature.title}</CardTitle>
+                    </div>
                   </CardHeader>
                   <CardContent className="flex-1">
                     <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
@@ -169,18 +151,16 @@ export default function HomePage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {courseHighlights.map((course, index) => (
                 <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col rounded-xl border border-border hover:border-primary/30">
-                  <div className="w-full h-48 relative bg-muted flex items-center justify-center">
-                     <Image src={`https://placehold.co/600x400.png`} alt={course.title} layout="fill" objectFit="cover" data-ai-hint={course.imageHint} className="rounded-t-xl"/>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent flex flex-col justify-end p-4">
-                        <course.icon className="h-10 w-10 text-white/90 mb-2" />
-                        <CardTitle className="font-headline text-xl text-white shadow-sm">{course.title}</CardTitle>
+                  <CardHeader className="pt-4 pb-2 flex-row justify-between items-start">
+                    <div>
+                        <CardTitle className="font-headline text-xl text-foreground">{course.title}</CardTitle>
+                        <CardDescription className="text-sm">{course.type}</CardDescription>
                     </div>
-                  </div>
-                  <CardHeader className="pt-4 pb-2">
-                    <CardDescription className="text-sm h-12 overflow-hidden line-clamp-2">{course.description} <span className="text-primary font-medium">({course.type})</span></CardDescription>
+                     <course.icon className="h-10 w-10 text-primary/70 shrink-0" />
                   </CardHeader>
                   <CardContent className="flex-grow">
-                     <p className="text-xs text-muted-foreground">Category: {course.category}</p>
+                     <p className="text-xs text-muted-foreground mb-3">Category: {course.category}</p>
+                     <p className="text-sm h-16 overflow-hidden line-clamp-3 text-muted-foreground">{course.description}</p>
                   </CardContent>
                   <CardFooter className="mt-auto">
                     <Link href={`/courses/${course.id}`} passHref className="w-full">

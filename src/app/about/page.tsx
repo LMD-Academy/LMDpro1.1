@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Users, Lightbulb, Zap, ShieldCheck, HeartHandshake, Briefcase, Building } from "lucide-react"; 
-import Image from "next/image";
 
 export default function AboutUsPage() {
   return (
@@ -22,21 +21,18 @@ export default function AboutUsPage() {
           </section>
 
           <section>
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="flex flex-col gap-12 items-center text-center">
               <div>
                 <h2 className="text-3xl font-headline font-semibold mb-6">Our Vision: Empowering Lifelong Learners</h2>
-                <p className="text-muted-foreground mb-4">
+                <p className="text-muted-foreground mb-4 max-w-4xl mx-auto">
                   We believe in shifting the paradigm from passive content consumption to active, AI-facilitated skill development. LMDpro is engineered to be your proactive educational partner, providing unrestricted internet research capabilities, advanced cognitive processing for natural interaction, and dynamic learning path construction tailored to your unique goals.
                 </p>
-                <p className="text-muted-foreground mb-6">
+                <p className="text-muted-foreground mb-6 max-w-4xl mx-auto">
                   Our platform leverages the full potential of the Firebase ecosystem and cutting-edge AI models to deliver a seamless, scalable, and secure SaaS experience. We aim to create a direct correlation between your educational investment and tangible career growth.
                 </p>
                 <Link href="/register" passHref>
                   <Button className="button-animated-gradient">Join Our Community</Button>
                 </Link>
-              </div>
-              <div className="relative w-full h-64 md:h-96 bg-muted rounded-lg shadow-xl border overflow-hidden">
-                 <Image src="https://placehold.co/800x600.png" alt="Empowering Learners" layout="fill" objectFit="cover" data-ai-hint="diverse students learning" />
               </div>
             </div>
           </section>
@@ -71,7 +67,8 @@ export default function AboutUsPage() {
                 LMDpro is driven by a passionate team of educators, AI researchers, engineers, and designers dedicated to building the future of learning. (Team profiles coming soon!).
              </p>
              <div className="relative w-full max-w-3xl h-64 bg-muted rounded-md mx-auto border flex items-center justify-center overflow-hidden">
-                <Image src="https://placehold.co/800x400.png" alt="LMDpro Team Placeholder" layout="fill" objectFit="cover" data-ai-hint="diverse team working" />
+                <Users className="h-24 w-24 text-primary/30" />
+                <p className="absolute text-muted-foreground">Team Showcase Area</p>
              </div>
           </section>
 
@@ -81,4 +78,12 @@ export default function AboutUsPage() {
               Join LMDpro today and experience the power of AI-driven personalized learning.
             </p>
             <Link href="/pricing" passHref>
-              <Button size="lg" className="button-animated-gradient">View Our Plans</Button
+              <Button size="lg" className="button-animated-gradient">View Our Plans</Button>
+            </Link>
+          </section>
+        </div>
+      </main>
+      <PublicFooter />
+    </>
+  );
+}

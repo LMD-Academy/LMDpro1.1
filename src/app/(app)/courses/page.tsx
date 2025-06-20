@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { ArrowRight, Filter, List, Grid, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, ImageIcon, Video, FileText, Library, BookMarked, Lightbulb, Network, Info, Brain, FileVideo as FileVideoIcon, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText } from "lucide-react"; 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 const courseIcons = {
     GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, Video, FileTextIcon, Library, BookMarked, Lightbulb, Network, Info, Brain, FileVideoIcon, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText
@@ -167,19 +166,15 @@ export default function CoursesCatalogPage() {
               <Card 
                 key={course.id} 
                 className={cn(
-                  "shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden",
-                  viewMode === "list" && "flex flex-col sm:flex-row"
+                  "shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden flex flex-col",
+                  viewMode === "list" && "sm:flex-row"
                 )}
               >
-                <div className={cn(
-                    "relative bg-muted flex items-center justify-center",
-                    viewMode === "grid" ? "w-full h-48" : "w-full sm:w-48 h-48 sm:h-auto flex-shrink-0"
-                  )}>
-                   <Image src={`https://placehold.co/600x400.png`} alt={course.title} layout="fill" objectFit="cover" data-ai-hint={course.imageHint} />
-                   <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <IconComponent className="h-12 w-12 text-white/70" />
-                   </div>
-                </div>
+                {viewMode === "list" && (
+                    <div className="w-full sm:w-20 flex-shrink-0 bg-muted/50 flex items-center justify-center p-4 rounded-l-lg">
+                        <IconComponent className="h-10 w-10 text-primary" />
+                    </div>
+                )}
                 <div className="flex flex-col flex-1 p-4">
                   <CardHeader className="p-0 mb-2">
                     <CardTitle className="font-headline text-lg leading-tight hover:text-primary transition-colors">{course.title}</CardTitle>
@@ -189,16 +184,24 @@ export default function CoursesCatalogPage() {
                         <span>&bull; {course.duration}</span>
                     </div>
                   </CardHeader>
-                  <CardContent className={cn("p-0 flex-1", viewMode === "grid" ? "h-16" : "")}>
+                  <CardContent className={cn("p-0 flex-1", viewMode === "grid" ? "h-16" : "mt-2")}>
                     <CardDescription className={cn("text-sm", viewMode === "grid" ? "line-clamp-3" : "line-clamp-2")}>
                       Explore {course.title.toLowerCase()}, a {course.type.toLowerCase()} designed for {course.difficulty.toLowerCase()} learners, spanning {course.duration}.
                     </CardDescription>
                   </CardContent>
-                  <CardFooter className="p-0 mt-3">
+                  <CardFooter className="p-0 mt-4">
                     <Link href={`/courses/${course.id}`} passHref className="w-full">
                       <Button className="w-full button-animated-gradient">
                         View Details <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
                   </CardFooter>
-                
+                </div>
+              </Card>
+              )})}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
