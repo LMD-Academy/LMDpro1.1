@@ -34,9 +34,13 @@ import {
   HelpCircle,
   Lightbulb, 
   Video,
-  Bell, // Added for Notifications
-  Moon, // Added for Theme Switcher (example)
-  Sun,  // Added for Theme Switcher (example)
+  Bell,
+  Moon,
+  Sun,
+  Users, // For My Learning (example, can change)
+  FileCode, // For Academic Research
+  ShieldCheck, // For API Management
+  ScrollText, // For App Documentations
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -56,14 +60,14 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/my-learning", label: "My Learning", icon: Briefcase },
+  { href: "/my-learning", label: "My Learning", icon: Briefcase }, // Changed from Users
   { href: "/learning-paths", label: "Learning Paths", icon: Lightbulb },
   { href: "/courses", label: "Course Catalog", icon: GraduationCap },
   { href: "/video-creation", label: "Video Creation", icon: Video },
   { href: "/resume-builder", label: "Resume Builder", icon: FileText },
-  { href: "/academic-research", label: "Academic Research", icon: BookCopy },
-  { href: "/api-management", label: "API Management", icon: KeyRound },
-  { href: "/docs", label: "App Documentations", icon: BookOpen }, 
+  { href: "/academic-research", label: "Academic Research", icon: FileCode }, // Changed from BookCopy
+  { href: "/api-management", label: "API Management", icon: ShieldCheck }, // Changed from KeyRound
+  { href: "/docs", label: "App Documentations", icon: ScrollText },  // Changed from BookOpen
   { href: "/account", label: "Account Settings", icon: Settings },
   { href: "/support", label: "Help & Support", icon: HelpCircle },
 ];
@@ -73,23 +77,41 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { open, toggleSidebar, isMobile, state } = useSidebar();
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
   const [isSidebarFixedOpen, setIsSidebarFixedOpen] = React.useState(false);
-  const [currentTheme, setCurrentTheme] = React.useState("light"); // Example state for theme
+  const [currentTheme, setCurrentTheme] = React.useState("light");
 
   const effectiveSidebarOpen = isMobile ? open : (isSidebarFixedOpen || state === 'expanded');
 
   const toggleTheme = () => {
-    // Basic theme toggle example, in a real app use context and persist preference
     const newTheme = currentTheme === "light" ? "dark" : "light";
     setCurrentTheme(newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
+     // Persist theme preference
+    try {
+      localStorage.setItem('lmdpro-theme', newTheme);
+    } catch (error) {
+      console.warn("Could not save theme preference to localStorage", error);
+    }
   };
+
+  React.useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem('lmdpro-theme');
+      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+        setCurrentTheme(savedTheme);
+        document.documentElement.classList.toggle("dark", savedTheme === "dark");
+      }
+    } catch (error) {
+       console.warn("Could not load theme preference from localStorage", error);
+    }
+  }, []);
+
 
   return (
     <div className={cn("flex min-h-screen app-area-background")}>
       <Sidebar
         side="left"
         variant="sidebar"
-        collapsible="icon" // Default to icon view, expands on click/pin
+        collapsible="icon"
         className="border-r"
       >
         <SidebarHeader className="p-4 flex items-center justify-between">
@@ -120,16 +142,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <SidebarMenuItem key={item.href}>
                 <Link href={item.href} asChild>
                   <SidebarMenuButton
-                    asChild
                     isActive={pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))}
                     tooltip={item.label}
                   >
-                    <a>
-                      <item.icon />
-                      <span className={cn(
+                    <item.icon />
+                    <span className={cn(
                         (!effectiveSidebarOpen && !isMobile && !isSidebarFixedOpen && state === 'collapsed') && "hidden"
                       )}>{item.label}</span>
-                    </a>
                   </SidebarMenuButton>
                 </Link>
               </SidebarMenuItem>
@@ -213,9 +232,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </main>
         </div>
 
-        {/* Right-hand fixed sidebar for AI Assistant and Notepad */}
         <aside className="hidden lg:flex flex-col w-72 border-l bg-card p-4 space-y-4 sticky top-0 h-screen overflow-y-auto">
-            {/* AI Assistant Panel */}
             <Card className="flex-shrink-0">
                 <CardHeader>
                     <CardTitle className="text-lg font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
@@ -226,7 +243,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </CardContent>
             </Card>
 
-            {/* Notepad Panel */}
             <Card className="flex-grow flex flex-col min-h-0">
                 <CardHeader>
                     <CardTitle className="text-lg font-headline flex items-center gap-2"><StickyNote className="h-5 w-5 text-primary" /> Notepad</CardTitle>
@@ -240,7 +256,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </CardFooter>
             </Card>
             
-            {/* Support Panel (Bottom) */}
             <Card className="flex-shrink-0 mt-auto">
                 <CardHeader>
                     <CardTitle className="text-base font-headline flex items-center gap-2"><LifeBuoy className="h-5 w-5 text-primary"/> Support</CardTitle>
