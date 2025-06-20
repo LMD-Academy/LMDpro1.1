@@ -3,24 +3,56 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { UserCircle, LogIn, LayoutDashboard, Info, Tag, FileText, Menu, BookOpen, Users, Briefcase } from "lucide-react"; // Added Users for About Us for variety
+import { UserCircle, LogIn, LayoutDashboard, Info, Tag, FileText, Menu, BookOpen, Users, Briefcase, Moon, Sun } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/pricing", label: "Pricing", icon: Tag },
-  { href: "/api-docs", label: "API Docs", icon: FileText }, // For public API consumers
-  { href: "/docs", label: "App Docs", icon: BookOpen }, // For authenticated users, links to /app/docs
-  { href: "/about", label: "About Us", icon: Users }, // Changed icon for variety
+  { href: "/api-docs", label: "API Docs", icon: FileText },
+  { href: "/docs", label: "App Docs", icon: BookOpen },
+  { href: "/about", label: "About Us", icon: Users },
 ];
 
 export default function PublicHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState("light");
   // In a real app, you'd have an auth context to check if user is logged in
   const isAuthenticated = false; // Placeholder
 
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem('lmdpro-theme');
+      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+        setCurrentTheme(savedTheme);
+        document.documentElement.classList.toggle("dark", savedTheme === "dark");
+      } else {
+        // Default to light if no theme saved or invalid value
+        document.documentElement.classList.remove("dark");
+      }
+    } catch (error) {
+       console.warn("Could not load theme preference from localStorage", error);
+       document.documentElement.classList.remove("dark"); // Default to light on error
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    setCurrentTheme(newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
+    try {
+      localStorage.setItem('lmdpro-theme', newTheme);
+    } catch (error) {
+      console.warn("Could not save theme preference to localStorage", error);
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className={cn(
+      "z-50 w-full max-w-6xl mx-auto mt-4 rounded-xl shadow-lg", // Floating, rounded, centered with max-width
+      "bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60" // Styling for transparency
+    )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-primary"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
@@ -36,6 +68,10 @@ export default function PublicHeader() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
+           <Button variant="ghost" size="icon" onClick={toggleTheme} title="Toggle Theme">
+            {currentTheme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            <span className="sr-only">Toggle Theme</span>
+          </Button>
           {isAuthenticated ? (
             <>
               <Link href="/dashboard" passHref>
@@ -60,7 +96,11 @@ export default function PublicHeader() {
         </div>
 
         {/* Mobile Menu */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-2">
+           <Button variant="ghost" size="icon" onClick={toggleTheme} title="Toggle Theme">
+            {currentTheme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            <span className="sr-only">Toggle Theme</span>
+          </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
