@@ -217,6 +217,7 @@ const Sidebar = React.forwardRef<
         <div
           className={cn(
             "duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
+            "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
             "group-data-[collapsible=offcanvas]:w-0",
             "group-data-[side=right]:rotate-180",
             variant === "floating" || variant === "inset"
@@ -528,6 +529,7 @@ type SidebarMenuButtonProps = (React.ComponentProps<"button"> | React.ComponentP
   asChild?: boolean;
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
+  children?: React.ReactNode; // Explicitly add children to props
 } & VariantProps<typeof sidebarMenuButtonVariants>;
 
 
@@ -543,7 +545,8 @@ const SidebarMenuButton = React.forwardRef<
       size = "default",
       tooltip,
       className,
-      href, // Destructure href
+      href,
+      children, // Destructure children
       ...rest
     },
     ref
@@ -564,7 +567,7 @@ const SidebarMenuButton = React.forwardRef<
         "data-size": size,
         "data-active": isActive,
         className: cn(sidebarMenuButtonVariants({ variant, size }), className),
-        href, // Pass href if Comp is 'a'
+        href,
         ...rest,
     };
 
@@ -581,7 +584,7 @@ const SidebarMenuButton = React.forwardRef<
     if (typeof tooltip === "string") {
       tooltip = {
         children: tooltip,
-      }
+      } as React.ComponentProps<typeof TooltipContent>; // Cast to ensure type compatibility
     }
 
     return (
@@ -711,14 +714,14 @@ const SidebarMenuSubItem = React.forwardRef<
 SidebarMenuSubItem.displayName = "SidebarMenuSubItem"
 
 const SidebarMenuSubButton = React.forwardRef<
-  HTMLAnchorElement, // Changed to HTMLAnchorElement as it's typically a link
-  React.ComponentProps<"a"> & { // Changed to React.ComponentProps<"a">
+  HTMLAnchorElement, 
+  React.ComponentProps<"a"> & { 
     asChild?: boolean
     size?: "sm" | "md"
     isActive?: boolean
   }
 >(({ asChild, size = "md", isActive, className, ...props }, ref) => {
-  const Comp = asChild ? Slot : "a" // Default to 'a'
+  const Comp = asChild ? Slot : "a" 
 
   return (
     <Comp
