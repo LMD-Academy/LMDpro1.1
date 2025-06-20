@@ -2,7 +2,6 @@
 import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -20,7 +19,9 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    allowedDevOrigins: ['https://6000-firebase-studio-1750210494469.cluster-jbb3mjctu5cbgsi6hwq6u4btwe.cloudworkstations.dev'],
+    // The 'allowedDevOrigins' key was removed from here as it was causing an 'Unrecognized key' error.
+    // If the cross-origin warning (⚠ Cross origin request detected...) persists,
+    // an alternative way to configure allowed origins for Next.js 15.3.3 with Turbopack may be needed.
   },
 };
 
