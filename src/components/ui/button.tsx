@@ -44,20 +44,24 @@ export interface ButtonProps
 const Button = React.forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   ButtonProps
->(({ className, variant, size, asChild: buttonOwnAsChild = false, ...restProps }, ref) => {
-  // Determine the component type based on Button's own asChild prop and presence of href
-  const Comp = buttonOwnAsChild ? Slot : (restProps.href ? "a" : "button");
+>(({ className, variant, size, asChild: buttonOwnAsChild = false, ...allOtherProps }, ref) => {
+  // Determine if the Button itself should render as a Slot based on its own asChild prop
+  const isSlot = buttonOwnAsChild;
+  
+  // Determine if the component should render as an anchor tag if an href is present and it's not a Slot
+  const isLink = !isSlot && allOtherProps.href;
+  
+  const Comp = isSlot ? Slot : (isLink ? "a" : "button");
 
-  // Prepare props for the underlying component.
-  // Crucially, remove 'asChild' from restProps if it was passed down (e.g., from a Link component),
-  // to prevent it from being passed to a DOM element if Comp is not Slot.
-  const { asChild, ...finalProps } = restProps;
+  // Explicitly remove 'asChild' from the props that will be spread to the DOM element.
+  // This prevents the warning if 'asChild' was passed down from a parent <Link asChild>.
+  const { asChild, ...domProps } = allOtherProps;
 
   return (
     <Comp
       className={cn(buttonVariants({ variant, size, className }))}
       ref={ref as any} // Cast ref to any due to Comp being dynamic
-      {...finalProps} // Spread finalProps which should be clean of any 'asChild'
+      {...domProps} // Spread domProps which should be clean of any 'asChild'
     />
   );
 });
