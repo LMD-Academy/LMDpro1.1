@@ -3,9 +3,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { BookOpen, CheckCircle, Clock, ArrowRight, TrendingUp, Star, Image as ImageIcon } from "lucide-react"; // Added ImageIcon
+import { BookOpen, CheckCircle, Clock, ArrowRight, TrendingUp, Star, ImageIcon } from "lucide-react"; 
 import { Progress } from "@/components/ui/progress";
-// import Image from "next/image"; // Image import removed
 
 const inProgressCourses = [
   { id: "lp1", title: "Executive Leadership Development Path", progress: 75, type: "Learning Path", imageHint: "leadership meeting", lastAccessed: "2 days ago" },
@@ -36,7 +35,7 @@ export default function MyLearningPage() {
       <section>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-headline font-semibold animated-text-gradient">In Progress</h2>
-          <Link href="/courses?filter=inprogress" passHref>
+          <Link href="/courses?filter=inprogress" asChild>
             <Button variant="link" className="text-primary">View All <ArrowRight className="ml-1 h-4 w-4" /></Button>
           </Link>
         </div>
@@ -44,7 +43,6 @@ export default function MyLearningPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {inProgressCourses.map((course) => (
               <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-                {/* Image removed */}
                 <div className="w-full h-40 bg-muted flex items-center justify-center">
                   <ImageIcon className="h-16 w-16 text-primary/30" />
                 </div>
@@ -60,7 +58,7 @@ export default function MyLearningPage() {
                   <Progress value={course.progress} className="mb-3 h-2" />
                 </CardContent>
                 <CardFooter>
-                  <Link href={`/courses/${course.id}`} passHref className="w-full">
+                  <Link href={`/courses/${course.id}`} asChild className="w-full">
                     <Button className="w-full button-animated-gradient">
                       Continue Learning <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
@@ -75,7 +73,7 @@ export default function MyLearningPage() {
               <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <p className="text-xl font-semibold">No courses in progress.</p>
               <p className="text-muted-foreground mb-4">Start a new learning journey today!</p>
-              <Link href="/courses" passHref>
+              <Link href="/courses" asChild>
                 <Button className="button-animated-gradient">Explore Course Catalog</Button>
               </Link>
             </CardContent>
@@ -87,7 +85,7 @@ export default function MyLearningPage() {
       <section>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-headline font-semibold animated-text-gradient">Completed</h2>
-           <Link href="/courses?filter=completed" passHref>
+           <Link href="/courses?filter=completed" asChild>
             <Button variant="link" className="text-primary">View All <ArrowRight className="ml-1 h-4 w-4" /></Button>
           </Link>
         </div>
@@ -95,7 +93,6 @@ export default function MyLearningPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {completedCourses.map((course) => (
               <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-                {/* Image removed */}
                 <div className="w-full h-40 bg-muted flex items-center justify-center">
                    <CheckCircle className="h-16 w-16 text-green-500/50" />
                 </div>
@@ -106,7 +103,7 @@ export default function MyLearningPage() {
                   <CardDescription>Completed on: {course.completionDate}</CardDescription>
                 </CardHeader>
                 <CardFooter>
-                  <Link href={course.certificateLink} passHref className="w-full">
+                  <Link href={course.certificateLink} asChild className="w-full">
                     <Button variant="outline" className="w-full">View Certificate</Button>
                   </Link>
                 </CardFooter>
@@ -128,7 +125,7 @@ export default function MyLearningPage() {
       <section>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-headline font-semibold animated-text-gradient">Bookmarked Courses</h2>
-           <Link href="/courses?filter=bookmarked" passHref>
+           <Link href="/courses?filter=bookmarked" asChild>
             <Button variant="link" className="text-primary">View All <ArrowRight className="ml-1 h-4 w-4" /></Button>
           </Link>
         </div>
@@ -136,7 +133,6 @@ export default function MyLearningPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {bookmarkedCourses.map((course) => (
               <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-                 {/* Image removed */}
                 <div className="w-full h-40 bg-muted flex items-center justify-center">
                    <Star className="h-16 w-16 text-yellow-400/50" />
                 </div>
@@ -145,7 +141,7 @@ export default function MyLearningPage() {
                   <CardDescription>{course.category}</CardDescription>
                 </CardHeader>
                  <CardFooter className="mt-auto">
-                  <Link href={`/courses/${course.id}`} passHref className="w-full">
+                  <Link href={`/courses/${course.id}`} asChild className="w-full">
                     <Button className="w-full button-animated-gradient">
                       View Course <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
@@ -181,3 +177,4 @@ export default function MyLearningPage() {
     </div>
   );
 }
+

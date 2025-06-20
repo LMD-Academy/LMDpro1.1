@@ -3,9 +3,8 @@ import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import Image from "next/image"; // Image import removed
 import Link from "next/link";
-import { Users, Lightbulb, Zap, ShieldCheck, HeartHandshake, Briefcase } from "lucide-react"; // Added Briefcase
+import { Users, Lightbulb, Zap, ShieldCheck, HeartHandshake, Briefcase } from "lucide-react"; 
 
 export default function AboutUsPage() {
   return (
@@ -31,12 +30,11 @@ export default function AboutUsPage() {
                 <p className="text-muted-foreground mb-6">
                   Our platform leverages the full potential of the Firebase ecosystem and cutting-edge AI models to deliver a seamless, scalable, and secure SaaS experience. We aim to create a direct correlation between your educational investment and tangible career growth.
                 </p>
-                <Link href="/register" passHref>
+                <Link href="/register" asChild>
                   <Button className="button-animated-gradient">Join Our Community</Button>
                 </Link>
               </div>
               <div>
-                {/* Image removed */}
                 <div className="w-full h-64 md:h-96 bg-muted rounded-lg shadow-xl border flex items-center justify-center">
                   <Briefcase className="h-24 w-24 text-primary/30" />
                 </div>
@@ -73,7 +71,6 @@ export default function AboutUsPage() {
              <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
                 LMDpro is driven by a passionate team of educators, AI researchers, engineers, and designers dedicated to building the future of learning. (Placeholder for team member profiles or a group photo).
              </p>
-             {/* Image removed */}
              <div className="w-full max-w-3xl h-64 bg-muted rounded-md mx-auto border flex items-center justify-center">
                 <Users className="h-24 w-24 text-primary/30" />
              </div>
@@ -84,7 +81,7 @@ export default function AboutUsPage() {
             <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-8">
               Join LMDpro today and experience the power of AI-driven personalized learning.
             </p>
-            <Link href="/pricing" passHref>
+            <Link href="/pricing" asChild>
               <Button size="lg" className="button-animated-gradient">View Our Plans</Button>
             </Link>
           </section>
@@ -95,3 +92,4 @@ export default function AboutUsPage() {
     </>
   );
 }
+

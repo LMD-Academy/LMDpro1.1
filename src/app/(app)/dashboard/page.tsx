@@ -4,7 +4,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, RefreshCw, Activity, TrendingUp, Zap, Lightbulb, UserCircle, Image as ImageIcon } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, RefreshCw, Activity, TrendingUp, Zap, Lightbulb, UserCircle, ImageIcon } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
 const ongoingCourses = [
@@ -84,7 +84,7 @@ export default function DashboardPage() {
                 <div className="absolute inset-0 flex items-center justify-center text-2xl font-bold animated-text-gradient">75%</div>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">Good! Add 2 more AI-suggested skills from 'Advanced AI' to reach 85%.</p>
-            <Link href="/resume-builder" passHref>
+            <Link href="/resume-builder" asChild>
               <Button className="mt-4 w-full button-animated-gradient">
                 Optimize Resume <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -108,7 +108,7 @@ export default function DashboardPage() {
                     <span className="text-xs text-primary/80 group-hover:underline">Why it&apos;s recommended?</span>
                 </Link>
             ))}
-            <Link href="/courses" passHref>
+            <Link href="/courses" asChild>
               <Button variant="outline" className="w-full mt-2">
                 Explore All Recommendations
               </Button>
@@ -121,7 +121,7 @@ export default function DashboardPage() {
       <section>
         <div className="flex justify-between items-center mb-4">
             <h2 className="text-3xl font-headline font-semibold animated-text-gradient">Continue Learning</h2>
-            <Link href="/my-learning?filter=inprogress" passHref>
+            <Link href="/my-learning?filter=inprogress" asChild>
                  <Button variant="link" className="text-primary">View All <ArrowRight className="ml-1 h-4 w-4" /></Button>
             </Link>
         </div>
@@ -141,7 +141,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <Progress value={course.progress} className="mb-3 h-2" />
-                <Link href={`/courses/${course.id}`} passHref>
+                <Link href={`/courses/${course.id}`} asChild>
                   <Button className="w-full button-animated-gradient">
                     Resume Learning <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -156,7 +156,7 @@ export default function DashboardPage() {
               <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
               <p className="font-semibold">No courses in progress.</p>
               <p className="text-sm text-muted-foreground mb-3">Start a new learning journey today!</p>
-              <Link href="/courses"><Button className="button-animated-gradient">Explore Course Catalog</Button></Link>
+              <Link href="/courses" asChild><Button className="button-animated-gradient">Explore Course Catalog</Button></Link>
             </CardContent>
           </Card>
         )}
@@ -214,3 +214,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

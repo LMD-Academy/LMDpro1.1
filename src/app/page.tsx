@@ -83,7 +83,7 @@ export default function HomePage() {
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10">
               Your AI-powered partner for personalized learning, skill enhancement, automated video creation, and career advancement. Experience the future of education, tailored to you, by an advanced AI-driven agentic system.
             </p>
-            <Link href="/register" passHref>
+            <Link href="/register" asChild>
               <Button size="lg" className="button-animated-gradient text-lg px-10 py-6">
                 Start Your Learning Path <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -116,7 +116,7 @@ export default function HomePage() {
                     <p className="text-muted-foreground text-sm">{feature.description}</p>
                   </CardContent>
                   <CardFooter>
-                    <Link href={feature.href} passHref className="w-full">
+                    <Link href={feature.href} asChild className="w-full">
                        <Button variant="outline" className="w-full">
                         Learn More <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
@@ -148,7 +148,7 @@ export default function HomePage() {
                     <CardDescription className="text-sm h-16 overflow-hidden">{course.description} ({course.type})</CardDescription>
                   </CardHeader>
                   <CardFooter className="mt-auto">
-                    <Link href="/courses" passHref className="w-full">
+                    <Link href="/courses" asChild className="w-full">
                         <Button variant="outline" className="w-full">
                         View Details <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
@@ -158,7 +158,7 @@ export default function HomePage() {
               ))}
             </div>
             <div className="text-center mt-12">
-              <Link href="/courses" passHref>
+              <Link href="/courses" asChild>
                 <Button size="lg" className="button-animated-gradient">
                   Explore All Courses & Paths
                 </Button>
@@ -198,7 +198,7 @@ export default function HomePage() {
                     </ul>
                   </CardContent>
                   <CardFooter>
-                    <Link href={tier.href} passHref className="w-full">
+                    <Link href={tier.href} asChild className="w-full">
                       <Button className="w-full button-animated-gradient">{tier.cta}</Button>
                     </Link>
                   </CardFooter>
@@ -206,7 +206,7 @@ export default function HomePage() {
               ))}
             </div>
              <div className="text-center mt-12">
-              <Link href="/pricing" passHref>
+              <Link href="/pricing" asChild>
                 <Button variant="link" className="text-lg animated-text-gradient font-semibold">
                   See Full Pricing Details & Compare All Plans <ArrowRight className="ml-1 h-5 w-5" />
                 </Button>
@@ -251,7 +251,7 @@ export default function HomePage() {
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
                 {quickLinks.map(link => (
-                    <Link key={link.label} href={link.href} passHref>
+                    <Link key={link.label} href={link.href} asChild>
                         <Button variant="outline" className="w-full h-20 flex-col gap-1 text-xs sm:text-sm hover:bg-primary/5 hover:text-primary">
                             <link.icon className="h-6 w-6 mb-1" />
                             {link.label}
@@ -259,7 +259,7 @@ export default function HomePage() {
                     </Link>
                 ))}
             </div>
-             <Link href="/register" passHref>
+             <Link href="/register" asChild>
                 <Button size="lg" className="button-animated-gradient text-lg px-10 py-6">
                     Sign Up For Free <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -272,3 +272,4 @@ export default function HomePage() {
     </>
   );
 }
+

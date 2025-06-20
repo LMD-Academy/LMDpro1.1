@@ -6,11 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-// import { Checkbox } from "@/components/ui/checkbox"; // Checkbox import removed as it's not used
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Filter, List, Grid, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, Image as ImageIcon } from "lucide-react"; // Added ImageIcon
+import { ArrowRight, Filter, List, Grid, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, ImageIcon } from "lucide-react"; 
 import Link from "next/link";
-// import Image from "next/image"; // Image import removed
 import { cn } from "@/lib/utils";
 
 const allCourses = [
@@ -140,7 +138,6 @@ export default function CoursesCatalogPage() {
                   viewMode === "list" && "flex flex-col sm:flex-row overflow-hidden"
                 )}
               >
-                {/* Image removed and replaced with placeholder div */}
                 <div className={cn(
                     "bg-muted flex items-center justify-center",
                     viewMode === "grid" ? "w-full h-48" : "w-full sm:w-48 h-48 sm:h-auto"
@@ -163,7 +160,7 @@ export default function CoursesCatalogPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className={cn("flex-1 flex items-end", viewMode === "list" && "sm:pb-4 sm:pr-4")}>
-                    <Link href={`/courses/${course.id}`} passHref className="w-full">
+                    <Link href={`/courses/${course.id}`} asChild className="w-full">
                       <Button className="w-full button-animated-gradient mt-2">
                         View {course.type} <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
@@ -178,3 +175,4 @@ export default function CoursesCatalogPage() {
     </div>
   );
 }
+

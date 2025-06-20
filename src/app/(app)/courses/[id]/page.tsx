@@ -4,9 +4,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, Share2, ChevronLeft, ChevronRight, Lightbulb, Video } from "lucide-react"; // Added Video icon
+import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, Share2, ChevronLeft, ChevronRight, Lightbulb, Video } from "lucide-react"; 
 import Link from "next/link";
-// import Image from "next/image"; // Image import removed
 import { Progress } from "@/components/ui/progress";
 
 const courseData = {
@@ -62,7 +61,6 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
         {/* Video Player Placeholder */}
         <Card className="shadow-lg overflow-hidden">
           <div className="aspect-video bg-black flex items-center justify-center text-white relative">
-            {/* Image removed, replaced with an icon or text */}
             <Video className="h-24 w-24 text-muted-foreground/50" />
             <div className="absolute bottom-4 left-4 text-sm bg-black/50 p-2 rounded">
               Video Player Area: {currentLesson.title}
@@ -160,7 +158,7 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
                     <ul className="space-y-1 pl-2">
                       {module.lessons.map(lesson => (
                         <li key={lesson.id}>
-                          <Link href={`/courses/${course.id}?lesson=${lesson.id}`} passHref>
+                          <Link href={`/courses/${course.id}?lesson=${lesson.id}`} asChild>
                             <Button 
                                 variant="ghost" 
                                 className={`w-full justify-start h-auto py-2 px-2 text-left ${lesson.id === currentLesson.id ? 'bg-muted font-medium' : ''}`}
@@ -183,3 +181,4 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
+

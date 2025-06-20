@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Code, Zap, Package, DollarSign, ShieldCheck, BookOpen } from "lucide-react";
+import { Code, Zap, Package, DollarSign, ShieldCheck, BookOpen, Download } from "lucide-react";
 import Link from "next/link";
 
 interface ApiPlan {
@@ -86,7 +86,7 @@ export default function ApiManagementPage() {
           Build innovative solutions with our robust and scalable API.
         </p>
         <div className="mt-6">
-          <Link href="/api-docs" passHref> {/* Corrected link to public API docs */}
+          <Link href="/api-docs" asChild> 
              <Button size="lg" className="button-animated-gradient">
                 <BookOpen className="mr-2 h-5 w-5" /> Read API Documentation
              </Button>
@@ -159,3 +159,4 @@ export default function ApiManagementPage() {
     </div>
   );
 }
+

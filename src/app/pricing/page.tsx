@@ -4,7 +4,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, Zap, Users, Building, Award as StudentCapIcon, Gem, Star, Brain, Server, ShieldAlert } from "lucide-react"; // Using Award for Student/Non-Profit
+import { CheckCircle, Zap, Users, Building, Award as StudentCapIcon, Gem } from "lucide-react"; 
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
 import Link from "next/link";
@@ -210,7 +210,7 @@ export default function PricingPage() {
                   </ul>
                 </CardContent>
                 <CardFooter className="mt-4">
-                   <Link href={tier.id === 'enterprise' ? '/contact-sales' : `/register?tier=${tier.id}`} passHref className="w-full">
+                   <Link href={tier.id === 'enterprise' ? '/contact-sales' : `/register?tier=${tier.id}`} asChild className="w-full">
                     <Button className={`w-full ${tier.highlight || tier.id === 'community' || tier.id === 'nonprofit-student' ? 'button-animated-gradient' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}>
                       {tier.cta}
                     </Button>
@@ -314,3 +314,4 @@ export default function PricingPage() {
     </>
   );
 }
+

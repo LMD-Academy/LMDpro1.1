@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { UserCircle, LogIn, LayoutDashboard, Info, Tag, FileText, Menu, BookOpen, Users, Briefcase, Moon, Sun, ShoppingBag, ChevronDown, Lightbulb, Zap, Link as LinkIcon } from "lucide-react";
+import { UserCircle, LogIn, LayoutDashboard, Info, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ShoppingBag, ChevronDown, Lightbulb, Zap, Link as LinkIcon } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 
 const mainNavLinks = [
   { href: "/pricing", label: "Pricing", icon: Tag },
-  { href: "/docs", label: "Docs & Guides", icon: BookOpen }, 
+  { href: "/docs", label: "Docs & Guides", icon: BookOpen },
   { href: "/about", label: "About Us", icon: Users },
 ];
 
@@ -66,7 +66,7 @@ export default function PublicHeader() {
         setCurrentTheme(savedTheme);
         document.documentElement.classList.toggle("dark", savedTheme === "dark");
       } else {
-        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.remove("dark"); 
       }
     } catch (error) {
        console.warn("Could not load theme preference from localStorage", error);
@@ -87,8 +87,8 @@ export default function PublicHeader() {
 
   return (
     <header className={cn(
-      "sticky top-4 z-50 w-full max-w-5xl mx-auto rounded-xl shadow-lg",
-      "bg-card" 
+      "sticky top-4 z-50 w-full max-w-5xl mx-auto rounded-xl shadow-lg", // Changed max-w-6xl to max-w-5xl
+      "bg-card" // Removed translucency
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
@@ -114,7 +114,7 @@ export default function PublicHeader() {
                       {field.name}
                     </div>
                     {field.courses.map((course) => (
-                      <Link href={course.href} key={course.title} passHref>
+                      <Link href={course.href} key={course.title} asChild>
                         <DropdownMenuItem asChild>
                           <a className="text-xs text-muted-foreground hover:text-primary pl-6">{course.title}</a>
                         </DropdownMenuItem>
@@ -124,7 +124,7 @@ export default function PublicHeader() {
                 ))}
               </div>
                <DropdownMenuSeparator className="my-3" />
-               <Link href="/courses" passHref>
+               <Link href="/courses" asChild>
                 <DropdownMenuItem asChild>
                   <a className="font-semibold text-primary hover:underline">View All Courses & Learning Paths &rarr;</a>
                 </DropdownMenuItem>
@@ -148,10 +148,10 @@ export default function PublicHeader() {
           </Button>
           {isAuthenticated ? (
             <>
-              <Link href="/dashboard">
+              <Link href="/dashboard" asChild>
                 <Button variant="outline">Dashboard</Button>
               </Link>
-              <Link href="/account?tab=profile">
+              <Link href="/account?tab=profile" asChild>
                  <Button variant="ghost" size="icon" aria-label="Account">
                     <UserCircle className="h-5 w-5" />
                  </Button>
@@ -159,10 +159,10 @@ export default function PublicHeader() {
             </>
           ) : (
             <>
-              <Link href="/login">
+              <Link href="/login" asChild>
                 <Button variant="ghost">Login</Button>
               </Link>
-              <Link href="/register">
+              <Link href="/register" asChild>
                 <Button className="button-animated-gradient">Get Started Free</Button>
               </Link>
             </>
@@ -201,12 +201,12 @@ export default function PublicHeader() {
                 <hr className="my-2" />
                 {isAuthenticated ? (
                     <>
-                     <Link href="/dashboard">
+                     <Link href="/dashboard" asChild>
                         <Button variant="outline" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             <LayoutDashboard className="h-5 w-5"/> Dashboard
                         </Button>
                      </Link>
-                     <Link href="/account?tab=profile">
+                     <Link href="/account?tab=profile" asChild>
                         <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             <UserCircle className="h-5 w-5" /> Account
                         </Button>
@@ -214,12 +214,12 @@ export default function PublicHeader() {
                     </>
                 ) : (
                     <>
-                        <Link href="/login">
+                        <Link href="/login" asChild>
                         <Button variant="outline" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             <LogIn className="h-5 w-5" /> Login
                         </Button>
                         </Link>
-                        <Link href="/register">
+                        <Link href="/register" asChild>
                         <Button className="w-full button-animated-gradient justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             Get Started Free
                         </Button>
@@ -234,3 +234,4 @@ export default function PublicHeader() {
     </header>
   );
 }
+

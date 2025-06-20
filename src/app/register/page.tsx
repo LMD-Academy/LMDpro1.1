@@ -1,3 +1,4 @@
+
 // src/app/register/page.tsx
 import AuthForm from "@/components/auth/AuthForm";
 import PublicHeader from "@/components/layout/PublicHeader";
@@ -14,3 +15,4 @@ export default function RegisterPage() {
     </>
   );
 }
+

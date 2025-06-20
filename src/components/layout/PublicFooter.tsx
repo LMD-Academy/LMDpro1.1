@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Github, Linkedin, Twitter, BookOpen, LifeBuoy, FileText as FileTextIcon } from "lucide-react"; // Renamed to avoid conflict
+import { Github, Linkedin, Twitter, BookOpen, LifeBuoy, FileText as FileTextIcon } from "lucide-react"; 
 
 export default function PublicFooter() {
   const currentYear = new Date().getFullYear();
@@ -18,12 +18,12 @@ export default function PublicFooter() {
     company: [
       { href: "/about", label: "About LMDpro" },
       { href: "/contact", label: "Contact Us" },
-      // { href: "/careers", label: "Careers at LMDpro" },
-      // { href: "/blog", label: "Our Blog" },
+      // { href: "/careers", label: "Careers at LMDpro" }, // Placeholder
+      // { href: "/blog", label: "Our Blog" }, // Placeholder
     ],
     resources: [
       { href: "/api-docs", label: "Developer API Docs", icon: FileTextIcon },
-      { href: "/docs", label: "Application Docs", icon: BookOpen }, // Authenticated app docs
+      { href: "/docs", label: "Application Docs", icon: BookOpen }, 
       { href: "/support", label: "Help Center & Support", icon: LifeBuoy },
       { href: "/terms", label: "Terms of Service" },
       { href: "/privacy", label: "Privacy Policy" },
@@ -54,7 +54,7 @@ export default function PublicFooter() {
           <div>
             <h5 className="font-semibold mb-3 text-foreground">Company</h5>
             <ul className="space-y-2 text-sm">
-              {footerLinks.company.map(link => (
+             {footerLinks.company.map(link => (
                  <li key={link.label}><Link href={link.href} className="text-muted-foreground hover:text-primary">{link.label}</Link></li>
               ))}
             </ul>
@@ -85,3 +85,4 @@ export default function PublicFooter() {
     </footer>
   );
 }
+

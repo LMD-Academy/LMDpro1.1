@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Code, Zap, ShieldCheck, BookOpen, Download } from "lucide-react";
@@ -18,12 +19,12 @@ export default function ApiDocumentationPage() {
               Integrate LMDpro's powerful AI capabilities into your applications. Access personalized learning, video generation, and resume optimization endpoints.
             </p>
             <div className="flex gap-4 justify-center">
-              <Link href="#getting-started" passHref>
+              <Link href="#getting-started" asChild>
                 <Button size="lg" className="button-animated-gradient">
                   <Zap className="mr-2 h-5 w-5" /> Get Started
                 </Button>
               </Link>
-              <Link href="/api-management" passHref> {/* Or link to where users get keys if different */}
+              <Link href="/api-management" asChild> 
                 <Button size="lg" variant="outline">
                    Manage API Keys
                 </Button>
@@ -122,3 +123,4 @@ export default function ApiDocumentationPage() {
     </>
   );
 }
+

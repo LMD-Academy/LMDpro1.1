@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Shield, CreditCard, Bell, KeyRound, Eye, EyeOff, Linkedin, PlusCircle } from "lucide-react";
 import { useSearchParams } from 'next/navigation';
-import Link from "next/link"; // Import Link
+import Link from "next/link"; 
 
 export default function AccountSettingsPage() {
   const searchParams = useSearchParams();
@@ -77,7 +77,7 @@ export default function AccountSettingsPage() {
                 <Label htmlFor="linkedinProfile">LinkedIn Profile URL (Optional)</Label>
                 <div className="flex items-center gap-2">
                     <Input id="linkedinProfile" placeholder="https://linkedin.com/in/yourprofile" className="mt-1" />
-                    <Button variant="outline" size="icon" title="Import data from LinkedIn (Coming Soon)">
+                    <Button type="button" variant="outline" size="icon" title="Import data from LinkedIn (Coming Soon)">
                         <Linkedin className="h-4 w-4"/>
                     </Button>
                 </div>
@@ -143,7 +143,7 @@ export default function AccountSettingsPage() {
                 <p className="text-sm text-muted-foreground">Renews on: August 20, 2024 (Example Date)</p>
                 <p className="text-sm text-muted-foreground">Price: $5.80/month (Example Price)</p>
                 <div className="mt-3 space-x-2">
-                    <Link href="/pricing" passHref>
+                    <Link href="/pricing" asChild>
                         <Button variant="outline">Change Plan</Button>
                     </Link>
                     <Button variant="destructive"
@@ -213,14 +213,14 @@ export default function AccountSettingsPage() {
                     <Label htmlFor="email-promotions" className="font-medium">Promotions & New Features</Label>
                     <p className="text-xs text-muted-foreground">Get notified about new LMDpro features, special offers, and platform news.</p>
                 </div>
-                <Input type="checkbox" id="email-promotions" checked className="h-5 w-5"/> {/* Replace with Switch component */}
+                <Input type="checkbox" id="email-promotions" defaultChecked className="h-5 w-5"/> {/* Replace with Switch component */}
               </div>
                <div className="flex items-center justify-between p-3 border rounded-md">
                 <div>
                     <Label htmlFor="inapp-achievements" className="font-medium">In-App Skill Achievements</Label>
                     <p className="text-xs text-muted-foreground">See in-app notifications when you complete a module or acquire a new skill.</p>
                 </div>
-                <Input type="checkbox" id="inapp-achievements" checked className="h-5 w-5"/> {/* Replace with Switch component */}
+                <Input type="checkbox" id="inapp-achievements" defaultChecked className="h-5 w-5"/> {/* Replace with Switch component */}
               </div>
               <p className="text-sm text-muted-foreground pt-2">More granular notification controls for specific course activities are coming soon.</p>
             </CardContent>
@@ -233,14 +233,14 @@ export default function AccountSettingsPage() {
         <TabsContent value="apikeys">
           <Card className="shadow-lg">
              <CardHeader>
-              <CardTitle className="font-headline">API Key Management</CardTitle>
+              <CardTitle className="font-headline text-2xl animated-text-gradient">API Key Management</CardTitle>
               <CardDescription>Generate and manage your API keys for LMDpro services. API access is available on Premium, Teams, and Enterprise plans.</CardDescription>
             </CardHeader>
             <CardContent>
                 <p className="text-muted-foreground mb-4">
                     Access LMDpro's powerful AI capabilities programmatically. Integrate personalized learning path generation, video script creation, and resume optimization into your own applications.
                 </p>
-                <Link href="/api-management">
+                <Link href="/api-management" asChild>
                     <Button className="button-animated-gradient">Go to API Management & Pricing</Button>
                 </Link>
             </CardContent>
@@ -251,3 +251,4 @@ export default function AccountSettingsPage() {
     </div>
   );
 }
+
