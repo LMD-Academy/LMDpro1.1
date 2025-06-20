@@ -8,7 +8,7 @@ import { PanelLeft } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button" // Assuming Button is correctly handling its own asChild logic
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
@@ -526,11 +526,15 @@ const sidebarMenuButtonVariants = cva(
 
 type SidebarMenuButtonElement = HTMLButtonElement | HTMLAnchorElement;
 
-type SidebarMenuButtonProps = (React.ComponentProps<"button"> | React.ComponentProps<"a">) & {
-  renderAsSlot?: boolean; // Renamed from asChild to avoid conflict with Link's asChild
+type SidebarMenuButtonProps = (
+  | React.ComponentProps<"button">
+  | React.ComponentProps<"a">
+) & {
+  renderAsSlot?: boolean;
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
   children?: React.ReactNode;
+  asChild?: boolean; // To capture asChild from Link
 } & VariantProps<typeof sidebarMenuButtonVariants>;
 
 
@@ -540,44 +544,40 @@ const SidebarMenuButton = React.forwardRef<
 >(
   (
     {
-      renderAsSlot, // This is the SidebarMenuButton's own prop to decide if it renders Slot
+      renderAsSlot,
       isActive = false,
-      variant = "default",
-      size = "default",
+      variant,
+      size,
       tooltip,
-      className,
-      href, // This prop will be passed by next/link when its asChild is true
       children,
-      ...restPropsFromParent // This will capture all other props, including `asChild` if passed by <Link asChild>
+      className,
+      href,
+      asChild: asChildFromParent, // Capture asChild from Link or other parent
+      ...rest
     },
     ref
   ) => {
     const { isMobile, state } = useSidebar();
+    const Comp = renderAsSlot ? Slot : href ? "a" : "button";
 
-    // Determine if this SidebarMenuButton should render a Slot or a concrete element ('a' or 'button')
-    const Comp = renderAsSlot ? Slot : (href ? "a" : "button");
-
-    // Explicitly remove 'asChild' from the props received from the parent (e.g., from Link)
-    // before spreading them onto a DOM element. This 'asChild' is not for the DOM element.
-    const { asChild: parentAsChildProp, ...domSafeRestProps } = restPropsFromParent;
-
-    const componentProps = {
-      ref: ref as React.Ref<any>,
+    // `rest` now contains all other props, which might include event handlers from Link
+    // but `asChildFromParent` has captured the asChild prop from Link so it's not in `rest`.
+    
+    const componentProps: any = {
+      ref: ref,
       "data-sidebar": "menu-button",
       "data-size": size,
       "data-active": isActive,
-      className: cn(sidebarMenuButtonVariants({ variant, size }), className),
-      ...domSafeRestProps, // Spread the rest of the props, now without `asChild` from parent
+      className: cn(sidebarMenuButtonVariants({ variant, size, className })),
+      ...rest, // Spread rest, which is now clean of asChild from the parent Link
     };
 
-    if (href && Comp === "a") {
-      (componentProps as React.AnchorHTMLAttributes<HTMLAnchorElement>).href = href;
+    if (Comp === "a" && href) {
+      componentProps.href = href;
     }
     
     const buttonContent = (
-      <Comp {...componentProps}>
-        {children}
-      </Comp>
+      <Comp {...componentProps}>{children}</Comp>
     );
 
     if (!tooltip) {
