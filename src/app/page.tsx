@@ -3,12 +3,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; // Corrected: Added import
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowRight, Zap, Star, Lightbulb, Film, FileText as FileTextIcon, GraduationCap, Briefcase, ShieldCheck, Handshake, BookOpen, DollarSign, HelpCircle, Settings, Link as LinkIconProp, Users as UsersIcon, Building, CheckCircle, UserCircle, FileVideo, ClipboardList, Library, MessageSquare as MessageSquareIcon, DraftingCompass, Server, Cpu, Palette, LayoutGrid, Code2 } from "lucide-react";
 import Link from "next/link";
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
-import Image from "next/image"; 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -18,8 +18,8 @@ const featureCards = [
     title: "AI-Powered Learning Paths",
     description: "Dynamically creates personalized learning journeys based on your profile and goals, leveraging real-time internet research for up-to-date content and comprehensive skill gap analysis. LMDpro's AI Agent actively guides you, suggesting modules, resources, and assessments to ensure optimal skill acquisition and career alignment.",
     icon: Lightbulb,
-    bgColor: "bg-blue-500/10 dark:bg-blue-900/30", 
-    textColor: "text-blue-600 dark:text-blue-400", 
+    bgColor: "bg-blue-500/10 dark:bg-blue-900/30",
+    textColor: "text-blue-600 dark:text-blue-400",
     href: "/learning-paths",
     imagePlaceholder: "https://placehold.co/600x400.png",
     imageHint: "AI learning path"
@@ -85,10 +85,12 @@ const quickLinks = [
 ];
 
 export default function HomePage() {
-  const [userName, setUserName] = useState("Learner"); 
+  const [userName, setUserName] = useState("Learner");
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("lmdpro-user"); 
+    // In a real app, fetch user name from auth context
+    // For now, can use a simple local storage check or keep placeholder
+    const storedUser = localStorage.getItem("lmdpro-user"); // Example
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
@@ -199,7 +201,7 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        
+
         {/* Pricing Section Block */}
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4">
@@ -306,5 +308,3 @@ export default function HomePage() {
     </>
   );
 }
-
-    
