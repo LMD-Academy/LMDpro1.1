@@ -9,7 +9,7 @@ import PublicFooter from "@/components/layout/PublicFooter";
 const featureCards = [
   {
     title: "AI-Powered Learning Paths",
-    description: "Dynamically creates personalized learning journeys based on your profile and goals, leveraging real-time internet research for up-to-date content and comprehensive skill gap analysis.",
+    description: "Dynamically creates personalized learning journeys based on your profile and goals, leveraging real-time internet research for up-to-date content and comprehensive skill gap analysis. LMDpro's AI Agent actively guides you, suggesting modules, resources, and assessments to ensure optimal skill acquisition and career alignment.",
     icon: Lightbulb,
     bgColor: "bg-blue-500/10",
     textColor: "text-blue-500",
@@ -17,7 +17,7 @@ const featureCards = [
   },
   {
     title: "Automated Video Creation",
-    description: "Automatically generate engaging educational videos from research scripts. Supports multiple languages, diverse avatar selections, and custom branding application for streamlined content creation.",
+    description: "Automatically generate engaging educational videos from research scripts or your own text. Supports multiple languages, diverse 3D animated avatar selections, and custom branding application for streamlined, professional content creation. Ideal for educators and corporate training.",
     icon: Film,
     bgColor: "bg-green-500/10",
     textColor: "text-green-500",
@@ -25,15 +25,15 @@ const featureCards = [
   },
   {
     title: "Intelligent Resume Builder",
-    description: "Import data from LinkedIn, design with customizable templates, and optimize content with AI suggestions and ATS scoring. Export professional resumes as PDF with a subtle 'Made with LMDpro' watermark.",
+    description: "Import data from LinkedIn, design with customizable templates, and optimize content with AI suggestions tailored to specific job descriptions and ATS scoring. Export professional resumes as PDF, with a subtle 'Made with LMDpro' watermark on the free tier.",
     icon: FileText,
     bgColor: "bg-purple-500/10",
     textColor: "text-purple-500",
     href: "/resume-builder",
   },
   {
-    title: "24/7 AI Support",
-    description: "Get instant assistance for technical issues, billing inquiries, and course navigation via our intelligent AI chat modal, featuring persistent conversation history for quick problem resolution.",
+    title: "24/7 AI Support & Research",
+    description: "Get instant assistance for technical issues, billing inquiries, and course navigation via our intelligent AI chat. Leverage the Academic Research Agent for in-depth exploration of topics, powered by unrestricted internet access and RAG capabilities.",
     icon: HelpCircle,
     bgColor: "bg-yellow-500/10",
     textColor: "text-yellow-500",
@@ -42,22 +42,22 @@ const featureCards = [
 ];
 
 const pricingTiersHomepage = [
-  { name: "Community", price: "Free", model: "Latest Free Gemma Model", features: ["Limited Personalized Learning Paths", "Basic Video Creation (watermarked)", "1 Resume Template", "Selection of Free Courses"], cta: "Join for Free", href:"/register?tier=community" },
-  { name: "Premium", price: "$5.80/mo", model: "Latest Flash Model", features: ["Unlimited Learning Paths & AI Generation", "Advanced Video Creation (No Watermark)", "All Resume Templates & AI Optimization", "Full Course Catalog Access"], cta: "Go Premium", href:"/register?tier=premium", popular: true },
+  { name: "Community", price: "Free", model: "Latest Free Gemma Model", features: ["Limited Personalized Learning Paths", "Basic Video Creation (watermarked)", "1 Resume Template (watermarked export)", "Selection of Free Courses"], cta: "Join for Free", href:"/register?tier=community" },
+  { name: "Premium", price: "$5.80/mo", model: "Latest Flash Model", features: ["Unlimited Learning Paths & AI Generation", "Advanced Video Creation (No Watermark)", "All Resume Templates & AI Optimization (No Watermark)", "Full Course Catalog Access"], cta: "Go Premium", href:"/register?tier=premium", popular: true },
   { name: "Teams", price: "$196/mo", model: "Latest Pro Model", features: ["All Premium Features", "Team Management & Analytics", "Shared Resources & Brand Kits", "Consolidated Billing"], cta: "Choose Teams", href:"/register?tier=teams" },
 ];
 
 
 const courseHighlights = [
-  { title: "Executive Leadership Development", icon: GraduationCap, type: "Learning Path", description: "Master executive skills for top-tier roles. Develop strategic thinking, communication, and team motivation abilities essential for modern leadership." },
-  { title: "AI for Business Professionals", icon: Briefcase, type: "Course", description: "Understand and apply Artificial Intelligence in various business contexts to drive innovation, efficiency, and data-driven decision-making." },
-  { title: "Full-Stack Web Development Bootcamp", icon: Zap, type: "Learning Path", description: "Comprehensive training from foundational HTML/CSS/JS to advanced backend technologies, databases, and deployment strategies." },
+  { title: "Executive Leadership Development", icon: GraduationCap, type: "Learning Path", description: "Master executive skills for top-tier roles. Develop strategic thinking, communication, and team motivation abilities essential for modern leadership in a global context." },
+  { title: "AI for Business Professionals", icon: Briefcase, type: "Course", description: "Understand and apply Artificial Intelligence in various business contexts to drive innovation, operational efficiency, and data-driven decision-making strategies." },
+  { title: "Autonomous AI Agent Development", icon: Zap, type: "Learning Path", description: "Comprehensive training from foundational AI principles to designing, building, and deploying advanced autonomous AI agents capable of complex tasks." },
 ];
 
 const testimonials = [
-    { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path in AI was a game-changer. It helped me upskill effectively and secure a promotion. The AI resume builder polished my CV perfectly!" },
-    { name: "Maria S.", role: "Marketing Manager", quote: "The AI video creation tool is incredibly efficient for our team's internal training content. We're producing high-quality, professional videos in a fraction of the time." },
-    { name: "David K.", role: "University Student", quote: "As a student, the Non-Profit/Student tier provides amazing value. I'm learning cutting-edge skills in data science that are preparing me for my future career." },
+    { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path in AI was a game-changer. It helped me upskill effectively and secure a promotion. The AI resume builder polished my CV perfectly!" , avatarHint: "software engineer" },
+    { name: "Maria S.", role: "Marketing Manager", quote: "The AI video creation tool is incredibly efficient for our team's internal training content. We're producing high-quality, professional videos in a fraction of the time." , avatarHint: "marketing manager" },
+    { name: "David K.", role: "University Student", quote: "As a student, the Non-Profit/Student tier provides amazing value. I'm learning cutting-edge skills in data science that are preparing me for my future career." , avatarHint: "university student" },
 ];
 
 const quickLinks = [
@@ -75,7 +75,7 @@ export default function HomePage() {
       <PublicHeader />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="py-20 md:py-32 text-center bg-card/50 backdrop-blur-sm dark:bg-card/80">
+        <section className="pt-24 md:pt-32 lg:pt-40 pb-20 md:pb-32 text-center bg-card/50 backdrop-blur-sm dark:bg-card/80"> {/* Adjusted top padding */}
           <div className="container mx-auto px-4">
             <h1 className="text-5xl md:text-7xl font-headline font-bold mb-6 animated-text-gradient">
               Unlock Your Potential with LMDpro
@@ -90,7 +90,7 @@ export default function HomePage() {
             </Link>
              <div className="mt-16">
               <div className="w-full max-w-4xl h-[300px] md:h-[400px] bg-muted rounded-lg shadow-2xl mx-auto border flex items-center justify-center">
-                <p className="text-muted-foreground">LMDpro Platform Showcase Area</p>
+                <p className="text-muted-foreground text-center px-4">Dynamic LMDpro Platform Showcase: Visualize an interactive demo of AI learning paths, video creation previews, and resume optimization in action.</p>
               </div>
             </div>
           </div>

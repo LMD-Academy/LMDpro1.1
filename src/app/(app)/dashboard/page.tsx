@@ -1,15 +1,11 @@
 
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, RefreshCw, Activity, TrendingUp, Zap, Lightbulb, UserCircle } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, RefreshCw, Activity, TrendingUp, Zap, Lightbulb, UserCircle, Image as ImageIcon } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-// import Image from "next/image"; // Image import removed
-
-// Assuming a chart component exists or will be added from shadcn/ui/chart
-// import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'; // Example, replace with actual chart components
 
 const ongoingCourses = [
   { id: "1", title: "Advanced AI for Business Strategy", progress: 65, imageHint: "AI business", type: "Learning Path" },
@@ -59,8 +55,9 @@ export default function DashboardPage() {
             <CardDescription>Overview of your course engagement.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-48 flex items-center justify-center bg-muted/50 rounded-md text-muted-foreground mb-4">
-              Learning Progress Chart (e.g., Pie Chart: 5 Completed, 3 In Progress, 2 Not Started)
+            <div className="h-48 flex items-center justify-center bg-muted/50 rounded-md text-muted-foreground mb-4 border">
+              {/* Placeholder for a real chart component */}
+              <p className="text-sm p-4 text-center">Dynamic Learning Progress Chart Area (e.g., Pie Chart: 5 Completed, 3 In Progress, 2 Not Started)</p>
             </div>
              <div className="space-y-2 text-sm">
                 <div className="flex justify-between"><span>Courses Completed</span> <span className="font-semibold">5</span></div>
@@ -79,7 +76,7 @@ export default function DashboardPage() {
              <CardDescription>AI-Assessed ATS Compatibility.</CardDescription>
           </CardHeader>
           <CardContent className="text-center">
-             <div className="relative mx-auto h-32 w-32"> {/* Circular progress placeholder */}
+             <div className="relative mx-auto h-32 w-32">
                 <svg className="h-full w-full -rotate-90" viewBox="0 0 36 36">
                     <circle className="text-muted/30" strokeWidth="3" stroke="currentColor" fill="transparent" r="15.9155" cx="18" cy="18"></circle>
                     <circle className="text-primary" strokeWidth="3" strokeDasharray="75, 100" strokeLinecap="round" stroke="currentColor" fill="transparent" r="15.9155" cx="18" cy="18"></circle>
@@ -105,7 +102,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             {["Advanced Data Analysis with Pandas & SQL", "Natural Language Processing with Transformers"].map(title => (
-                <Link href="#" key={title} className="block p-3 border rounded-md hover:bg-muted/50 transition-colors group">
+                <Link href="/courses" key={title} className="block p-3 border rounded-md hover:bg-muted/50 transition-colors group">
                     <h4 className="font-semibold text-sm group-hover:text-primary">{title}</h4>
                     <p className="text-xs text-muted-foreground">Matches your 'Data Science' career goal & recent activity in Python.</p>
                     <span className="text-xs text-primary/80 group-hover:underline">Why it&apos;s recommended?</span>
@@ -132,9 +129,8 @@ export default function DashboardPage() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {ongoingCourses.map((course) => (
             <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-              {/* Image removed */}
-              <div className="w-full h-40 bg-muted flex items-center justify-center">
-                <UserCircle className="h-16 w-16 text-primary/50" /> {/* Placeholder Icon */}
+              <div className="w-full h-40 bg-muted flex items-center justify-center rounded-t-lg">
+                <ImageIcon className="h-16 w-16 text-primary/30" data-ai-hint={course.imageHint} />
               </div>
               <CardHeader>
                 <CardTitle className="font-headline text-lg">{course.title}</CardTitle>
