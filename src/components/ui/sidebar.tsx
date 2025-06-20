@@ -8,7 +8,7 @@ import { PanelLeft } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button" // Assuming Button is correctly handling its own asChild logic
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
@@ -527,14 +527,13 @@ const sidebarMenuButtonVariants = cva(
 type SidebarMenuButtonElement = HTMLButtonElement | HTMLAnchorElement;
 
 type SidebarMenuButtonProps = (
-  | React.ComponentProps<"button">
-  | React.ComponentProps<"a">
+  React.ComponentProps<"button"> & React.ComponentProps<"a"> // Combine button and anchor props
 ) & {
-  renderAsSlot?: boolean;
+  renderAsSlot?: boolean; // Prop to indicate if SidebarMenuButton should render as Slot
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
   children?: React.ReactNode;
-  asChild?: boolean; // To capture asChild from Link
+  asChild?: boolean; // This is to explicitly catch the asChild prop from Link
 } & VariantProps<typeof sidebarMenuButtonVariants>;
 
 
@@ -543,8 +542,14 @@ const SidebarMenuButton = React.forwardRef<
   SidebarMenuButtonProps
 >(
   (
-    {
-      renderAsSlot,
+    props, // Changed to props to access all of them before destructuring
+    ref
+  ) => {
+    const { isMobile, state } = useSidebar();
+    // Destructure props, explicitly capturing `asChild` if passed (e.g., from Link)
+    // and `renderAsSlot` for SidebarMenuButton's own behavior.
+    const {
+      renderAsSlot, // This is SidebarMenuButton's own prop
       isActive = false,
       variant,
       size,
@@ -552,16 +557,11 @@ const SidebarMenuButton = React.forwardRef<
       children,
       className,
       href,
-      asChild: asChildFromParent, // Capture asChild from Link or other parent
-      ...rest
-    },
-    ref
-  ) => {
-    const { isMobile, state } = useSidebar();
-    const Comp = renderAsSlot ? Slot : href ? "a" : "button";
+      asChild: asChildFromParent, // Capture asChild passed from Link or other parent
+      ...otherRestProps // Remaining props
+    } = props;
 
-    // `rest` now contains all other props, which might include event handlers from Link
-    // but `asChildFromParent` has captured the asChild prop from Link so it's not in `rest`.
+    const Comp = renderAsSlot ? Slot : href ? "a" : "button";
     
     const componentProps: any = {
       ref: ref,
@@ -569,7 +569,7 @@ const SidebarMenuButton = React.forwardRef<
       "data-size": size,
       "data-active": isActive,
       className: cn(sidebarMenuButtonVariants({ variant, size, className })),
-      ...rest, // Spread rest, which is now clean of asChild from the parent Link
+      ...otherRestProps, // Spread only the other props, asChildFromParent is not spread
     };
 
     if (Comp === "a" && href) {
@@ -768,4 +768,3 @@ export {
   SidebarTrigger,
   useSidebar,
 }
-
