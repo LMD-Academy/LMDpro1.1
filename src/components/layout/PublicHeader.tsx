@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { UserCircle, LogIn, LayoutDashboard, Info, Tag, FileText, Menu, BookOpen, Users, Briefcase, Moon, Sun, ShoppingBag, ChevronDown, Lightbulb, Zap } from "lucide-react"; // Added Lightbulb and Zap
+import { UserCircle, LogIn, LayoutDashboard, Info, Tag, FileText, Menu, BookOpen, Users, Briefcase, Moon, Sun, ShoppingBag, ChevronDown, Lightbulb, Zap, Link as LinkIcon } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -18,17 +18,15 @@ import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 const mainNavLinks = [
-  // Explore Courses is now a DropdownMenu
   { href: "/pricing", label: "Pricing", icon: Tag },
-  { href: "/docs", label: "Docs & Guides", icon: BookOpen }, // Consolidated Docs
+  { href: "/docs", label: "Docs & Guides", icon: BookOpen }, 
   { href: "/about", label: "About Us", icon: Users },
 ];
 
-// Example course structure for megamenu placeholder
 const courseFields = [
   {
     name: "Technology Development",
-    icon: Briefcase, // Using Briefcase for general Tech/Career Dev
+    icon: Briefcase, 
     courses: [
       { title: "Python for Data Science", href: "/courses/python-ds" },
       { title: "Full-Stack Web Development", href: "/courses/full-stack-web" },
@@ -37,7 +35,7 @@ const courseFields = [
   },
   {
     name: "Business & Management",
-    icon: LayoutDashboard, // Maintained for Business
+    icon: LayoutDashboard, 
     courses: [
       { title: "Executive Leadership Program", href: "/courses/exec-leadership" },
       { title: "Agile Project Management", href: "/courses/agile-pm" },
@@ -46,7 +44,7 @@ const courseFields = [
   },
   {
     name: "AI Specializations",
-    icon: Lightbulb, // Using Lightbulb specifically for AI
+    icon: Lightbulb, 
     courses: [
       { title: "Autonomous AI Agent Development", href: "/courses/ai-agent-dev" },
       { title: "Machine Learning Foundations", href: "/courses/ml-foundations" },
@@ -68,12 +66,11 @@ export default function PublicHeader() {
         setCurrentTheme(savedTheme);
         document.documentElement.classList.toggle("dark", savedTheme === "dark");
       } else {
-         // Default to light theme if nothing is saved or value is invalid
         document.documentElement.classList.remove("dark");
       }
     } catch (error) {
        console.warn("Could not load theme preference from localStorage", error);
-       document.documentElement.classList.remove("dark"); // Fallback to light
+       document.documentElement.classList.remove("dark"); 
     }
   }, []);
 
@@ -91,7 +88,7 @@ export default function PublicHeader() {
   return (
     <header className={cn(
       "sticky top-4 z-50 w-full max-w-5xl mx-auto rounded-xl shadow-lg",
-      "bg-card" // Solid background for non-translucency
+      "bg-card" 
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
@@ -106,7 +103,7 @@ export default function PublicHeader() {
                 Explore Courses <ChevronDown className="ml-1 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[500px] p-4" align="start"> {/* Wide content area */}
+            <DropdownMenuContent className="w-[500px] p-4" align="start"> 
               <DropdownMenuLabel className="font-headline text-lg mb-2">Courses by Field</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -117,7 +114,7 @@ export default function PublicHeader() {
                       {field.name}
                     </div>
                     {field.courses.map((course) => (
-                      <Link href={course.href} key={course.title} passHref legacyBehavior>
+                      <Link href={course.href} key={course.title} passHref>
                         <DropdownMenuItem asChild>
                           <a className="text-xs text-muted-foreground hover:text-primary pl-6">{course.title}</a>
                         </DropdownMenuItem>
@@ -127,7 +124,7 @@ export default function PublicHeader() {
                 ))}
               </div>
                <DropdownMenuSeparator className="my-3" />
-               <Link href="/courses" passHref legacyBehavior>
+               <Link href="/courses" passHref>
                 <DropdownMenuItem asChild>
                   <a className="font-semibold text-primary hover:underline">View All Courses & Learning Paths &rarr;</a>
                 </DropdownMenuItem>
@@ -136,7 +133,7 @@ export default function PublicHeader() {
           </DropdownMenu>
 
           {mainNavLinks.map(link => (
-            <Link key={link.label} href={link.href} legacyBehavior>
+            <Link key={link.label} href={link.href}>
               <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
                 {link.label}
               </Button>
@@ -151,10 +148,10 @@ export default function PublicHeader() {
           </Button>
           {isAuthenticated ? (
             <>
-              <Link href="/dashboard" passHref>
+              <Link href="/dashboard">
                 <Button variant="outline">Dashboard</Button>
               </Link>
-              <Link href="/account?tab=profile" passHref>
+              <Link href="/account?tab=profile">
                  <Button variant="ghost" size="icon" aria-label="Account">
                     <UserCircle className="h-5 w-5" />
                  </Button>
@@ -162,10 +159,10 @@ export default function PublicHeader() {
             </>
           ) : (
             <>
-              <Link href="/login" passHref>
+              <Link href="/login">
                 <Button variant="ghost">Login</Button>
               </Link>
-              <Link href="/register" passHref>
+              <Link href="/register">
                 <Button className="button-animated-gradient">Get Started Free</Button>
               </Link>
             </>
@@ -192,7 +189,7 @@ export default function PublicHeader() {
                   <span className="text-xl font-headline font-bold animated-text-gradient">LMDpro</span>
                 </Link>
                 <Link href="/courses" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
-                  <ShoppingBag className="h-5 w-5" /> {/* Using ShoppingBag for Explore Courses */}
+                  <ShoppingBag className="h-5 w-5" /> {}
                   Explore Courses
                 </Link>
                 {mainNavLinks.map(link => (
@@ -204,12 +201,12 @@ export default function PublicHeader() {
                 <hr className="my-2" />
                 {isAuthenticated ? (
                     <>
-                     <Link href="/dashboard" passHref>
+                     <Link href="/dashboard">
                         <Button variant="outline" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             <LayoutDashboard className="h-5 w-5"/> Dashboard
                         </Button>
                      </Link>
-                     <Link href="/account?tab=profile" passHref>
+                     <Link href="/account?tab=profile">
                         <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             <UserCircle className="h-5 w-5" /> Account
                         </Button>
@@ -217,12 +214,12 @@ export default function PublicHeader() {
                     </>
                 ) : (
                     <>
-                        <Link href="/login" passHref>
+                        <Link href="/login">
                         <Button variant="outline" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             <LogIn className="h-5 w-5" /> Login
                         </Button>
                         </Link>
-                        <Link href="/register" passHref>
+                        <Link href="/register">
                         <Button className="w-full button-animated-gradient justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             Get Started Free
                         </Button>
@@ -237,5 +234,3 @@ export default function PublicHeader() {
     </header>
   );
 }
-
-    
