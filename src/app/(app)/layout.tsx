@@ -68,15 +68,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <SidebarMenu>
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href}>
-                <Link href={item.href}>
+                <Link href={item.href} asChild>
                   <SidebarMenuButton
                     asChild
                     isActive={pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))}
                     tooltip={item.label}
                   >
-                    {/* This <a> tag is the crucial change. It becomes the child of Slot.
-                        Slot will pass the className from SidebarMenuButton and href from Link to this <a>.
-                    */}
                     <a>
                       <item.icon />
                       <span>{item.label}</span>
