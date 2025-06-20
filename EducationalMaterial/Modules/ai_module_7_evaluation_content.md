@@ -1,0 +1,10 @@
+
+# Module 7: Building and Evaluating Agentic Systems
+
+Having explored the theoretical foundations, architectural patterns, and core components (perception, planning, action, memory) of autonomous agents, this module transitions towards practical application and critical evaluation. Building an agent involves more than just understanding the concepts; it requires hands-on implementation, rigorous testing, and careful consideration of the broader implications, including safety and ethics. This module provides practical guidance on setting up a development environment, walks through building a basic agent using a common framework, introduces methods for evaluating agent performance, and addresses the crucial aspects of responsible AI development in the context of autonomous systems.
+
+## Lesson 7.1: Practical Implementation Workshop
+
+Theory comes alive through practice. This lesson provides a hands-on starting point for building an autonomous agent, focusing on setting up the necessary environment and constructing a simple agent using a popular framework like LangChain. While a comprehensive build is beyond the scope of a single lesson, this workshop aims to illustrate how the core components discussed in previous modules can be integrated using existing tools.
+
+First, **setting up the development environment** is crucial. This typically involves installing Python and relevant package managers (like pip or conda). Essential libraries will include the chosen agent framework (e.g., `langchain`, `langchain-openai`, `langchain-anthropic`), libraries for any specific tools the agent will use (e.g., `selenium` for web browsing, `requests` for API calls, `beautifulsoup4` for HTML parsing), and potentially libraries for vector stores if implementing long-term memory (e.g., `faiss-cpu`, `chromadb`). Access to LLM APIs (like OpenAI, Anthropic, Google Gemini) is also necessary, which usually involves obtaining API keys and configuring them securely in the environment. Depending

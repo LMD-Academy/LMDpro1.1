@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 const navLinks = [
   { href: "/pricing", label: "Pricing", icon: Tag },
   { href: "/api-docs", label: "API Docs", icon: FileText },
-  { href: "/docs", label: "App Docs", icon: BookOpen },
+  { href: "/docs", label: "App Docs", icon: BookOpen }, // Link to authenticated docs page
   { href: "/about", label: "About Us", icon: Users },
 ];
 
@@ -43,15 +43,15 @@ export default function PublicHeader() {
     document.documentElement.classList.toggle("dark", newTheme === "dark");
     try {
       localStorage.setItem('lmdpro-theme', newTheme);
-    } catch (error) {
+    } catch (error) { // Added curly braces here
       console.warn("Could not save theme preference to localStorage", error);
-    }
+    } // And here
   };
 
   return (
     <header className={cn(
-      "z-50 w-full max-w-6xl mx-auto mt-4 rounded-xl shadow-lg", // Floating, rounded, centered with max-width
-      "bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60" // Styling for transparency
+      "sticky top-4 z-50 w-full max-w-6xl mx-auto rounded-xl shadow-lg",
+      "bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60"
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
@@ -77,7 +77,7 @@ export default function PublicHeader() {
               <Link href="/dashboard" passHref>
                 <Button variant="outline">Dashboard</Button>
               </Link>
-              <Link href="/account" passHref>
+              <Link href="/account?tab=profile" passHref>
                  <Button variant="ghost" size="icon" aria-label="Account">
                     <UserCircle className="h-5 w-5" />
                  </Button>
@@ -128,7 +128,7 @@ export default function PublicHeader() {
                             <LayoutDashboard className="h-5 w-5"/> Dashboard
                         </Button>
                      </Link>
-                     <Link href="/account" passHref>
+                     <Link href="/account?tab=profile" passHref>
                         <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             <UserCircle className="h-5 w-5" /> Account
                         </Button>
