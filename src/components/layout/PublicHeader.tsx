@@ -1,16 +1,17 @@
+
 "use client";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { UserCircle, LogIn, LayoutDashboard, Info, Tag, FileText, Menu } from "lucide-react";
+import { UserCircle, LogIn, LayoutDashboard, Info, Tag, FileText, Menu, BookOpen } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 
 const navLinks = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/pricing", label: "Pricing", icon: Tag },
   { href: "/api-docs", label: "API Docs", icon: FileText },
-  { href: "/about", label: "About Us", icon: Info },
+  { href: "/docs", label: "App Docs", icon: BookOpen },
+  { href: "/about", label: "About Us", icon: Info }, // Assuming an /about page will be created
 ];
 
 export default function PublicHeader() {
@@ -37,7 +38,7 @@ export default function PublicHeader() {
             <Button variant="ghost">Login</Button>
           </Link>
           <Link href="/register" passHref>
-            <Button className="button-animated-gradient">Get Started</Button>
+            <Button className="button-animated-gradient">Get Started Free</Button>
           </Link>
           <Link href="/account" passHref>
              <Button variant="outline" size="icon" aria-label="Account">
@@ -75,7 +76,7 @@ export default function PublicHeader() {
                 </Link>
                 <Link href="/register" passHref>
                   <Button className="w-full button-animated-gradient justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
-                    Get Started
+                    Get Started Free
                   </Button>
                 </Link>
                  <Link href="/account" passHref>

@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowRight, Zap, Users, Star, Lightbulb, Film, FileText, GraduationCap, Briefcase, ShieldCheck, Handshake, BookOpen, DollarSign, HelpCircle, Settings, Link as LinkIcon } from "lucide-react";
+import { ArrowRight, Zap, Star, Lightbulb, Film, FileText, GraduationCap, Briefcase, ShieldCheck, Handshake, BookOpen, DollarSign, HelpCircle, Settings, Link as LinkIcon, Users, Building } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import PublicHeader from "@/components/layout/PublicHeader";
@@ -10,42 +10,54 @@ import PublicFooter from "@/components/layout/PublicFooter";
 const featureCards = [
   {
     title: "AI-Powered Learning Paths",
-    description: "Dynamically creates personalized learning journeys based on your profile and goals, leveraging internet research for up-to-date content.",
+    description: "Dynamically creates personalized learning journeys based on your profile and goals, leveraging internet research for up-to-date content and skill gap analysis.",
     icon: Lightbulb,
-    bgColor: "bg-blue-500/10",
-    textColor: "text-blue-500",
-    href: "/learning-paths",
+    bgColor: "bg-blue-500/10", // Example color
+    textColor: "text-blue-500", // Example color
+    href: "/learning-paths", // Assuming this page will be created
   },
   {
     title: "Automated Video Creation",
-    description: "Automatically generate educational videos from research scripts. Supports multiple languages, avatars, and branding.",
+    description: "Automatically generate educational videos from research scripts. Supports multiple languages, avatar selections, and branding application for streamlined content creation.",
     icon: Film,
-    bgColor: "bg-green-500/10",
-    textColor: "text-green-500",
+    bgColor: "bg-green-500/10", // Example color
+    textColor: "text-green-500", // Example color
     href: "/video-creation",
   },
   {
     title: "Intelligent Resume Builder",
-    description: "Import from LinkedIn, design with customizable templates, and optimize content with AI suggestions and ATS scoring.",
+    description: "Import from LinkedIn, design with customizable templates, and optimize content with AI suggestions and ATS scoring. Export as a PDF with 'Made with LMDpro' watermark.",
     icon: FileText,
-    bgColor: "bg-purple-500/10",
-    textColor: "text-purple-500",
+    bgColor: "bg-purple-500/10", // Example color
+    textColor: "text-purple-500", // Example color
     href: "/resume-builder",
   },
   {
     title: "24/7 AI Support",
-    description: "Instant assistance for technical issues, billing, and course navigation via our AI chat modal with persistent history.",
+    description: "Instant assistance for technical issues, billing, and course navigation via our AI chat modal with persistent conversation history to quickly address common problems.",
     icon: HelpCircle,
-    bgColor: "bg-yellow-500/10",
-    textColor: "text-yellow-500",
+    bgColor: "bg-yellow-500/10", // Example color
+    textColor: "text-yellow-500", // Example color
     href: "/support",
   },
 ];
 
-const pricingTiers = [
+const pricingTiersHomepage = [
   { name: "Community", price: "Free", model: "Latest Free Gemma Model", features: ["Limited Learning Paths", "Basic Video Creation (watermarked)", "1 Resume Template"], cta: "Join for Free", href:"/register?tier=community" },
-  { name: "Premium", price: "$5.80/mo", model: "Latest Flash Model", features: ["Unlimited Learning Paths", "Advanced Video Creation", "All Resume Templates"], cta: "Go Premium", href:"/register?tier=premium" },
-  { name: "Teams", price: "$196/mo", model: "Latest Pro Model", features: ["All Premium Features", "Team Management", "Shared Resources"], cta: "Choose Teams", href:"/register?tier=teams" },
+  { name: "Premium", price: "$5.80/mo", model: "Latest Flash Model", features: ["Unlimited Learning Paths", "Advanced Video Creation", "All Resume Templates & AI Optimization"], cta: "Go Premium", href:"/register?tier=premium" },
+  { name: "Teams", price: "$196/mo", model: "Latest Pro Model", features: ["All Premium Features", "Team Management", "Shared Resources & Analytics"], cta: "Choose Teams", href:"/register?tier=teams" },
+];
+
+const courseHighlights = [
+  { title: "Executive Leadership Development", icon: GraduationCap, imageHint: "leadership team", type: "Learning Path", description: "Master executive skills for top-tier roles. Develop strategic thinking and team motivation." },
+  { title: "AI for Business Professionals", icon: Briefcase, imageHint: "AI business", type: "Course", description: "Understand and apply AI in business contexts to drive innovation and efficiency." },
+  { title: "Full-Stack Web Development Bootcamp", icon: Zap, imageHint: "web development code", type: "Learning Path", description: "Comprehensive training from fundamentals to advanced web technologies and deployment." },
+];
+
+const testimonials = [
+    { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path helped me upskill in AI and land a promotion. The resume builder was a fantastic bonus!", avatarHint: "software engineer typing" },
+    { name: "Maria S.", role: "Marketing Manager", quote: "The AI video creation tool is a game-changer for our team's training content. So much faster and highly professional.", avatarHint: "marketing manager presentation" },
+    { name: "David K.", role: "Student", quote: "As a student, the Non-Profit/Student tier is incredible. I'm learning cutting-edge skills that will prepare me for my career.", avatarHint: "student with laptop" },
 ];
 
 const quickLinks = [
@@ -55,7 +67,7 @@ const quickLinks = [
     { href: "/api-management", label: "Developer APIs", icon: Zap },
     { href: "/pricing", label: "View Plans", icon: DollarSign },
     { href: "/support", label: "Get Support", icon: HelpCircle },
-]
+];
 
 export default function HomePage() {
   return (
@@ -69,7 +81,7 @@ export default function HomePage() {
               Unlock Your Potential with LMDpro
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10">
-              Your AI-powered partner for personalized learning, skill enhancement, automated video creation, and career advancement.
+              Your AI-powered partner for personalized learning, skill enhancement, automated video creation, and career advancement. Experience the future of education, tailored to you.
             </p>
             <Link href="/register" passHref>
               <Button size="lg" className="button-animated-gradient text-lg px-10 py-6">
@@ -77,7 +89,7 @@ export default function HomePage() {
               </Button>
             </Link>
              <div className="mt-16">
-              <Image src="https://placehold.co/1200x600.png" alt="LMDpro Platform Showcase" width={1200} height={600} className="rounded-lg shadow-2xl mx-auto border" data-ai-hint="platform user interface" />
+              <Image src="https://placehold.co/1200x600.png" alt="LMDpro Platform Showcase - Dashboard and Learning Interface" width={1200} height={600} className="rounded-lg shadow-2xl mx-auto border" data-ai-hint="platform user interface" />
             </div>
           </div>
         </section>
@@ -85,9 +97,9 @@ export default function HomePage() {
         {/* Features Section */}
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-4">Why Choose LMDpro?</h2>
+            <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-4 animated-text-gradient">Transform Your Career with AI-Driven Learning</h2>
             <p className="text-lg text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-              We leverage cutting-edge AI to provide a learning experience that&apos;s truly personalized, effective, and geared towards tangible career outcomes.
+              LMDpro leverages cutting-edge AI to provide an educational experience that's truly personalized, effective, and geared towards tangible career outcomes and skill mastery.
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {featureCards.map((feature, index) => (
@@ -121,11 +133,7 @@ export default function HomePage() {
               Popular Learning Paths & Courses
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                { title: "Executive Leadership Development", icon: GraduationCap, imageHint: "leadership team", type: "Learning Path", description: "Master executive skills for top-tier roles." },
-                { title: "AI for Business Professionals", icon: Briefcase, imageHint: "AI business", type: "Course", description: "Understand and apply AI in business contexts." },
-                { title: "Full-Stack Web Development", icon: Zap, imageHint: "web development", type: "Learning Path", description: "From fundamentals to advanced web technologies." },
-              ].map((course, index) => (
+              {courseHighlights.map((course, index) => (
                 <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col">
                   <Image src={`https://placehold.co/600x400.png`} alt={course.title} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={course.imageHint} />
                   <CardHeader>
@@ -133,7 +141,7 @@ export default function HomePage() {
                       <course.icon className="h-6 w-6 text-primary shrink-0" />
                       <CardTitle className="font-headline text-xl">{course.title}</CardTitle>
                     </div>
-                    <CardDescription>{course.description} ({course.type})</CardDescription>
+                    <CardDescription className="text-sm h-16 overflow-hidden">{course.description} ({course.type})</CardDescription>
                   </CardHeader>
                   <CardFooter className="mt-auto">
                     <Link href="/courses" passHref className="w-full">
@@ -158,12 +166,12 @@ export default function HomePage() {
         {/* Pricing Section Block */}
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-4">Flexible Pricing for Everyone</h2>
+            <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-4 animated-text-gradient">Flexible Pricing for Everyone</h2>
             <p className="text-lg text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-              Choose a plan that fits your needs, from individual learners to large enterprises, all designed to deliver maximum value.
+              Choose a plan that fits your needs, from individual learners to large enterprises. All plans are designed to deliver maximum value and accelerate your growth.
             </p>
             <div className="grid md:grid-cols-3 gap-8 items-stretch">
-              {pricingTiers.map((tier) => (
+              {pricingTiersHomepage.map((tier) => (
                 <Card key={tier.name} className="flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300">
                   <CardHeader className="text-center">
                     <CardTitle className="font-headline text-2xl mb-2">{tier.name}</CardTitle>
@@ -191,7 +199,7 @@ export default function HomePage() {
              <div className="text-center mt-12">
               <Link href="/pricing" passHref>
                 <Button variant="link" className="text-lg animated-text-gradient font-semibold">
-                  See Full Pricing Details & Compare Plans <ArrowRight className="ml-1 h-5 w-5" />
+                  See Full Pricing Details & Compare All Plans <ArrowRight className="ml-1 h-5 w-5" />
                 </Button>
               </Link>
             </div>
@@ -201,15 +209,11 @@ export default function HomePage() {
         {/* Testimonials Section */}
         <section className="py-16 md:py-24 bg-card/50 backdrop-blur-sm dark:bg-card/80">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-12 animated-text-gradient">
               Loved by Learners & Professionals
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                { name: "Sarah L.", role: "Product Manager", quote: "LMDpro helped me pivot my career. The personalized learning path was a game-changer!", avatarHint: "woman smiling professional" },
-                { name: "Mike R.", role: "Startup Founder", quote: "The AI video creation tool saved us hours and elevated our educational content. Highly recommended!", avatarHint: "man glasses tech" },
-                { name: "Jessica P.", role: "UX Designer", quote: "Building my resume was so easy, and the AI suggestions really improved its impact. I landed more interviews!", avatarHint: "designer working computer" },
-              ].map((testimonial, index) => (
+              {testimonials.map((testimonial, index) => (
                 <Card key={index} className="shadow-md">
                   <CardContent className="pt-6">
                     <div className="flex items-center mb-4">
@@ -230,14 +234,14 @@ export default function HomePage() {
         {/* Quick Links / Call to Action Section */}
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-headline font-semibold mb-6">Ready to Elevate Your Career?</h2>
+            <h2 className="text-3xl md:text-4xl font-headline font-semibold mb-6 animated-text-gradient">Ready to Elevate Your Career?</h2>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-10">
-              Explore LMDpro and discover how AI can accelerate your learning and professional growth.
+              Explore LMDpro and discover how AI can accelerate your learning and professional growth. Sign up today and take the first step towards a brighter future.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
                 {quickLinks.map(link => (
                     <Link key={link.label} href={link.href} passHref>
-                        <Button variant="outline" className="w-full h-20 flex-col gap-1 text-xs sm:text-sm button-animated-gradient text-primary-foreground hover:text-primary-foreground/80">
+                        <Button variant="outline" className="w-full h-20 flex-col gap-1 text-xs sm:text-sm hover:bg-primary/5 hover:text-primary">
                             <link.icon className="h-6 w-6 mb-1" />
                             {link.label}
                         </Button>

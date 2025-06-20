@@ -17,7 +17,7 @@ import Link from "next/link";
 import {
   LayoutDashboard,
   GraduationCap,
-  FileText as ResumeIcon,
+  FileText,
   BookOpen,
   LifeBuoy,
   Settings,
@@ -33,7 +33,10 @@ import {
   ClipboardList,
   HelpCircle,
   Lightbulb, 
-  Video, 
+  Video,
+  Bell, // Added for Notifications
+  Moon, // Added for Theme Switcher (example)
+  Sun,  // Added for Theme Switcher (example)
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -53,14 +56,14 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/my-learning", label: "My Learning", icon: Briefcase },
   { href: "/learning-paths", label: "Learning Paths", icon: Lightbulb },
   { href: "/courses", label: "Course Catalog", icon: GraduationCap },
   { href: "/video-creation", label: "Video Creation", icon: Video },
-  { href: "/resume-builder", label: "Resume Builder", icon: ResumeIcon },
-  { href: "/my-learning", label: "My Learning", icon: Briefcase }, 
+  { href: "/resume-builder", label: "Resume Builder", icon: FileText },
   { href: "/academic-research", label: "Academic Research", icon: BookCopy },
   { href: "/api-management", label: "API Management", icon: KeyRound },
-  { href: "/docs", label: "Documentations", icon: BookOpen }, 
+  { href: "/docs", label: "App Documentations", icon: BookOpen }, 
   { href: "/account", label: "Account Settings", icon: Settings },
   { href: "/support", label: "Help & Support", icon: HelpCircle },
 ];
@@ -70,16 +73,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { open, toggleSidebar, isMobile, state } = useSidebar();
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
   const [isSidebarFixedOpen, setIsSidebarFixedOpen] = React.useState(false);
+  const [currentTheme, setCurrentTheme] = React.useState("light"); // Example state for theme
 
   const effectiveSidebarOpen = isMobile ? open : (isSidebarFixedOpen || state === 'expanded');
 
+  const toggleTheme = () => {
+    // Basic theme toggle example, in a real app use context and persist preference
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    setCurrentTheme(newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
+  };
 
   return (
     <div className={cn("flex min-h-screen app-area-background")}>
       <Sidebar
         side="left"
         variant="sidebar"
-        collapsible="icon"
+        collapsible="icon" // Default to icon view, expands on click/pin
         className="border-r"
       >
         <SidebarHeader className="p-4 flex items-center justify-between">
@@ -98,7 +108,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               size="icon"
               onClick={() => setIsSidebarFixedOpen(!isSidebarFixedOpen)}
               className={cn((state === 'collapsed' && !isSidebarFixedOpen) && "hidden group-hover/sidebar-wrapper:flex", (state === 'expanded' || isSidebarFixedOpen) && "flex" )}
-              title={isSidebarFixedOpen ? "Pin Sidebar (Icon View)" : "Unpin Sidebar (Expanded View)"}
+              title={isSidebarFixedOpen ? "Unpin Sidebar (Icon View)" : "Pin Sidebar (Expanded View)"}
             >
               {isSidebarFixedOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
             </Button>
@@ -153,7 +163,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </Button>
                 <Input
                     type="search"
-                    placeholder="Search courses, docs..."
+                    placeholder="Search LMDpro..."
                     className={cn(
                     "transition-all duration-300 ease-in-out",
                     isSearchExpanded ? "w-60 sm:w-72 opacity-100 px-3 py-2 h-10" : "w-0 opacity-0 p-0 border-none",
@@ -165,7 +175,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+                 <Button variant="ghost" size="icon" title="Notifications">
+                    <Bell className="h-5 w-5" />
+                    <span className="sr-only">Notifications</span>
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={toggleTheme} title="Toggle Theme">
+                    {currentTheme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+                    <span className="sr-only">Toggle Theme</span>
+                  </Button>
                 <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-9 w-9 rounded-full">
@@ -195,41 +213,40 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </main>
         </div>
 
+        {/* Right-hand fixed sidebar for AI Assistant and Notepad */}
         <aside className="hidden lg:flex flex-col w-72 border-l bg-card p-4 space-y-4 sticky top-0 h-screen overflow-y-auto">
-            <div className="flex-1 space-y-4">
-                 {/* AI Assistant Panel */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-lg font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-sm text-muted-foreground">AI chat and tools will appear here. (Inspired by Google Gemini)</p>
-                         <Button variant="outline" size="sm" className="w-full mt-2">Ask AI</Button>
-                    </CardContent>
-                </Card>
+            {/* AI Assistant Panel */}
+            <Card className="flex-shrink-0">
+                <CardHeader>
+                    <CardTitle className="text-lg font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-muted-foreground mb-2">Your intelligent learning partner. Ask questions, get summaries, or brainstorm ideas.</p>
+                     <Button variant="outline" size="sm" className="w-full">Chat with AI</Button>
+                </CardContent>
+            </Card>
 
-                {/* Notepad */}
-                <Card className="flex-grow flex flex-col">
-                    <CardHeader>
-                        <CardTitle className="text-lg font-headline flex items-center gap-2"><StickyNote className="h-5 w-5 text-primary" /> Notepad</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1">
-                        <Textarea placeholder="Take notes here... they will persist across pages." className="h-full min-h-[200px] focus-gradient-outline" />
-                    </CardContent>
-                    <CardFooter className="gap-2">
-                        <Button variant="outline" size="sm" className="flex-1">Export Notes</Button>
-                        <Button size="sm" className="flex-1 button-animated-gradient">Learn More</Button>
-                    </CardFooter>
-                </Card>
-            </div>
-
-            {/* Support Panel */}
-            <Card>
+            {/* Notepad Panel */}
+            <Card className="flex-grow flex flex-col min-h-0">
+                <CardHeader>
+                    <CardTitle className="text-lg font-headline flex items-center gap-2"><StickyNote className="h-5 w-5 text-primary" /> Notepad</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1 flex flex-col min-h-0">
+                    <Textarea placeholder="Take notes here... they will persist across pages." className="flex-1 h-full min-h-[150px] focus-gradient-outline" />
+                </CardContent>
+                <CardFooter className="gap-2 pt-4">
+                    <Button variant="outline" size="sm" className="flex-1">Export Notes</Button>
+                    <Button size="sm" className="flex-1 button-animated-gradient">Ask AI</Button>
+                </CardFooter>
+            </Card>
+            
+            {/* Support Panel (Bottom) */}
+            <Card className="flex-shrink-0 mt-auto">
                 <CardHeader>
                     <CardTitle className="text-base font-headline flex items-center gap-2"><LifeBuoy className="h-5 w-5 text-primary"/> Support</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-xs text-muted-foreground mb-2">Need help? Chat with our AI Support.</p>
+                    <p className="text-xs text-muted-foreground mb-2">Need help? Chat with our AI Support for instant assistance.</p>
                     <Button variant="outline" size="sm" className="w-full">Open Support Chat</Button>
                 </CardContent>
             </Card>
