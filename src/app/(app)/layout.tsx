@@ -74,10 +74,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     isActive={pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))}
                     tooltip={item.label}
                   >
-                    <>
+                    {/* This <a> tag is the crucial change. It becomes the child of Slot.
+                        Slot will pass the className from SidebarMenuButton and href from Link to this <a>.
+                    */}
+                    <a>
                       <item.icon />
                       <span>{item.label}</span>
-                    </>
+                    </a>
                   </SidebarMenuButton>
                 </Link>
               </SidebarMenuItem>
@@ -92,7 +95,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             {open || (isMobile && state === 'expanded') ? <PanelLeftClose /> : <PanelLeftOpen />}
             <span className="sr-only">Toggle Menu</span>
           </Button>
-          <div className="hidden md:block"> 
+          <div className="hidden md:block">
              <SidebarTrigger />
           </div>
           <div className="flex items-center gap-4">
