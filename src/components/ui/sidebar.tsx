@@ -8,7 +8,7 @@ import { PanelLeft } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button" // Button import might not be used directly by SidebarMenuButton here
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
@@ -526,69 +526,71 @@ const sidebarMenuButtonVariants = cva(
 
 type SidebarMenuButtonElement = HTMLButtonElement | HTMLAnchorElement;
 
-type SidebarMenuButtonProps = (
-  React.ComponentProps<"button"> & React.ComponentProps<"a"> // Combine button and anchor props
-) & {
-  renderAsSlot?: boolean; // Prop to indicate if SidebarMenuButton should render as Slot
+// Props for SidebarMenuButton
+export type SidebarMenuButtonProps = VariantProps<typeof sidebarMenuButtonVariants> & {
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
   children?: React.ReactNode;
-  asChild?: boolean; // This is to explicitly catch the asChild prop from Link
-} & VariantProps<typeof sidebarMenuButtonVariants>;
+  className?: string;
+  // Allow all HTMLButtonElement props
+} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> 
+  // Allow all HTMLAnchorElement props, but make href optional as Link might not always pass it
+  & Partial<Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>> & { href?: string }
+  & {
+    asChild?: boolean; // This is to catch the asChild prop from a parent Link component
+  };
 
 
 const SidebarMenuButton = React.forwardRef<
   SidebarMenuButtonElement,
   SidebarMenuButtonProps
 >(
-  (
-    props, // Changed to props to access all of them before destructuring
-    ref
-  ) => {
+  ({
+    className,
+    variant,
+    size,
+    isActive = false,
+    tooltip,
+    children,
+    asChild: asChildFromParent, // This prop is specifically for the Link component's asChild.
+                                // It will be destructured and not passed to the DOM element.
+    ...props // All other props, including href if passed by Link, and any button/anchor attributes.
+  }, ref) => {
     const { isMobile, state } = useSidebar();
-    // Destructure props, explicitly capturing `asChild` if passed (e.g., from Link)
-    // and `renderAsSlot` for SidebarMenuButton's own behavior.
-    const {
-      renderAsSlot, // This is SidebarMenuButton's own prop
-      isActive = false,
-      variant,
-      size,
-      tooltip,
-      children,
-      className,
-      href,
-      asChild: asChildFromParent, // Capture asChild passed from Link or other parent
-      ...otherRestProps // Remaining props
-    } = props;
 
-    const Comp = renderAsSlot ? Slot : href ? "a" : "button";
+    // Determine the component type: 'a' if href is present, otherwise 'button'.
+    // SidebarMenuButton itself does not use Slot for its primary rendering in this context.
+    const Comp = props.href ? "a" : "button";
+
+    // The 'asChildFromParent' is destructured.
+    // 'props' here already contains href if provided by Link, and other attributes.
+    // We don't need to do anything special with asChildFromParent other than not spreading it.
     
-    const componentProps: any = {
+    const elementProps = {
+      ...props, // Spread all other props like href, onClick, etc.
       ref: ref,
+      className: cn(sidebarMenuButtonVariants({ variant, size, className })),
       "data-sidebar": "menu-button",
       "data-size": size,
       "data-active": isActive,
-      className: cn(sidebarMenuButtonVariants({ variant, size, className })),
-      ...otherRestProps, // Spread only the other props, asChildFromParent is not spread
     };
 
-    if (Comp === "a" && href) {
-      componentProps.href = href;
-    }
-    
-    const buttonContent = (
-      <Comp {...componentProps}>{children}</Comp>
-    );
+    const buttonElement = <Comp {...elementProps}>{children}</Comp>;
 
     if (!tooltip) {
-      return buttonContent;
+      return buttonElement;
     }
 
-    const tooltipContentProps = typeof tooltip === "string" ? { children: tooltip } : tooltip;
+    const tooltipContentProps =
+      typeof tooltip === "string" ? { children: tooltip } : tooltip;
     
     return (
       <Tooltip>
-        <TooltipTrigger asChild>{buttonContent}</TooltipTrigger>
+        <TooltipTrigger asChild>
+           {/* TooltipTrigger's asChild expects its child (buttonElement) to handle props
+               or be a DOM element. Since buttonElement is a DOM element, this is fine. */}
+          {buttonElement}
+        </TooltipTrigger>
         <TooltipContent
           side="right"
           align="center"
@@ -768,3 +770,4 @@ export {
   SidebarTrigger,
   useSidebar,
 }
+
