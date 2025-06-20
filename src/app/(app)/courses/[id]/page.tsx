@@ -1,9 +1,10 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, Share2, ChevronLeft, ChevronRight } from "lucide-react";
+import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, Share2, ChevronLeft, ChevronRight, Lightbulb } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Progress } from "@/components/ui/progress"; // Assuming you have this component
@@ -69,7 +70,7 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
           <CardContent className="p-4">
             <div className="flex justify-between items-center">
                 <Button variant="outline"><ChevronLeft className="mr-2 h-4 w-4" /> Previous</Button>
-                <Button>Next Lesson <ChevronRight className="ml-2 h-4 w-4" /></Button>
+                <Button className="button-animated-gradient">Next Lesson <ChevronRight className="ml-2 h-4 w-4" /></Button>
             </div>
           </CardContent>
         </Card>
@@ -95,15 +96,30 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
                     <Button variant="ghost" className="rounded-none flex-1 border-b-2 border-primary">Overview</Button>
                     <Button variant="ghost" className="rounded-none flex-1">Q&A</Button>
                     <Button variant="ghost" className="rounded-none flex-1">Notes</Button>
+                     <Button variant="ghost" className="rounded-none flex-1"><Lightbulb className="mr-2 h-4 w-4"/>AI Insights</Button>
                 </div>
             </CardHeader>
-            <CardContent className="pt-6">
-                <h2 className="text-xl font-semibold mb-2">About this lesson</h2>
-                <p className="text-muted-foreground">
-                    This lesson covers {currentLesson.title}. You will learn key concepts and practical applications. 
-                    Estimated duration: {currentLesson.duration}.
-                </p>
-                {/* Add more content here like learning objectives, resources etc. */}
+            <CardContent className="pt-6 space-y-4">
+                <div>
+                    <h2 className="text-xl font-semibold mb-2">About this lesson: {currentLesson.title}</h2>
+                    <p className="text-muted-foreground">
+                        This lesson covers essential aspects of {currentLesson.title}. You will learn key concepts and practical applications. 
+                        Estimated duration: {currentLesson.duration}. Upon completion, this skill will be added to your profile.
+                    </p>
+                </div>
+                <div>
+                    <h3 className="text-lg font-semibold mb-1">Learning Objectives:</h3>
+                    <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                        <li>Objective 1 specific to "{currentLesson.title}"</li>
+                        <li>Objective 2 specific to "{currentLesson.title}"</li>
+                        <li>Objective 3 related to practical application</li>
+                    </ul>
+                </div>
+                 <div>
+                    <h3 className="text-lg font-semibold mb-1">Downloadable Resources:</h3>
+                     <Button variant="link" className="p-0 h-auto"><Download className="mr-2 h-4 w-4"/>Lesson_Slides_{currentLesson.id}.pdf</Button><br/>
+                     <Button variant="link" className="p-0 h-auto"><Download className="mr-2 h-4 w-4"/>Supplementary_Reading_{currentLesson.id}.docx</Button>
+                </div>
             </CardContent>
         </Card>
 
@@ -112,11 +128,11 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
         <Card className="shadow-md">
           <CardHeader>
             <CardTitle className="font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary"/> AI-Powered Q&A</CardTitle>
-            <CardDescription>Ask questions about the course content. Our AI will assist you.</CardDescription>
+            <CardDescription>Ask questions about the course content. Our AI will assist you by referencing course materials and validated web data.</CardDescription>
           </CardHeader>
           <CardContent>
             {/* Q&A input and display would go here */}
-            <p className="text-sm text-muted-foreground">AI Q&A section placeholder. (e.g., Input field and previous questions)</p>
+            <p className="text-sm text-muted-foreground">AI Q&A section placeholder. (e.g., Input field for questions, display of conversation history with AI, ability for AI to reference specific timestamps or content sections)</p>
           </CardContent>
         </Card>
 

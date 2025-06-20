@@ -1,3 +1,6 @@
+
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Code, Zap, Package, DollarSign, ShieldCheck, BookOpen } from "lucide-react";
@@ -83,7 +86,7 @@ export default function ApiManagementPage() {
           Build innovative solutions with our robust and scalable API.
         </p>
         <div className="mt-6">
-          <Link href="/path-to-api-docs" passHref>
+          <Link href="/api-docs" passHref> {/* Corrected link to public API docs */}
              <Button size="lg" className="button-animated-gradient">
                 <BookOpen className="mr-2 h-5 w-5" /> Read API Documentation
              </Button>
@@ -115,7 +118,7 @@ export default function ApiManagementPage() {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button className="w-full button-animated-gradient">
                   {plan.cta}
                 </Button>
               </CardFooter>
@@ -128,20 +131,21 @@ export default function ApiManagementPage() {
         <Card className="shadow-lg">
           <CardHeader>
             <CardTitle className="font-headline text-2xl animated-text-gradient">Manage Your API Keys</CardTitle>
-            <CardDescription>View, generate, and revoke your API keys here. (This is a placeholder)</CardDescription>
+            <CardDescription>View, generate, and revoke your API keys here. (API Keys are available on Premium, Teams, and Enterprise plans)</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* Placeholder for actual API key list. In a real app, this would be dynamic. */}
             <div className="flex items-center justify-between p-3 border rounded-md bg-muted/30">
               <div>
                 <p className="font-mono text-sm">prod_sk_xxxxxxxxxxxx<span className="text-muted-foreground">••••••••</span>xxxx</p>
-                <p className="text-xs text-muted-foreground">Last used: 2 hours ago</p>
+                <p className="text-xs text-muted-foreground">Last used: 2 hours ago | Permissions: Full Access</p>
               </div>
               <Button variant="destructive" size="sm">Revoke</Button>
             </div>
              <div className="flex items-center justify-between p-3 border rounded-md bg-muted/30">
               <div>
                 <p className="font-mono text-sm">dev_sk_yyyyyyyyyyyy<span className="text-muted-foreground">••••••••</span>yyyy</p>
-                <p className="text-xs text-muted-foreground">Last used: 1 day ago</p>
+                <p className="text-xs text-muted-foreground">Last used: 1 day ago | Permissions: Read-only (Learning Paths)</p>
               </div>
               <Button variant="destructive" size="sm">Revoke</Button>
             </div>
