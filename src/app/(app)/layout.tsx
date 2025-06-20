@@ -17,7 +17,7 @@ import Link from "next/link";
 import {
   LayoutDashboard,
   GraduationCap,
-  FileText as ResumeIcon, // Renamed to avoid conflict if FileText is used elsewhere
+  FileText as ResumeIcon, 
   BookOpen,
   LifeBuoy,
   Settings,
@@ -26,9 +26,12 @@ import {
   PanelLeftOpen,
   Search,
   KeyRound,
-  Briefcase, // For My Learning
-  MessageSquare, // For AI Support Chatbot in future
-  StickyNote, // For Notepad in future
+  Briefcase, 
+  MessageSquare, 
+  StickyNote, 
+  BookCopy, // For Library and Academic Research
+  ClipboardList, // For My Learning (alternative)
+  HelpCircle, // For Help & Support
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -40,32 +43,30 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-// Placeholder for right-hand AI Assistant and Notepad components
-// import AiAssistantPanel from '@/components/layout/AiAssistantPanel';
-// import NotepadPanel from '@/components/layout/NotepadPanel';
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/my-learning", label: "My Learning", icon: Briefcase },
+  { href: "/my-learning", label: "My Learning", icon: Briefcase }, // Briefcase or ClipboardList
   { href: "/courses", label: "Course Catalog", icon: GraduationCap },
+  { href: "/academic-research", label: "Academic Research", icon: BookCopy },
   { href: "/resume-builder", label: "Resume Builder", icon: ResumeIcon },
   { href: "/api-management", label: "API Management", icon: KeyRound },
-  { href: "/settings", label: "Settings", icon: Settings }, // This will map to /app/settings/page.tsx
-  { href: "/support", label: "Help & Support", icon: LifeBuoy },
+  { href: "/docs", label: "Documentations", icon: BookOpen }, // For LMDpro docs
+  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/support", label: "Help & Support", icon: HelpCircle },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { open, toggleSidebar, isMobile, state } = useSidebar();
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
-  const [isSidebarFixedOpen, setIsSidebarFixedOpen] = React.useState(false); // Default to icon-only
-  
-  // Calculate effective sidebar state for hiding text
-  // For desktop: text visible if fixed open OR if temporarily expanded by hover/click
-  // For mobile: text visible if mobile menu is open
+  const [isSidebarFixedOpen, setIsSidebarFixedOpen] = React.useState(false); 
+
   const effectiveSidebarOpen = isMobile ? open : (isSidebarFixedOpen || state === 'expanded');
 
 
@@ -76,26 +77,22 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         variant="sidebar" 
         collapsible="icon" 
         className="border-r"
-        // The sidebar component's internal state handles open/collapsed based on interactions
-        // We use `isSidebarFixedOpen` for the persistent toggle button logic
       >
         <SidebarHeader className="p-4 flex items-center justify-between">
-          <Link href="/dashboard" className="flex items-center gap-2 group"> {/* Changed href to /dashboard */}
+          <Link href="/dashboard" className="flex items-center gap-2 group">
              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-primary"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
             <h1 className={cn(
                 "text-2xl font-headline font-bold animated-text-gradient",
-                 // Hide text if sidebar is effectively collapsed on desktop and not fixed open
                 (!effectiveSidebarOpen && !isMobile && !isSidebarFixedOpen && state === 'collapsed') && "hidden"
               )}>
               LMDpro
             </h1>
           </Link>
-          {!isMobile && ( // Show toggle only on desktop
+          {!isMobile && ( 
              <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => setIsSidebarFixedOpen(!isSidebarFixedOpen)}
-              // Hide toggle if sidebar is icon-only and not fixed-open (to prevent it from showing briefly on hover-expand)
               className={cn((state === 'collapsed' && !isSidebarFixedOpen) && "hidden group-hover/sidebar-wrapper:flex", (state === 'expanded' || isSidebarFixedOpen) && "flex" )}
               title={isSidebarFixedOpen ? "Pin Sidebar (Icon View)" : "Unpin Sidebar (Expanded View)"}
             >
@@ -109,15 +106,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <SidebarMenuItem key={item.href}>
                 <Link href={item.href} passHref asChild>
                   <SidebarMenuButton
-                    asChild // Ensures SidebarMenuButton handles the <a> tag rendering via Slot
+                    asChild 
                     isActive={pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))}
                     tooltip={item.label}
                   >
-                    {/* The <a> tag is now the direct child as expected by Slot with asChild */}
                     <a>
                       <item.icon />
                       <span className={cn(
-                        // Hide text if sidebar is effectively collapsed on desktop and not fixed open
                         (!effectiveSidebarOpen && !isMobile && !isSidebarFixedOpen && state === 'collapsed') && "hidden"
                       )}>{item.label}</span>
                     </a>
@@ -129,28 +124,25 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </SidebarContent>
       </Sidebar>
 
-      <SidebarInset className="flex flex-1"> {/* Changed to flex flex-1 for right panel */}
-        <div className="flex flex-col flex-1"> {/* Main content area wrapper */}
+      <SidebarInset className="flex flex-1"> 
+        <div className="flex flex-col flex-1"> 
             <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-card/80 backdrop-blur-sm px-4 md:px-6">
             <div className="flex items-center gap-2">
-                {/* Mobile menu toggle */}
                 <Button variant="ghost" size="icon" onClick={toggleSidebar} className="md:hidden">
                 {open ? <PanelLeftClose /> : <PanelLeftOpen />}
                 <span className="sr-only">Toggle Menu</span>
                 </Button>
                 
-                {/* Desktop sidebar collapse/expand trigger (library default) */}
                 <div className="hidden md:block">
                     <SidebarTrigger onClick={() => setIsSidebarFixedOpen(false)} />
                 </div>
 
-                {/* Search Bar */}
                 <div className="relative flex items-center">
                 <Button 
                     variant="ghost" 
                     size="icon" 
                     onClick={() => setIsSearchExpanded(!isSearchExpanded)}
-                    className={cn("sm:flex", isSearchExpanded && "hidden")} // Show on sm always if not expanded
+                    className={cn("sm:flex", isSearchExpanded && "hidden")} 
                 >
                     <Search className="h-5 w-5" />
                     <span className="sr-only">Search</span>
@@ -161,9 +153,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     className={cn(
                     "transition-all duration-300 ease-in-out",
                     isSearchExpanded ? "w-60 sm:w-72 opacity-100 px-3 py-2 h-10" : "w-0 opacity-0 p-0 border-none",
-                    !isSearchExpanded && !isMobile && "sm:opacity-100 sm:w-52 sm:px-3 sm:py-2 sm:h-10 sm:border" // Default visible on larger screens
+                    !isSearchExpanded && !isMobile && "sm:opacity-100 sm:w-52 sm:px-3 sm:py-2 sm:h-10 sm:border" 
                     )}
-                    onFocus={() => !isMobile && setIsSearchExpanded(true)} // Expand on focus for desktop
+                    onFocus={() => !isMobile && setIsSearchExpanded(true)} 
                     onBlur={() => setIsSearchExpanded(false)}
                 />
                 </div>
@@ -199,10 +191,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </main>
         </div>
         
-        {/* Right-hand Narrow Column (Notepad & AI Assistant) - Placeholder */}
         <aside className="hidden lg:flex flex-col w-72 border-l bg-card p-4 space-y-4 sticky top-0 h-screen overflow-y-auto">
             <div className="flex-1 space-y-4">
-                 {/* AI Assistant Panel Placeholder */}
                 <Card>
                     <CardHeader>
                         <CardTitle className="text-lg font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
@@ -213,7 +203,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     </CardContent>
                 </Card>
 
-                {/* Notepad Panel Placeholder */}
                 <Card className="flex-grow flex flex-col">
                     <CardHeader>
                         <CardTitle className="text-lg font-headline flex items-center gap-2"><StickyNote className="h-5 w-5 text-primary" /> Notepad</CardTitle>
@@ -228,7 +217,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </Card>
             </div>
 
-            {/* Help & Support Chat (bottom of right panel) Placeholder */}
             <Card>
                 <CardHeader>
                     <CardTitle className="text-base font-headline flex items-center gap-2"><LifeBuoy className="h-5 w-5 text-primary"/> Support</CardTitle>
