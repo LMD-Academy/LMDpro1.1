@@ -25,19 +25,19 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Search,
-  KeyRound,
-  Briefcase,
+  KeyRound, // Kept for potential future use if different from ShieldCheck
+  Briefcase, // For My Learning
   MessageSquare,
   StickyNote,
-  BookCopy,
-  ClipboardList,
+  // BookCopy, // Replaced by FileCode or ScrollText
+  ClipboardList, // Can be used for tasks/assessments if needed
   HelpCircle,
   Lightbulb, 
   Video,
   Bell,
   Moon,
   Sun,
-  Users, // For My Learning (example, can change)
+  Users, 
   FileCode, // For Academic Research
   ShieldCheck, // For API Management
   ScrollText, // For App Documentations
@@ -60,14 +60,14 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/my-learning", label: "My Learning", icon: Briefcase }, // Changed from Users
+  { href: "/my-learning", label: "My Learning", icon: Briefcase },
   { href: "/learning-paths", label: "Learning Paths", icon: Lightbulb },
   { href: "/courses", label: "Course Catalog", icon: GraduationCap },
   { href: "/video-creation", label: "Video Creation", icon: Video },
   { href: "/resume-builder", label: "Resume Builder", icon: FileText },
-  { href: "/academic-research", label: "Academic Research", icon: FileCode }, // Changed from BookCopy
-  { href: "/api-management", label: "API Management", icon: ShieldCheck }, // Changed from KeyRound
-  { href: "/docs", label: "App Documentations", icon: ScrollText },  // Changed from BookOpen
+  { href: "/academic-research", label: "Academic Research", icon: FileCode },
+  { href: "/api-management", label: "API Management", icon: ShieldCheck },
+  { href: "/docs", label: "App Documentations", icon: ScrollText },
   { href: "/account", label: "Account Settings", icon: Settings },
   { href: "/support", label: "Help & Support", icon: HelpCircle },
 ];
@@ -76,23 +76,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { open, toggleSidebar, isMobile, state } = useSidebar();
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
-  const [isSidebarFixedOpen, setIsSidebarFixedOpen] = React.useState(false);
-  const [currentTheme, setCurrentTheme] = React.useState("light");
+  const [isSidebarFixedOpen, setIsSidebarFixedOpen] = React.useState(false); // For pinning sidebar
+  const [currentTheme, setCurrentTheme] = React.useState("light"); // Default theme
 
+  // Determine effective sidebar open state for responsive label hiding
   const effectiveSidebarOpen = isMobile ? open : (isSidebarFixedOpen || state === 'expanded');
 
   const toggleTheme = () => {
     const newTheme = currentTheme === "light" ? "dark" : "light";
     setCurrentTheme(newTheme);
     document.documentElement.classList.toggle("dark", newTheme === "dark");
-     // Persist theme preference
     try {
       localStorage.setItem('lmdpro-theme', newTheme);
     } catch (error) {
       console.warn("Could not save theme preference to localStorage", error);
     }
   };
-
+  
   React.useEffect(() => {
     try {
       const savedTheme = localStorage.getItem('lmdpro-theme');
@@ -111,7 +111,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Sidebar
         side="left"
         variant="sidebar"
-        collapsible="icon"
+        collapsible="icon" // Default to icon-only view, hover expands
         className="border-r"
       >
         <SidebarHeader className="p-4 flex items-center justify-between">
@@ -124,6 +124,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               LMDpro
             </h1>
           </Link>
+          {/* Pin/Unpin button for desktop */}
           {!isMobile && (
              <Button
               variant="ghost"
@@ -140,13 +141,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <SidebarMenu>
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href}>
-                <Link href={item.href} asChild>
+                <Link href={item.href} passHref asChild>
                   <SidebarMenuButton
                     isActive={pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))}
                     tooltip={item.label}
                   >
-                    <item.icon />
-                    <span className={cn(
+                      <item.icon />
+                      <span className={cn(
                         (!effectiveSidebarOpen && !isMobile && !isSidebarFixedOpen && state === 'collapsed') && "hidden"
                       )}>{item.label}</span>
                   </SidebarMenuButton>
@@ -161,21 +162,25 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col flex-1">
             <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-card/80 backdrop-blur-sm px-4 md:px-6">
             <div className="flex items-center gap-2">
+                {/* Mobile Menu Toggle */}
                 <Button variant="ghost" size="icon" onClick={toggleSidebar} className="md:hidden">
                 {open ? <PanelLeftClose /> : <PanelLeftOpen />}
                 <span className="sr-only">Toggle Menu</span>
                 </Button>
 
+                {/* Desktop Sidebar Toggle (when not pinned) */}
                 <div className="hidden md:block">
                     <SidebarTrigger onClick={() => setIsSidebarFixedOpen(false)} />
                 </div>
 
+                {/* Search Bar */}
                 <div className="relative flex items-center">
                 <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => setIsSearchExpanded(!isSearchExpanded)}
                     className={cn("sm:flex", isSearchExpanded && "hidden")}
+                    aria-label="Open search"
                 >
                     <Search className="h-5 w-5" />
                     <span className="sr-only">Search</span>
@@ -186,10 +191,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     className={cn(
                     "transition-all duration-300 ease-in-out",
                     isSearchExpanded ? "w-60 sm:w-72 opacity-100 px-3 py-2 h-10" : "w-0 opacity-0 p-0 border-none",
-                    !isSearchExpanded && !isMobile && "sm:opacity-100 sm:w-52 sm:px-3 sm:py-2 sm:h-10 sm:border"
+                    !isSearchExpanded && !isMobile && "sm:opacity-100 sm:w-52 sm:px-3 sm:py-2 sm:h-10 sm:border" // Default visible on larger screens
                     )}
-                    onFocus={() => !isMobile && setIsSearchExpanded(true)}
-                    onBlur={() => setIsSearchExpanded(false)}
+                    onFocus={() => !isMobile && setIsSearchExpanded(true)} // Expand on focus for desktop
+                    onBlur={() => setIsSearchExpanded(false)} // Collapse on blur
                 />
                 </div>
             </div>
@@ -218,11 +223,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     <Link href="/account?tab=profile" passHref>
                         <DropdownMenuItem><UserCircle className="mr-2"/>Profile</DropdownMenuItem>
                     </Link>
-                    <Link href="/account?tab=subscription" passHref>
+                    <Link href="/account" passHref>
                          <DropdownMenuItem><Settings className="mr-2"/>Account Settings</DropdownMenuItem>
                     </Link>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Logout</DropdownMenuItem>
+                    <DropdownMenuItem>Logout</DropdownMenuItem> {/* Add logout functionality later */}
                 </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -232,36 +237,45 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </main>
         </div>
 
+        {/* Right-hand Utility Column */}
         <aside className="hidden lg:flex flex-col w-72 border-l bg-card p-4 space-y-4 sticky top-0 h-screen overflow-y-auto">
+            {/* AI Assistant Panel */}
             <Card className="flex-shrink-0">
                 <CardHeader>
                     <CardTitle className="text-lg font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-sm text-muted-foreground mb-2">Your intelligent learning partner. Ask questions, get summaries, or brainstorm ideas.</p>
+                    <p className="text-sm text-muted-foreground mb-2">
+                        Your intelligent learning partner. Ask questions about course content, get summaries, or brainstorm ideas for your projects.
+                    </p>
                      <Button variant="outline" size="sm" className="w-full">Chat with AI</Button>
                 </CardContent>
             </Card>
 
+            {/* Notepad Panel */}
             <Card className="flex-grow flex flex-col min-h-0">
                 <CardHeader>
                     <CardTitle className="text-lg font-headline flex items-center gap-2"><StickyNote className="h-5 w-5 text-primary" /> Notepad</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col min-h-0">
-                    <Textarea placeholder="Take notes here... they will persist across pages." className="flex-1 h-full min-h-[150px] focus-gradient-outline" />
+                    <Textarea 
+                        placeholder="Take notes here... they will persist across pages. Use for quick thoughts, reminders, or drafting content." 
+                        className="flex-1 h-full min-h-[150px] focus-gradient-outline" 
+                    />
                 </CardContent>
-                <CardFooter className="gap-2 pt-4">
-                    <Button variant="outline" size="sm" className="flex-1">Export Notes</Button>
-                    <Button size="sm" className="flex-1 button-animated-gradient">Ask AI</Button>
+                <CardFooter className="gap-2 pt-4 flex-col sm:flex-row">
+                    <Button variant="outline" size="sm" className="flex-1 w-full sm:w-auto">Export Notes (.txt)</Button>
+                    <Button size="sm" className="flex-1 button-animated-gradient w-full sm:w-auto">Ask AI About Notes</Button>
                 </CardFooter>
             </Card>
             
+            {/* Support Chat Panel */}
             <Card className="flex-shrink-0 mt-auto">
                 <CardHeader>
                     <CardTitle className="text-base font-headline flex items-center gap-2"><LifeBuoy className="h-5 w-5 text-primary"/> Support</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-xs text-muted-foreground mb-2">Need help? Chat with our AI Support for instant assistance.</p>
+                    <p className="text-xs text-muted-foreground mb-2">Need help? Chat with our AI Support for instant assistance with technical issues, billing, or platform navigation.</p>
                     <Button variant="outline" size="sm" className="w-full">Open Support Chat</Button>
                 </CardContent>
             </Card>

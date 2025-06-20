@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowRight, Zap, Star, Lightbulb, Film, FileText, GraduationCap, Briefcase, ShieldCheck, Handshake, BookOpen, DollarSign, HelpCircle, Settings, Link as LinkIcon, Users, Building } from "lucide-react";
+import { ArrowRight, Zap, Star, Lightbulb, Film, FileText, GraduationCap, Briefcase, ShieldCheck, Handshake, BookOpen, DollarSign, HelpCircle, Settings, Link as LinkIcon, Users, Building, CheckCircle } from "lucide-react"; // Added CheckCircle
 import Link from "next/link";
 import Image from "next/image";
 import PublicHeader from "@/components/layout/PublicHeader";
@@ -10,54 +10,55 @@ import PublicFooter from "@/components/layout/PublicFooter";
 const featureCards = [
   {
     title: "AI-Powered Learning Paths",
-    description: "Dynamically creates personalized learning journeys based on your profile and goals, leveraging internet research for up-to-date content and skill gap analysis.",
+    description: "Dynamically creates personalized learning journeys based on your profile and goals, leveraging real-time internet research for up-to-date content and comprehensive skill gap analysis.",
     icon: Lightbulb,
-    bgColor: "bg-blue-500/10", // Example color
-    textColor: "text-blue-500", // Example color
-    href: "/learning-paths", // Assuming this page will be created
+    bgColor: "bg-blue-500/10",
+    textColor: "text-blue-500",
+    href: "/learning-paths",
   },
   {
     title: "Automated Video Creation",
-    description: "Automatically generate educational videos from research scripts. Supports multiple languages, avatar selections, and branding application for streamlined content creation.",
+    description: "Automatically generate engaging educational videos from research scripts. Supports multiple languages, diverse avatar selections, and custom branding application for streamlined content creation.",
     icon: Film,
-    bgColor: "bg-green-500/10", // Example color
-    textColor: "text-green-500", // Example color
+    bgColor: "bg-green-500/10",
+    textColor: "text-green-500",
     href: "/video-creation",
   },
   {
     title: "Intelligent Resume Builder",
-    description: "Import from LinkedIn, design with customizable templates, and optimize content with AI suggestions and ATS scoring. Export as a PDF with 'Made with LMDpro' watermark.",
+    description: "Import data from LinkedIn, design with customizable templates, and optimize content with AI suggestions and ATS scoring. Export professional resumes as PDF with a subtle 'Made with LMDpro' watermark.",
     icon: FileText,
-    bgColor: "bg-purple-500/10", // Example color
-    textColor: "text-purple-500", // Example color
+    bgColor: "bg-purple-500/10",
+    textColor: "text-purple-500",
     href: "/resume-builder",
   },
   {
     title: "24/7 AI Support",
-    description: "Instant assistance for technical issues, billing, and course navigation via our AI chat modal with persistent conversation history to quickly address common problems.",
+    description: "Get instant assistance for technical issues, billing inquiries, and course navigation via our intelligent AI chat modal, featuring persistent conversation history for quick problem resolution.",
     icon: HelpCircle,
-    bgColor: "bg-yellow-500/10", // Example color
-    textColor: "text-yellow-500", // Example color
+    bgColor: "bg-yellow-500/10",
+    textColor: "text-yellow-500",
     href: "/support",
   },
 ];
 
 const pricingTiersHomepage = [
-  { name: "Community", price: "Free", model: "Latest Free Gemma Model", features: ["Limited Learning Paths", "Basic Video Creation (watermarked)", "1 Resume Template"], cta: "Join for Free", href:"/register?tier=community" },
-  { name: "Premium", price: "$5.80/mo", model: "Latest Flash Model", features: ["Unlimited Learning Paths", "Advanced Video Creation", "All Resume Templates & AI Optimization"], cta: "Go Premium", href:"/register?tier=premium" },
-  { name: "Teams", price: "$196/mo", model: "Latest Pro Model", features: ["All Premium Features", "Team Management", "Shared Resources & Analytics"], cta: "Choose Teams", href:"/register?tier=teams" },
+  { name: "Community", price: "Free", model: "Latest Free Gemma Model", features: ["Limited Personalized Learning Paths", "Basic Video Creation (watermarked)", "1 Resume Template", "Selection of Free Courses"], cta: "Join for Free", href:"/register?tier=community" },
+  { name: "Premium", price: "$5.80/mo", model: "Latest Flash Model", features: ["Unlimited Learning Paths & AI Generation", "Advanced Video Creation (No Watermark)", "All Resume Templates & AI Optimization", "Full Course Catalog Access"], cta: "Go Premium", href:"/register?tier=premium" },
+  { name: "Teams", price: "$196/mo", model: "Latest Pro Model", features: ["All Premium Features", "Team Management & Analytics", "Shared Resources & Brand Kits", "Consolidated Billing"], cta: "Choose Teams", href:"/register?tier=teams" },
 ];
 
+
 const courseHighlights = [
-  { title: "Executive Leadership Development", icon: GraduationCap, imageHint: "leadership team", type: "Learning Path", description: "Master executive skills for top-tier roles. Develop strategic thinking and team motivation." },
-  { title: "AI for Business Professionals", icon: Briefcase, imageHint: "AI business", type: "Course", description: "Understand and apply AI in business contexts to drive innovation and efficiency." },
-  { title: "Full-Stack Web Development Bootcamp", icon: Zap, imageHint: "web development code", type: "Learning Path", description: "Comprehensive training from fundamentals to advanced web technologies and deployment." },
+  { title: "Executive Leadership Development", icon: GraduationCap, imageHint: "leadership team", type: "Learning Path", description: "Master executive skills for top-tier roles. Develop strategic thinking, communication, and team motivation abilities essential for modern leadership." },
+  { title: "AI for Business Professionals", icon: Briefcase, imageHint: "AI business", type: "Course", description: "Understand and apply Artificial Intelligence in various business contexts to drive innovation, efficiency, and data-driven decision-making." },
+  { title: "Full-Stack Web Development Bootcamp", icon: Zap, imageHint: "web development code", type: "Learning Path", description: "Comprehensive training from foundational HTML/CSS/JS to advanced backend technologies, databases, and deployment strategies." },
 ];
 
 const testimonials = [
-    { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path helped me upskill in AI and land a promotion. The resume builder was a fantastic bonus!", avatarHint: "software engineer typing" },
-    { name: "Maria S.", role: "Marketing Manager", quote: "The AI video creation tool is a game-changer for our team's training content. So much faster and highly professional.", avatarHint: "marketing manager presentation" },
-    { name: "David K.", role: "Student", quote: "As a student, the Non-Profit/Student tier is incredible. I'm learning cutting-edge skills that will prepare me for my career.", avatarHint: "student with laptop" },
+    { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path in AI was a game-changer. It helped me upskill effectively and secure a promotion. The AI resume builder polished my CV perfectly!", avatarHint: "software engineer typing" },
+    { name: "Maria S.", role: "Marketing Manager", quote: "The AI video creation tool is incredibly efficient for our team's internal training content. We're producing high-quality, professional videos in a fraction of the time.", avatarHint: "marketing manager presentation" },
+    { name: "David K.", role: "University Student", quote: "As a student, the Non-Profit/Student tier provides amazing value. I'm learning cutting-edge skills in data science that are preparing me for my future career.", avatarHint: "student with laptop" },
 ];
 
 const quickLinks = [
@@ -81,7 +82,7 @@ export default function HomePage() {
               Unlock Your Potential with LMDpro
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10">
-              Your AI-powered partner for personalized learning, skill enhancement, automated video creation, and career advancement. Experience the future of education, tailored to you.
+              Your AI-powered partner for personalized learning, skill enhancement, automated video creation, and career advancement. Experience the future of education, tailored to you, by an advanced AI-driven agentic system.
             </p>
             <Link href="/register" passHref>
               <Button size="lg" className="button-animated-gradient text-lg px-10 py-6">
@@ -99,7 +100,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-4 animated-text-gradient">Transform Your Career with AI-Driven Learning</h2>
             <p className="text-lg text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-              LMDpro leverages cutting-edge AI to provide an educational experience that's truly personalized, effective, and geared towards tangible career outcomes and skill mastery.
+              LMDpro leverages cutting-edge AI to provide an educational experience that's truly personalized, effective, and geared towards tangible career outcomes and skill mastery. Our agentic system actively guides your learning.
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {featureCards.map((feature, index) => (
@@ -236,7 +237,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-headline font-semibold mb-6 animated-text-gradient">Ready to Elevate Your Career?</h2>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-10">
-              Explore LMDpro and discover how AI can accelerate your learning and professional growth. Sign up today and take the first step towards a brighter future.
+              Explore LMDpro and discover how our AI-driven platform can accelerate your learning and professional growth. Sign up today and take the first step towards a brighter future.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
                 {quickLinks.map(link => (
@@ -261,22 +262,3 @@ export default function HomePage() {
     </>
   );
 }
-
-// Helper icon, can be moved to a shared location later
-const CheckCircle = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-    <polyline points="22 4 12 14.01 9 11.01" />
-  </svg>
-);

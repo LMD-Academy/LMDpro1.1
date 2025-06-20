@@ -3,19 +3,21 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { UserCircle, LogIn, LayoutDashboard, Info, Tag, FileText, Menu, BookOpen } from "lucide-react";
+import { UserCircle, LogIn, LayoutDashboard, Info, Tag, FileText, Menu, BookOpen, Users, Briefcase } from "lucide-react"; // Added Users for About Us for variety
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 
 const navLinks = [
   { href: "/pricing", label: "Pricing", icon: Tag },
-  { href: "/api-docs", label: "API Docs", icon: FileText },
-  { href: "/docs", label: "App Docs", icon: BookOpen },
-  { href: "/about", label: "About Us", icon: Info }, // Assuming an /about page will be created
+  { href: "/api-docs", label: "API Docs", icon: FileText }, // For public API consumers
+  { href: "/docs", label: "App Docs", icon: BookOpen }, // For authenticated users, links to /app/docs
+  { href: "/about", label: "About Us", icon: Users }, // Changed icon for variety
 ];
 
 export default function PublicHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // In a real app, you'd have an auth context to check if user is logged in
+  const isAuthenticated = false; // Placeholder
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -34,17 +36,27 @@ export default function PublicHeader() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
-          <Link href="/login" passHref>
-            <Button variant="ghost">Login</Button>
-          </Link>
-          <Link href="/register" passHref>
-            <Button className="button-animated-gradient">Get Started Free</Button>
-          </Link>
-          <Link href="/account" passHref>
-             <Button variant="outline" size="icon" aria-label="Account">
-                <UserCircle className="h-5 w-5" />
-             </Button>
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link href="/dashboard" passHref>
+                <Button variant="outline">Dashboard</Button>
+              </Link>
+              <Link href="/account" passHref>
+                 <Button variant="ghost" size="icon" aria-label="Account">
+                    <UserCircle className="h-5 w-5" />
+                 </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/login" passHref>
+                <Button variant="ghost">Login</Button>
+              </Link>
+              <Link href="/register" passHref>
+                <Button className="button-animated-gradient">Get Started Free</Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu */}
@@ -69,21 +81,33 @@ export default function PublicHeader() {
                   </Link>
                 ))}
                 <hr className="my-2" />
-                <Link href="/login" passHref>
-                  <Button variant="outline" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
-                    <LogIn className="h-5 w-5" /> Login
-                  </Button>
-                </Link>
-                <Link href="/register" passHref>
-                  <Button className="w-full button-animated-gradient justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
-                    Get Started Free
-                  </Button>
-                </Link>
-                 <Link href="/account" passHref>
-                  <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
-                    <UserCircle className="h-5 w-5" /> Account
-                  </Button>
-                </Link>
+                {isAuthenticated ? (
+                    <>
+                     <Link href="/dashboard" passHref>
+                        <Button variant="outline" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
+                            <LayoutDashboard className="h-5 w-5"/> Dashboard
+                        </Button>
+                     </Link>
+                     <Link href="/account" passHref>
+                        <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
+                            <UserCircle className="h-5 w-5" /> Account
+                        </Button>
+                     </Link>
+                    </>
+                ) : (
+                    <>
+                        <Link href="/login" passHref>
+                        <Button variant="outline" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
+                            <LogIn className="h-5 w-5" /> Login
+                        </Button>
+                        </Link>
+                        <Link href="/register" passHref>
+                        <Button className="w-full button-animated-gradient justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
+                            Get Started Free
+                        </Button>
+                        </Link>
+                    </>
+                )}
               </div>
             </SheetContent>
           </Sheet>
