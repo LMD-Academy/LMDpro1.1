@@ -1,6 +1,7 @@
 // src/app/(app)/docs/page.tsx
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen } from "lucide-react";
+import Link from "next/link"; // Added import
 
 export default function AppDocumentationPage() {
   return (
