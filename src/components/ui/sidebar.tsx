@@ -525,8 +525,9 @@ const sidebarMenuButtonVariants = cva(
 )
 
 type SidebarMenuButtonElement = HTMLButtonElement | HTMLAnchorElement;
+
 type SidebarMenuButtonProps = (React.ComponentProps<"button"> | React.ComponentProps<"a">) & {
-  asChild?: boolean;
+  renderAsSlot?: boolean; // Renamed from asChild to avoid conflict with Link's asChild
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
   children?: React.ReactNode;
@@ -539,36 +540,42 @@ const SidebarMenuButton = React.forwardRef<
 >(
   (
     {
-      asChild: ownAsChildProp, // Renamed for clarity from asChildProp to ownAsChildProp
+      renderAsSlot, // This is the SidebarMenuButton's own prop to decide if it renders Slot
       isActive = false,
       variant = "default",
       size = "default",
       tooltip,
       className,
-      href,
-      children, // Explicitly destructured
-      ...rest
+      href, // This prop will be passed by next/link when its asChild is true
+      children,
+      ...restPropsFromParent // This will capture all other props, including `asChild` if passed by <Link asChild>
     },
     ref
   ) => {
     const { isMobile, state } = useSidebar();
 
-    const Comp = ownAsChildProp ? Slot : (href ? "a" : "button");
+    // Determine if this SidebarMenuButton should render a Slot or a concrete element ('a' or 'button')
+    const Comp = renderAsSlot ? Slot : (href ? "a" : "button");
 
-    // Filter out any 'asChild' prop that might have been passed in 'rest'
-    const { asChild: _asChildFromRest, ...filteredRestProps } = rest;
+    // Explicitly remove 'asChild' from the props received from the parent (e.g., from Link)
+    // before spreading them onto a DOM element. This 'asChild' is not for the DOM element.
+    const { asChild: parentAsChildProp, ...domSafeRestProps } = restPropsFromParent;
 
-    const allProps = {
-        "data-sidebar": "menu-button",
-        "data-size": size,
-        "data-active": isActive,
-        className: cn(sidebarMenuButtonVariants({ variant, size }), className),
-        href,
-        ...filteredRestProps,
+    const componentProps = {
+      ref: ref as React.Ref<any>,
+      "data-sidebar": "menu-button",
+      "data-size": size,
+      "data-active": isActive,
+      className: cn(sidebarMenuButtonVariants({ variant, size }), className),
+      ...domSafeRestProps, // Spread the rest of the props, now without `asChild` from parent
     };
 
+    if (href && Comp === "a") {
+      (componentProps as React.AnchorHTMLAttributes<HTMLAnchorElement>).href = href;
+    }
+    
     const buttonContent = (
-      <Comp ref={ref as React.Ref<any>} {...allProps}>
+      <Comp {...componentProps}>
         {children}
       </Comp>
     );
@@ -577,7 +584,6 @@ const SidebarMenuButton = React.forwardRef<
       return buttonContent;
     }
 
-    // Ensure tooltip prop for TooltipContent is structured correctly
     const tooltipContentProps = typeof tooltip === "string" ? { children: tooltip } : tooltip;
     
     return (
@@ -762,3 +768,4 @@ export {
   SidebarTrigger,
   useSidebar,
 }
+

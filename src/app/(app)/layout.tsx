@@ -71,7 +71,7 @@ const navItems = [
   { href: "/support", label: "Help & Support", icon: HelpCircle },
 ];
 
-export default function AppLayout({ children: layoutChildren }: { children: React.ReactNode }) { // Renamed children to layoutChildren
+export default function AppLayout({ children: layoutChildren }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { open, toggleSidebar, isMobile, state } = useSidebar();
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
@@ -275,3 +275,4 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
     </div>
   );
 }
+
