@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -531,46 +530,42 @@ export type SidebarMenuButtonProps = VariantProps<typeof sidebarMenuButtonVarian
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
   children?: React.ReactNode;
   className?: string;
+  href?: string; // Can be passed by Link
+  asChild?: boolean; // To catch asChild from Link
 } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> 
-  & Partial<Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>> & { href?: string }
-  & {
-    asChild?: boolean; // To catch asChild from parent Link
-  };
+  & Partial<Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>>;
 
 
 const SidebarMenuButton = React.forwardRef<
   SidebarMenuButtonElement,
   SidebarMenuButtonProps
 >(
-  (props, ref) => {
-    // Explicitly destructure all known props, including 'asChild' and 'href'
-    // that might be passed by a parent <Link asChild>.
-    const {
+  (
+    {
       className,
       variant,
       size,
       isActive = false,
       tooltip,
       children,
-      asChild, // This 'asChild' is from the parent Link. It should be consumed and not spread.
-      href,   // This 'href' is from the parent Link.
-      ...restOfNativeProps // These are other button/anchor attributes intended for the DOM element.
-    } = props;
-
+      href, // Explicitly catch href from Link
+      asChild: asChildFromParent, // Explicitly catch asChild from Link
+      ...rest // All other props
+    },
+    ref
+  ) => {
     const { isMobile, state } = useSidebar();
-
-    // If href is present (passed from Link), this component should render as an 'a' tag.
-    // Otherwise, it defaults to a 'button' tag.
     const Comp = href ? "a" : "button";
 
-    // 'restOfNativeProps' should now be clean of 'asChild' (from Link) and 'href'
-    // because they were explicitly destructured above.
-    // We then spread these 'clean' props onto the Comp.
+    // Ensure 'asChild' from parent Link is not passed to the DOM element
+    const finalProps = { ...rest };
+    // No need to delete `asChildFromParent` from `finalProps` because it was explicitly destructured and not part of `rest`.
+
     const buttonContent = (
       <Comp
         ref={ref as React.Ref<any>}
-        href={href} // Pass href explicitly if Comp is 'a'
-        {...restOfNativeProps} // Spread the remaining props
+        href={href} // Pass href if Comp is 'a'
+        {...finalProps}   // Spread the remaining, clean props
         className={cn(sidebarMenuButtonVariants({ variant, size, className }))}
         data-sidebar="menu-button"
         data-size={size}

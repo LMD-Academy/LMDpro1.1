@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { UserCircle, LogIn, LayoutDashboard, Info, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ShoppingBag, ChevronDown, Lightbulb, Zap, Link as LinkIcon } from "lucide-react";
+import { UserCircle, LogIn, LayoutDashboard, Info, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ShoppingBag, ChevronDown, Lightbulb, Zap, Link as LinkIcon, HelpCircle } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -19,36 +19,37 @@ import { cn } from "@/lib/utils";
 
 const mainNavLinks = [
   { href: "/pricing", label: "Pricing", icon: Tag },
-  { href: "/docs", label: "Docs & Guides", icon: BookOpen },
+  { href: "/docs/general_documentation", label: "Docs & Guides", icon: BookOpen }, // Updated path
   { href: "/about", label: "About Us", icon: Users },
+  { href: "/support", label: "Support", icon: HelpCircle },
 ];
 
 const courseFields = [
   {
     name: "Technology Development",
-    icon: Briefcase, 
+    icon: Zap, // Changed icon
     courses: [
-      { title: "Python for Data Science", href: "/courses/python-ds" },
-      { title: "Full-Stack Web Development", href: "/courses/full-stack-web" },
-      { title: "Cybersecurity Fundamentals", href: "/courses/cybersec-intro" },
+      { title: "Python for Data Science", href: "/courses?category=TECH_DEV&course=PYTHON_DS" }, // Example link structure
+      { title: "Autonomous AI Agent Development", href: "/courses?category=AI_SPEC&course=AI_AGENT_DEV" },
+      { title: "Cybersecurity Specialization L3", href: "/courses?category=PROF_L3&course=CY_L3" },
     ]
   },
   {
     name: "Business & Management",
-    icon: LayoutDashboard, 
+    icon: Briefcase, // Changed icon
     courses: [
-      { title: "Executive Leadership Program", href: "/courses/exec-leadership" },
-      { title: "Agile Project Management", href: "/courses/agile-pm" },
-      { title: "Strategic Marketing", href: "/courses/strategic-marketing" },
+      { title: "Executive Leadership Capstone L5", href: "/courses?category=EXEC_L5&course=GM_L5_CAP" },
+      { title: "Agile Business Specialization L3", href: "/courses?category=PROF_L3&course=AB_L3" },
+      { title: "Foundational Business Skills L1", href: "/courses?category=CORE_L1&course=FBS_L1" },
     ]
   },
   {
-    name: "AI Specializations",
+    name: "Leadership Fundamentals", // Added example category
     icon: Lightbulb, 
     courses: [
-      { title: "Autonomous AI Agent Development", href: "/courses/ai-agent-dev" },
-      { title: "Machine Learning Foundations", href: "/courses/ml-foundations" },
-      { title: "Natural Language Processing", href: "/courses/nlp" },
+      { title: "Foundations of Effective Leadership", href: "/courses?category=LEAD_MGMT_FUND&course=LEAD_FOUND" },
+      { title: "Applied Management & Communication L2", href: "/courses?category=CORE_L2&course=AMC_L2" },
+      { title: "General Management Advanced L4", href: "/courses?category=SENIOR_L4&course=GM_L4" },
     ]
   }
 ];
@@ -57,9 +58,10 @@ const courseFields = [
 export default function PublicHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("light");
-  const isAuthenticated = false; // Placeholder
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Placeholder, manage with auth context
 
   useEffect(() => {
+    // Theme initialization
     try {
       const savedTheme = localStorage.getItem('lmdpro-theme');
       if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
@@ -72,6 +74,10 @@ export default function PublicHeader() {
        console.warn("Could not load theme preference from localStorage", error);
        document.documentElement.classList.remove("dark"); 
     }
+    // Auth state check placeholder
+    // For demo, assume not authenticated or check a simple flag
+    // const loggedIn = localStorage.getItem('lmdpro-auth-token'); // Example check
+    // setIsAuthenticated(!!loggedIn);
   }, []);
 
   const toggleTheme = () => {
@@ -87,8 +93,8 @@ export default function PublicHeader() {
 
   return (
     <header className={cn(
-      "sticky top-4 z-50 w-full max-w-5xl mx-auto rounded-xl shadow-lg", // Changed max-w-6xl to max-w-5xl
-      "bg-card" // Removed translucency
+      "sticky top-0 md:top-4 z-50 w-full md:max-w-5xl mx-auto md:rounded-xl shadow-lg",
+      "bg-card" 
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
@@ -103,10 +109,10 @@ export default function PublicHeader() {
                 Explore Courses <ChevronDown className="ml-1 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[500px] p-4" align="start"> 
+            <DropdownMenuContent className="w-[550px] p-4" align="start"> 
               <DropdownMenuLabel className="font-headline text-lg mb-2">Courses by Field</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {courseFields.map((field) => (
                   <DropdownMenuGroup key={field.name}>
                     <div className="flex items-center gap-2 text-sm font-semibold text-foreground mb-1">
@@ -114,9 +120,9 @@ export default function PublicHeader() {
                       {field.name}
                     </div>
                     {field.courses.map((course) => (
-                      <Link href={course.href} key={course.title} asChild>
+                      <Link href={course.href} key={course.title} passHref>
                         <DropdownMenuItem asChild>
-                          <a className="text-xs text-muted-foreground hover:text-primary pl-6">{course.title}</a>
+                          <a className="text-xs text-muted-foreground hover:text-primary pl-6 cursor-pointer">{course.title}</a>
                         </DropdownMenuItem>
                       </Link>
                     ))}
@@ -124,16 +130,16 @@ export default function PublicHeader() {
                 ))}
               </div>
                <DropdownMenuSeparator className="my-3" />
-               <Link href="/courses" asChild>
+               <Link href="/courses" passHref>
                 <DropdownMenuItem asChild>
-                  <a className="font-semibold text-primary hover:underline">View All Courses & Learning Paths &rarr;</a>
+                  <a className="font-semibold text-primary hover:underline cursor-pointer">View All Courses & Learning Paths &rarr;</a>
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuContent>
           </DropdownMenu>
 
           {mainNavLinks.map(link => (
-            <Link key={link.label} href={link.href}>
+            <Link key={link.label} href={link.href} passHref>
               <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
                 {link.label}
               </Button>
@@ -147,22 +153,31 @@ export default function PublicHeader() {
             <span className="sr-only">Toggle Theme</span>
           </Button>
           {isAuthenticated ? (
-            <>
-              <Link href="/dashboard" asChild>
-                <Button variant="outline">Dashboard</Button>
-              </Link>
-              <Link href="/account?tab=profile" asChild>
-                 <Button variant="ghost" size="icon" aria-label="Account">
-                    <UserCircle className="h-5 w-5" />
-                 </Button>
-              </Link>
-            </>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage src="https://placehold.co/100x100.png" alt="@user" data-ai-hint="user avatar"/>
+                    <AvatarFallback>U</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <Link href="/dashboard" passHref><DropdownMenuItem>Dashboard</DropdownMenuItem></Link>
+                <Link href="/account?tab=profile" passHref><DropdownMenuItem>Profile</DropdownMenuItem></Link>
+                <Link href="/account" passHref><DropdownMenuItem>Settings</DropdownMenuItem></Link>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => {/* handle logout */ setIsAuthenticated(false);}}>Logout</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <>
-              <Link href="/login" asChild>
+              <Link href="/login" passHref>
                 <Button variant="ghost">Login</Button>
               </Link>
-              <Link href="/register" asChild>
+              <Link href="/register" passHref>
                 <Button className="button-animated-gradient">Get Started Free</Button>
               </Link>
             </>
@@ -201,25 +216,28 @@ export default function PublicHeader() {
                 <hr className="my-2" />
                 {isAuthenticated ? (
                     <>
-                     <Link href="/dashboard" asChild>
+                     <Link href="/dashboard" passHref>
                         <Button variant="outline" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             <LayoutDashboard className="h-5 w-5"/> Dashboard
                         </Button>
                      </Link>
-                     <Link href="/account?tab=profile" asChild>
+                     <Link href="/account?tab=profile" passHref>
                         <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             <UserCircle className="h-5 w-5" /> Account
                         </Button>
                      </Link>
+                     <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={() => {setIsAuthenticated(false); setIsMobileMenuOpen(false);}}>
+                        Logout
+                    </Button>
                     </>
                 ) : (
                     <>
-                        <Link href="/login" asChild>
+                        <Link href="/login" passHref>
                         <Button variant="outline" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             <LogIn className="h-5 w-5" /> Login
                         </Button>
                         </Link>
-                        <Link href="/register" asChild>
+                        <Link href="/register" passHref>
                         <Button className="w-full button-animated-gradient justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
                             Get Started Free
                         </Button>
@@ -228,10 +246,4 @@ export default function PublicHeader() {
                 )}
               </div>
             </SheetContent>
-          </Sheet>
-        </div>
-      </div>
-    </header>
-  );
-}
-
+          </Sheet

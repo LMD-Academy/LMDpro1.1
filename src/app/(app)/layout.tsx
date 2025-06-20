@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -29,7 +28,6 @@ import {
   Briefcase, 
   MessageSquare,
   StickyNote,
-  ClipboardList, 
   HelpCircle,
   Lightbulb, 
   Video,
@@ -39,7 +37,15 @@ import {
   Users, 
   FileCode, 
   ShieldCheck, 
-  ScrollText, 
+  ScrollText,
+  ClipboardList, // Added for Resume Builder
+  Settings2, // Added for Account Settings
+  BookMarked, // Added for My Learning / Favorite Courses
+  Brain, // Added for AI Agent dev
+  FileVideo, // Added for Video creation
+  Library, // Added for Academic Research
+  Network, // Added for API Management
+  Info, // Added for App Docs
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -56,18 +62,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/my-learning", label: "My Learning", icon: Briefcase },
+  { href: "/my-learning", label: "My Learning", icon: BookMarked },
   { href: "/learning-paths", label: "Learning Paths", icon: Lightbulb },
   { href: "/courses", label: "Course Catalog", icon: GraduationCap },
-  { href: "/video-creation", label: "Video Creation", icon: Video },
-  { href: "/resume-builder", label: "Resume Builder", icon: FileText },
-  { href: "/academic-research", label: "Academic Research", icon: FileCode },
-  { href: "/api-management", label: "API Management", icon: ShieldCheck },
-  { href: "/docs", label: "App Documentations", icon: ScrollText },
-  { href: "/account", label: "Account Settings", icon: Settings },
+  { href: "/video-creation", label: "Video Creation", icon: FileVideo },
+  { href: "/resume-builder", label: "Resume Builder", icon: ClipboardList },
+  { href: "/academic-research", label: "Academic Research", icon: Library },
+  { href: "/api-management", label: "API Management", icon: Network },
+  { href: "/docs", label: "App Documentation", icon: Info }, // Renamed and changed icon
+  { href: "/account", label: "Account Settings", icon: Settings2 }, // Changed icon
   { href: "/support", label: "Help & Support", icon: HelpCircle },
 ];
 
@@ -77,8 +84,24 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
   const [isSidebarFixedOpen, setIsSidebarFixedOpen] = React.useState(false); 
   const [currentTheme, setCurrentTheme] = React.useState("light"); 
+  const [notepadContent, setNotepadContent] = React.useState("");
+  const { toast } = useToast();
 
-  const effectiveSidebarOpen = isMobile ? open : (isSidebarFixedOpen || state === 'expanded');
+  React.useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem('lmdpro-theme');
+      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+        setCurrentTheme(savedTheme);
+        document.documentElement.classList.toggle("dark", savedTheme === "dark");
+      }
+      const savedNotepadContent = localStorage.getItem('lmdpro-notepad');
+      if (savedNotepadContent) {
+        setNotepadContent(savedNotepadContent);
+      }
+    } catch (error) {
+       console.warn("Error accessing localStorage for theme or notepad:", error);
+    }
+  }, []);
 
   const toggleTheme = () => {
     const newTheme = currentTheme === "light" ? "dark" : "light";
@@ -90,19 +113,46 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
       console.warn("Could not save theme preference to localStorage", error);
     }
   };
-  
-  React.useEffect(() => {
-    try {
-      const savedTheme = localStorage.getItem('lmdpro-theme');
-      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
-        setCurrentTheme(savedTheme);
-        document.documentElement.classList.toggle("dark", savedTheme === "dark");
-      }
-    } catch (error) {
-       console.warn("Could not load theme preference from localStorage", error);
-    }
-  }, []);
 
+  const handleNotepadChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newContent = event.target.value;
+    setNotepadContent(newContent);
+    try {
+      localStorage.setItem('lmdpro-notepad', newContent);
+    } catch (error) {
+      console.warn("Could not save notepad content to localStorage", error);
+    }
+  };
+
+  const exportNotepadContent = () => {
+    const blob = new Blob([notepadContent], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'lmdpro_notes.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
+    toast({ title: "Notepad Exported", description: "Your notes have been downloaded as lmdpro_notes.txt."});
+  };
+
+  const askAiAboutNotepad = () => {
+    if (notepadContent.trim().length < 10) {
+        toast({title: "Notepad Too Short", description: "Please write more in your notepad before asking AI.", variant: "destructive"});
+        return;
+    }
+    toast({ title: "AI Analysis (Notepad)", description: "AI is analyzing your notes... (Feature coming soon)"});
+    // Placeholder for Genkit flow call
+  };
+
+  const handleLogout = () => {
+    // In a real app, this would clear auth tokens, call a backend logout, etc.
+    // For now, we'll just redirect to the login page.
+    window.location.href = "/login"; 
+  };
+
+
+  const effectiveSidebarOpen = isMobile ? open : (isSidebarFixedOpen || state === 'expanded');
 
   return (
     <div className={cn("flex min-h-screen app-area-background")}>
@@ -183,7 +233,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                     type="search"
                     placeholder="Search LMDpro..."
                     className={cn(
-                    "transition-all duration-300 ease-in-out",
+                    "transition-all duration-300 ease-in-out focus-gradient-outline",
                     isSearchExpanded ? "w-60 sm:w-72 opacity-100 px-3 py-2 h-10" : "w-0 opacity-0 p-0 border-none",
                     !isSearchExpanded && !isMobile && "sm:opacity-100 sm:w-52 sm:px-3 sm:py-2 sm:h-10 sm:border" 
                     )}
@@ -206,7 +256,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                     <Avatar className="h-9 w-9">
-                        <AvatarImage src="https://placehold.co/100x100.png" alt="@user" data-ai-hint="user avatar" />
+                        <AvatarImage src="https://placehold.co/100x100.png" alt="@user" data-ai-hint="user avatar"/>
                         <AvatarFallback>U</AvatarFallback>
                     </Avatar>
                     </Button>
@@ -214,14 +264,14 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <Link href="/account?tab=profile" asChild>
+                    <Link href="/account?tab=profile" passHref>
                         <DropdownMenuItem><UserCircle className="mr-2"/>Profile</DropdownMenuItem>
                     </Link>
-                    <Link href="/account" asChild>
+                    <Link href="/account" passHref>
                          <DropdownMenuItem><Settings className="mr-2"/>Account Settings</DropdownMenuItem>
                     </Link>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Logout</DropdownMenuItem> 
+                    <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem> 
                 </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -240,7 +290,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                     <p className="text-sm text-muted-foreground mb-2">
                         Your intelligent learning partner. Ask questions about course content, get summaries, or brainstorm ideas for your projects.
                     </p>
-                     <Button variant="outline" size="sm" className="w-full">Chat with AI</Button>
+                     <Button variant="outline" size="sm" className="w-full" onClick={() => toast({title: "AI Assistant", description: "AI Assistant chat opened (placeholder)."})}>Chat with AI</Button>
                 </CardContent>
             </Card>
 
@@ -251,24 +301,26 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 <CardContent className="flex-1 flex flex-col min-h-0">
                     <Textarea 
                         placeholder="Take notes here... they will persist across pages. Use for quick thoughts, reminders, or drafting content." 
-                        className="flex-1 h-full min-h-[150px] focus-gradient-outline" 
+                        className="flex-1 h-full min-h-[150px] focus-gradient-outline"
+                        value={notepadContent}
+                        onChange={handleNotepadChange}
                     />
                 </CardContent>
                 <CardFooter className="gap-2 pt-4 flex-col sm:flex-row">
-                    <Button variant="outline" size="sm" className="flex-1 w-full sm:w-auto">Export Notes (.txt)</Button>
-                    <Button size="sm" className="flex-1 button-animated-gradient w-full sm:w-auto">Ask AI About Notes</Button>
+                    <Button variant="outline" size="sm" className="flex-1 w-full sm:w-auto" onClick={exportNotepadContent}>Export Notes (.txt)</Button>
+                    <Button size="sm" className="flex-1 button-animated-gradient w-full sm:w-auto" onClick={askAiAboutNotepad}>Ask AI About Notes</Button>
                 </CardFooter>
             </Card>
             
-            <Card className="flex-shrink-0 mt-auto">
-                <CardHeader>
-                    <CardTitle className="text-base font-headline flex items-center gap-2"><LifeBuoy className="h-5 w-5 text-primary"/> Support</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-xs text-muted-foreground mb-2">Need help? Chat with our AI Support for instant assistance with technical issues, billing, or platform navigation.</p>
-                    <Button variant="outline" size="sm" className="w-full">Open Support Chat</Button>
-                </CardContent>
-            </Card>
+             {/* AI Support Chatbot FAB - conceptual, real one might open a modal or different UI */}
+            <Button 
+                variant="outline" 
+                size="lg" 
+                className="w-full mt-auto flex-shrink-0 button-animated-gradient"
+                onClick={() => toast({title: "AI Support", description:"AI Support Chat opened (placeholder). For detailed help, navigate to the Help & Support page."})}
+            >
+                <HelpCircle className="mr-2 h-5 w-5"/> AI Support Chat
+            </Button>
         </aside>
 
       </SidebarInset>

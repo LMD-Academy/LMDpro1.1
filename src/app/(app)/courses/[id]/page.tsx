@@ -2,144 +2,212 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, Share2, ChevronLeft, ChevronRight, Lightbulb, Video } from "lucide-react"; 
+import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, Share2, ChevronLeft, ChevronRight, Lightbulb, Video, FileText, Brain, Award, Users, Type, ClockIcon, Activity } from "lucide-react"; 
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import Image from "next/image"; // For placeholder
 
-const courseData = {
-  id: "1",
-  title: "Executive Leadership Development",
-  description: "Master the art of leadership with this comprehensive learning path. Develop strategic thinking, communication, and team motivation skills essential for executive roles.",
-  instructor: "Dr. Eleanor Vance",
-  rating: 4.8,
-  reviews: 1250,
-  students: 5600,
-  lastUpdated: "July 2024",
-  language: "English",
-  imageHint: "leadership conference",
-  progress: 35, 
-  modules: [
-    {
-      id: "m1",
-      title: "Module 1: Foundations of Modern Leadership",
-      lessons: [
-        { id: "l1_1", title: "Introduction to Trait Theory", duration: "5 min video", completed: true, type: "video" },
-        { id: "l1_2", title: "Transformational vs. Transactional Leadership", duration: "7 min video", completed: true, type: "video" },
-        { id: "l1_3", title: "Leadership Styles Quiz", duration: "10 min quiz", completed: false, type: "quiz" },
-      ],
-    },
-    {
-      id: "m2",
-      title: "Module 2: Emotional Intelligence for Leaders",
-      lessons: [
-        { id: "l2_1", title: "Understanding EQ Components", duration: "8 min video", completed: false, type: "video" },
-        { id: "l2_2", title: "Self-Awareness Exercise", duration: "15 min activity", completed: false, type: "activity" },
-        { id: "l2_3", title: "Empathy in Leadership", duration: "6 min reading", completed: false, type: "reading" },
-      ],
-    },
-    {
-      id: "m3",
-      title: "Module 3: Strategic Communication",
-      lessons: [
-        { id: "l3_1", title: "Crafting a Vision Statement", duration: "10 min video", completed: false, type: "video" },
-        { id: "l3_2", title: "Effective Feedback Techniques", duration: "12 min video", completed: false, type: "video" },
-      ],
-    },
-  ],
+// Dummy course data - In a real app, this would come from a database/CMS via params.id
+const coursesDatabase: Record<string, any> = {
+  "AI_AGENT_DEV": {
+    id: "AI_AGENT_DEV",
+    title: "Autonomous AI Agent Development",
+    description: "A comprehensive program to design, build, evaluate, and deploy autonomous AI agents capable of complex reasoning, planning, and action.",
+    instructor: "Dr. Alex Turing & LMDpro AI",
+    instructorImage: "https://placehold.co/100x100.png?text=AT",
+    instructorTitle: "Lead AI Researcher",
+    rating: 4.9,
+    reviews: 2850,
+    students: 7500,
+    lastUpdated: "August 2024",
+    language: "English",
+    imageHint: "ai robot brain interface",
+    category: "AI Specialization",
+    level: "Advanced",
+    progress: 15, 
+    skills: ["Agentic Architectures", "LLM Orchestration", "Advanced Planning (ReAct, ToT)", "Tool Integration", "Agent Memory Systems"],
+    modules: [
+      {
+        id: "ai_module_1_foundations", title: "Module 1: Foundations of Autonomous AI Agents",
+        lessons: [
+          { id: "lesson1_1", title: "The Evolution of Automation to Autonomy", duration: "22 min read", completed: true, type: "reading" },
+          { id: "lesson1_2", title: "Core Architectural Pillars", duration: "18 min read", completed: true, type: "reading" },
+          { id: "lesson1_3", title: "The LLM as the Central Orchestrator", duration: "15 min read", completed: false, type: "reading" },
+          { id: "quiz_mod1", title: "Module 1 Quiz", duration: "10 min quiz", completed: false, type: "quiz" },
+        ],
+      },
+      {
+        id: "ai_module_2_architectures", title: "Module 2: Designing Agentic Architectures",
+        lessons: [
+          { id: "lesson2_1", title: "Essential System Components", duration: "20 min video", completed: false, type: "video" },
+          { id: "lesson2_2", title: "Architectural Patterns and Frameworks", duration: "25 min reading", completed: false, type: "reading" },
+          { id: "lesson2_3", title: "Learning from Industry Examples (Manus AI, Cline AI)", duration: "15 min case study", completed: false, type: "activity" },
+        ],
+      },
+      // Add more modules as per course_structure.md
+    ],
+  },
+  // Add other courses here based on course_structure.md if needed for linking
 };
 
+
 export default function CourseViewPage({ params }: { params: { id: string } }) {
-  const course = courseData;
-  const currentLesson = course.modules[0].lessons[2]; 
+  const course = coursesDatabase[params.id] || coursesDatabase["AI_AGENT_DEV"]; // Fallback to a default if ID not found
+  
+  // Placeholder for current lesson logic
+  const [currentLesson, setCurrentLesson] = useState(course.modules[0].lessons[2]); 
+  const currentModule = course.modules.find(m => m.lessons.some(l => l.id === currentLesson.id));
+
+  const getLessonIcon = (type: string) => {
+    switch(type) {
+        case "video": return <PlayCircle className="h-4 w-4 mr-2 text-muted-foreground shrink-0" />;
+        case "reading": return <BookOpen className="h-4 w-4 mr-2 text-muted-foreground shrink-0" />;
+        case "quiz": return <FileText className="h-4 w-4 mr-2 text-muted-foreground shrink-0" />;
+        case "activity": return <Activity className="h-4 w-4 mr-2 text-muted-foreground shrink-0" />;
+        default: return <PlayCircle className="h-4 w-4 mr-2 text-muted-foreground shrink-0" />;
+    }
+  }
 
   return (
     <div className="flex flex-col lg:flex-row gap-8">
       {/* Main Content Area (Video Player / Lesson Content) */}
       <main className="lg:w-2/3 space-y-6">
-        {/* Video Player Placeholder */}
-        <Card className="shadow-lg overflow-hidden">
-          <div className="aspect-video bg-black flex items-center justify-center text-white relative">
-            <Video className="h-24 w-24 text-muted-foreground/50" />
+        {/* Video Player Placeholder / Content Display Area */}
+        <Card className="shadow-lg overflow-hidden rounded-xl">
+          <div className="aspect-video bg-muted flex items-center justify-center text-white relative">
+            {/* Dynamic content based on lesson type */}
+            {currentLesson.type === 'video' && <Video className="h-24 w-24 text-primary/30" />}
+            {currentLesson.type === 'reading' && <BookOpen className="h-24 w-24 text-primary/30" />}
+            {currentLesson.type === 'quiz' && <FileText className="h-24 w-24 text-primary/30" />}
+             {currentLesson.type === 'activity' && <Activity className="h-24 w-24 text-primary/30" />}
             <div className="absolute bottom-4 left-4 text-sm bg-black/50 p-2 rounded">
-              Video Player Area: {currentLesson.title}
+              Content Area for: {currentLesson.title} ({currentLesson.type})
             </div>
           </div>
           <CardContent className="p-4">
             <div className="flex justify-between items-center">
-                <Button variant="outline"><ChevronLeft className="mr-2 h-4 w-4" /> Previous</Button>
-                <Button className="button-animated-gradient">Next Lesson <ChevronRight className="ml-2 h-4 w-4" /></Button>
+                <Button variant="outline" className="rounded-md"><ChevronLeft className="mr-2 h-4 w-4" /> Previous</Button>
+                <Button className="button-animated-gradient rounded-md">Next Lesson <ChevronRight className="ml-2 h-4 w-4" /></Button>
             </div>
           </CardContent>
         </Card>
 
         {/* Lesson Title and Actions */}
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-start py-4">
             <div>
                 <h1 className="text-3xl font-headline font-bold animated-text-gradient">{currentLesson.title}</h1>
-                <p className="text-muted-foreground">{course.title} - {course.modules[0].title}</p>
+                <p className="text-muted-foreground">{course.title} - {currentModule?.title}</p>
             </div>
             <div className="flex gap-2">
-                <Button variant="outline" size="icon" title="Download Resources"><Download className="h-5 w-5"/></Button>
-                <Button variant="outline" size="icon" title="Share Lesson"><Share2 className="h-5 w-5"/></Button>
-                <Button variant="outline" size="icon" title="Favorite Lesson"><Star className="h-5 w-5"/></Button>
+                <Button variant="outline" size="icon" title="Download Resources" className="rounded-full"><Download className="h-5 w-5"/></Button>
+                <Button variant="outline" size="icon" title="Share Lesson" className="rounded-full"><Share2 className="h-5 w-5"/></Button>
+                <Button variant="outline" size="icon" title="Favorite Lesson" className="rounded-full"><Star className="h-5 w-5"/></Button>
             </div>
         </div>
 
         {/* Tabs for Overview, Q&A, Notes */}
-        <Card>
-            <CardHeader className="p-0">
-                <div className="flex border-b">
-                    <Button variant="ghost" className="rounded-none flex-1 border-b-2 border-primary">Overview</Button>
-                    <Button variant="ghost" className="rounded-none flex-1">Q&A</Button>
-                    <Button variant="ghost" className="rounded-none flex-1">Notes</Button>
-                     <Button variant="ghost" className="rounded-none flex-1"><Lightbulb className="mr-2 h-4 w-4"/>AI Insights</Button>
+        <Tabs defaultValue="overview" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-4 mb-4">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="transcript">Transcript</TabsTrigger>
+            <TabsTrigger value="qna">Q&A</TabsTrigger>
+            <TabsTrigger value="insights"><Lightbulb className="mr-1 h-4 w-4 sm:inline hidden"/>AI Insights</TabsTrigger>
+          </TabsList>
+          <TabsContent value="overview">
+            <Card className="shadow-md rounded-lg">
+              <CardContent className="pt-6 space-y-4">
+                  <div>
+                      <h2 className="text-xl font-semibold mb-2 font-headline">About this lesson: {currentLesson.title}</h2>
+                      <p className="text-muted-foreground">
+                          This lesson explores {currentLesson.title.toLowerCase()}. You will learn key concepts and practical applications related to {currentModule?.title.toLowerCase()}. 
+                          Estimated duration: {currentLesson.duration}. Upon completion, this skill will be added to your profile.
+                      </p>
+                  </div>
+                  <div>
+                      <h3 className="text-lg font-semibold mb-1 font-headline">Learning Objectives:</h3>
+                      <ul className="list-disc list-inside text-muted-foreground space-y-1 pl-2">
+                          <li>Understand the core principles of {currentLesson.title.toLowerCase()}.</li>
+                          <li>Apply techniques related to {currentLesson.title.toLowerCase()} in practical scenarios.</li>
+                          <li>Analyze the impact of {currentLesson.title.toLowerCase()} within {course.category.toLowerCase()}.</li>
+                      </ul>
+                  </div>
+                  <div>
+                      <h3 className="text-lg font-semibold mb-1 font-headline">Downloadable Resources:</h3>
+                      <Button variant="link" className="p-0 h-auto text-primary hover:underline"><Download className="mr-2 h-4 w-4"/>Lesson_Slides_{currentLesson.id}.pdf</Button><br/>
+                      <Button variant="link" className="p-0 h-auto text-primary hover:underline"><Download className="mr-2 h-4 w-4"/>Supplementary_Reading_{currentLesson.id}.docx</Button>
+                  </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="transcript">
+            <Card className="shadow-md rounded-lg">
+                <CardHeader><CardTitle className="font-headline">Interactive Transcript</CardTitle></CardHeader>
+                <CardContent>
+                    <ScrollArea className="h-64 border rounded-md p-3 bg-muted/30">
+                        <p className="text-sm text-muted-foreground whitespace-pre-line">
+                            [00:00:05] Welcome to the lesson on {currentLesson.title}. Today, we will cover...
+                            {"\n"}[00:00:15] The first key concept is X, which refers to... (Interactive transcript highlighting based on video/audio playback - placeholder)
+                            {"\n"}[00:01:30] Another important aspect is Y. Consider this example...
+                            {"\n"}[00:02:50] Finally, let's discuss Z and its implications...
+                            {"\n"}[00:04:00] (More transcript content based on the lesson topic would go here.)
+                        </p>
+                    </ScrollArea>
+                </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="qna">
+            <Card className="shadow-md rounded-lg">
+              <CardHeader>
+                <CardTitle className="font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary"/> AI-Powered Q&A</CardTitle>
+                <CardDescription>Ask questions about the lesson content. Our AI will assist you by referencing course materials and validated web data.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Textarea placeholder="Type your question about this lesson..." className="mb-3 focus-gradient-outline" rows={3}/>
+                <Button className="button-animated-gradient">Ask AI Assistant</Button>
+                <div className="mt-4 space-y-3 text-sm text-muted-foreground">
+                    <p>Q: What is the main difference between X and Y mentioned in the video?</p>
+                    <p className="pl-4 border-l-2 border-primary">A: (AI generated answer referencing course material) The main difference is...</p>
                 </div>
-            </CardHeader>
-            <CardContent className="pt-6 space-y-4">
-                <div>
-                    <h2 className="text-xl font-semibold mb-2">About this lesson: {currentLesson.title}</h2>
-                    <p className="text-muted-foreground">
-                        This lesson covers essential aspects of {currentLesson.title}. You will learn key concepts and practical applications. 
-                        Estimated duration: {currentLesson.duration}. Upon completion, this skill will be added to your profile.
-                    </p>
-                </div>
-                <div>
-                    <h3 className="text-lg font-semibold mb-1">Learning Objectives:</h3>
-                    <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                        <li>Objective 1 specific to "{currentLesson.title}"</li>
-                        <li>Objective 2 specific to "{currentLesson.title}"</li>
-                        <li>Objective 3 related to practical application</li>
-                    </ul>
-                </div>
-                 <div>
-                    <h3 className="text-lg font-semibold mb-1">Downloadable Resources:</h3>
-                     <Button variant="link" className="p-0 h-auto"><Download className="mr-2 h-4 w-4"/>Lesson_Slides_{currentLesson.id}.pdf</Button><br/>
-                     <Button variant="link" className="p-0 h-auto"><Download className="mr-2 h-4 w-4"/>Supplementary_Reading_{currentLesson.id}.docx</Button>
-                </div>
-            </CardContent>
-        </Card>
-
-        {/* Q&A Section Placeholder */}
-        <Card className="shadow-md">
-          <CardHeader>
-            <CardTitle className="font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary"/> AI-Powered Q&A</CardTitle>
-            <CardDescription>Ask questions about the course content. Our AI will assist you by referencing course materials and validated web data.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">AI Q&A section placeholder. (e.g., Input field for questions, display of conversation history with AI, ability for AI to reference specific timestamps or content sections)</p>
-          </CardContent>
-        </Card>
-
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent value="insights">
+             <Card className="shadow-md rounded-lg">
+                <CardHeader><CardTitle className="font-headline flex items-center gap-2"><Lightbulb className="h-5 w-5 text-primary"/>AI Learning Insights</CardTitle>
+                <CardDescription>AI-generated summaries, key takeaways, and related concept explorations for this lesson.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-sm text-muted-foreground">AI Insights for "{currentLesson.title}" (Content placeholder - e.g., key concepts summary, links to related LMDpro modules, external research links).</p>
+                </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* Sidebar (Module Navigation) */}
       <aside className="lg:w-1/3 space-y-6">
-        <Card className="shadow-lg sticky top-20">
-          <CardHeader>
+        <Card className="shadow-lg sticky top-[calc(var(--header-height,4rem)+1rem)] rounded-xl"> {/* Adjusted top for fixed header */}
+          <CardHeader className="pb-3">
             <CardTitle className="font-headline text-xl">{course.title}</CardTitle>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+             <Link href={`/instructors/${course.instructor.replace(/\s+/g, '-').toLowerCase()}`} className="group">
+                <div className="flex items-center gap-2 mt-2">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage src={course.instructorImage} alt={course.instructor} data-ai-hint="instructor headshot" />
+                        <AvatarFallback>{course.instructor.split(' ').map((n:string)=>n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                        <p className="text-sm font-medium group-hover:text-primary">{course.instructor}</p>
+                        <p className="text-xs text-muted-foreground">{course.instructorTitle}</p>
+                    </div>
+                </div>
+            </Link>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2">
               <span>{course.rating} <Star className="h-4 w-4 inline text-yellow-400" /></span>
               <span>({course.reviews} reviews)</span>
               <span>&bull; {course.students} students</span>
@@ -147,27 +215,26 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
             <Progress value={course.progress} className="mt-3 h-2" />
              <p className="text-xs text-muted-foreground mt-1">{course.progress}% complete</p>
           </CardHeader>
-          <CardContent>
-            <Accordion type="single" collapsible defaultValue={course.modules[0].id} className="w-full">
-              {course.modules.map((module) => (
-                <AccordionItem value={module.id} key={module.id}>
+          <CardContent className="max-h-[calc(100vh-20rem)] overflow-y-auto"> {/* Adjust max-h as needed */}
+            <Accordion type="single" collapsible defaultValue={currentModule?.id} className="w-full">
+              {course.modules.map((moduleItem: any) => (
+                <AccordionItem value={moduleItem.id} key={moduleItem.id}>
                   <AccordionTrigger className="font-semibold hover:no-underline text-base">
-                    {module.title}
+                    {moduleItem.title}
                   </AccordionTrigger>
                   <AccordionContent>
                     <ul className="space-y-1 pl-2">
-                      {module.lessons.map(lesson => (
+                      {moduleItem.lessons.map((lesson: any) => (
                         <li key={lesson.id}>
-                          <Link href={`/courses/${course.id}?lesson=${lesson.id}`} asChild>
-                            <Button 
-                                variant="ghost" 
-                                className={`w-full justify-start h-auto py-2 px-2 text-left ${lesson.id === currentLesson.id ? 'bg-muted font-medium' : ''}`}
-                            >
-                              {lesson.completed ? <CheckCircle className="h-4 w-4 mr-2 text-green-500 shrink-0" /> : <PlayCircle className="h-4 w-4 mr-2 text-muted-foreground shrink-0" />}
-                              <span className="flex-1 text-sm">{lesson.title}</span>
-                              <span className="text-xs text-muted-foreground ml-2 shrink-0">{lesson.duration}</span>
-                            </Button>
-                          </Link>
+                          <Button 
+                              variant="ghost" 
+                              className={`w-full justify-start h-auto py-2 px-2 text-left text-sm ${lesson.id === currentLesson.id ? 'bg-muted font-medium text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                              onClick={() => setCurrentLesson(lesson)}
+                          >
+                            {lesson.completed ? <CheckCircle className="h-4 w-4 mr-2 text-green-500 shrink-0" /> : getLessonIcon(lesson.type)}
+                            <span className="flex-1">{lesson.title}</span>
+                            <span className="text-xs text-muted-foreground/80 ml-2 shrink-0">{lesson.duration}</span>
+                          </Button>
                         </li>
                       ))}
                     </ul>
@@ -176,9 +243,10 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
               ))}
             </Accordion>
           </CardContent>
+           <CardFooter className="pt-4 border-t">
+            <Button className="w-full button-animated-gradient">Enroll in Full Learning Path (Placeholder)</Button>
+           </CardFooter>
         </Card>
       </aside>
     </div>
-  );
-}
-
+  

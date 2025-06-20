@@ -4,7 +4,8 @@ import PublicFooter from "@/components/layout/PublicFooter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { Users, Lightbulb, Zap, ShieldCheck, HeartHandshake, Briefcase } from "lucide-react"; 
+import { Users, Lightbulb, Zap, ShieldCheck, HeartHandshake, Briefcase, Building } from "lucide-react"; 
+import Image from "next/image";
 
 export default function AboutUsPage() {
   return (
@@ -30,14 +31,12 @@ export default function AboutUsPage() {
                 <p className="text-muted-foreground mb-6">
                   Our platform leverages the full potential of the Firebase ecosystem and cutting-edge AI models to deliver a seamless, scalable, and secure SaaS experience. We aim to create a direct correlation between your educational investment and tangible career growth.
                 </p>
-                <Link href="/register" asChild>
+                <Link href="/register" passHref>
                   <Button className="button-animated-gradient">Join Our Community</Button>
                 </Link>
               </div>
-              <div>
-                <div className="w-full h-64 md:h-96 bg-muted rounded-lg shadow-xl border flex items-center justify-center">
-                  <Briefcase className="h-24 w-24 text-primary/30" />
-                </div>
+              <div className="relative w-full h-64 md:h-96 bg-muted rounded-lg shadow-xl border overflow-hidden">
+                 <Image src="https://placehold.co/800x600.png" alt="Empowering Learners" layout="fill" objectFit="cover" data-ai-hint="diverse students learning" />
               </div>
             </div>
           </section>
@@ -53,7 +52,7 @@ export default function AboutUsPage() {
                 { icon: HeartHandshake, title: "Accessibility", description: "Striving to make high-quality AI-driven education available to a diverse global audience through flexible subscription tiers." },
                  { icon: Users, title: "Community", description: "Fostering a supportive learning environment where users can connect, share, and grow together." },
               ].map((value) => (
-                <Card key={value.title} className="text-center shadow-lg">
+                <Card key={value.title} className="text-center shadow-lg hover:shadow-primary/20 transition-shadow duration-300">
                   <CardHeader>
                     <value.icon className="h-12 w-12 mx-auto mb-4 text-primary" />
                     <CardTitle className="font-headline text-xl">{value.title}</CardTitle>
@@ -69,10 +68,10 @@ export default function AboutUsPage() {
           <section className="text-center py-12 bg-card rounded-lg shadow-xl">
              <h2 className="text-3xl font-headline font-semibold mb-6 animated-text-gradient">Meet the (Future) Team</h2>
              <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-                LMDpro is driven by a passionate team of educators, AI researchers, engineers, and designers dedicated to building the future of learning. (Placeholder for team member profiles or a group photo).
+                LMDpro is driven by a passionate team of educators, AI researchers, engineers, and designers dedicated to building the future of learning. (Team profiles coming soon!).
              </p>
-             <div className="w-full max-w-3xl h-64 bg-muted rounded-md mx-auto border flex items-center justify-center">
-                <Users className="h-24 w-24 text-primary/30" />
+             <div className="relative w-full max-w-3xl h-64 bg-muted rounded-md mx-auto border flex items-center justify-center overflow-hidden">
+                <Image src="https://placehold.co/800x400.png" alt="LMDpro Team Placeholder" layout="fill" objectFit="cover" data-ai-hint="diverse team working" />
              </div>
           </section>
 
@@ -81,15 +80,5 @@ export default function AboutUsPage() {
             <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-8">
               Join LMDpro today and experience the power of AI-driven personalized learning.
             </p>
-            <Link href="/pricing" asChild>
-              <Button size="lg" className="button-animated-gradient">View Our Plans</Button>
-            </Link>
-          </section>
-
-        </div>
-      </main>
-      <PublicFooter />
-    </>
-  );
-}
-
+            <Link href="/pricing" passHref>
+              <Button size="lg" className="button-animated-gradient">View Our Plans</Button

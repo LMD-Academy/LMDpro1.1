@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Sparkles } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Loader2, Sparkles, Copy, ThumbsUp, ThumbsDown, Check } from "lucide-react";
 import { generatePersonalizedLearningPath, type GeneratePersonalizedLearningPathOutput } from "@/ai/flows/generate-personalized-learning-path";
 import { useToast } from "@/hooks/use-toast";
 
@@ -32,6 +32,7 @@ type FormData = z.infer<typeof formSchema>;
 export default function LearningPathsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [learningPath, setLearningPath] = useState<GeneratePersonalizedLearningPathOutput | null>(null);
+  const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<FormData>({
@@ -46,14 +47,19 @@ export default function LearningPathsPage() {
   async function onSubmit(values: FormData) {
     setIsLoading(true);
     setLearningPath(null);
+    setCopied(false);
     try {
       const result = await generatePersonalizedLearningPath(values);
       setLearningPath(result);
+      toast({
+        title: "Learning Path Generated!",
+        description: "Your personalized learning path is ready.",
+      });
     } catch (error) {
       console.error("Error generating learning path:", error);
       toast({
-        title: "Error",
-        description: "Failed to generate learning path. Please try again.",
+        title: "Error Generating Path",
+        description: "Failed to generate learning path. Please check your input or try again later.",
         variant: "destructive",
       });
     } finally {
@@ -61,19 +67,34 @@ export default function LearningPathsPage() {
     }
   }
 
+  const handleCopyToClipboard = () => {
+    if (learningPath?.learningPath) {
+      navigator.clipboard.writeText(learningPath.learningPath)
+        .then(() => {
+          setCopied(true);
+          toast({ title: "Copied to Clipboard!", description: "Learning path copied." });
+          setTimeout(() => setCopied(false), 2000);
+        })
+        .catch(err => {
+          console.error('Failed to copy text: ', err);
+          toast({ title: "Copy Failed", description: "Could not copy path to clipboard.", variant: "destructive" });
+        });
+    }
+  };
+
   return (
     <div className="space-y-8">
       <section>
         <h1 className="text-4xl font-headline font-bold mb-2 animated-text-gradient">Personalized Learning Paths</h1>
         <p className="text-lg text-muted-foreground">
-          Enter your role, interests, and goals to generate a custom learning path powered by AI.
+          Enter your current or desired role, key interests, and learning goals to let our AI craft a custom learning path just for you.
         </p>
       </section>
 
-      <Card className="shadow-lg">
+      <Card className="shadow-lg rounded-xl">
         <CardHeader>
-          <CardTitle className="font-headline">Define Your Profile</CardTitle>
-          <CardDescription>Tell us about yourself so we can tailor a learning path for you.</CardDescription>
+          <CardTitle className="font-headline">Define Your Learning Profile</CardTitle>
+          <CardDescription>The more details you provide, the better our AI can tailor your learning journey.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -85,7 +106,7 @@ export default function LearningPathsPage() {
                   <FormItem>
                     <FormLabel>Your Current or Desired Role</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Software Engineer, Data Scientist" {...field} />
+                      <Input placeholder="e.g., Software Engineer, Marketing Manager, Aspiring Data Scientist" {...field} className="focus-gradient-outline"/>
                     </FormControl>
                     <FormDescription>What role are you aiming for or currently in?</FormDescription>
                     <FormMessage />
@@ -97,11 +118,11 @@ export default function LearningPathsPage() {
                 name="interests"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Your Interests</FormLabel>
+                    <FormLabel>Your Key Interests</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="e.g., AI, machine learning, web development, cloud computing" {...field} />
+                      <Textarea placeholder="e.g., Artificial Intelligence, Machine Learning, Web Development, Cloud Computing, Project Management, Leadership Skills" {...field} className="focus-gradient-outline" rows={4}/>
                     </FormControl>
-                    <FormDescription>What topics or technologies are you passionate about?</FormDescription>
+                    <FormDescription>List topics, technologies, or industries you're passionate about learning.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -113,23 +134,23 @@ export default function LearningPathsPage() {
                   <FormItem>
                     <FormLabel>Your Learning Goals</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="e.g., Get a promotion, learn a new skill, change careers, build a specific project" {...field} />
+                      <Textarea placeholder="e.g., Secure a promotion to Senior Developer, Learn Python for data analysis, Transition into a UX design role, Build a portfolio project using React and Firebase" {...field} className="focus-gradient-outline" rows={4}/>
                     </FormControl>
-                    <FormDescription>What do you hope to achieve with this learning path?</FormDescription>
+                    <FormDescription>What specific outcomes do you hope to achieve through this learning path?</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading} className="w-full button-animated-gradient">
+              <Button type="submit" disabled={isLoading} className="w-full button-animated-gradient text-base py-6">
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating...
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Generating Your Path...
                   </>
                 ) : (
                   <>
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Generate Learning Path
+                    <Sparkles className="mr-2 h-5 w-5" />
+                    Generate My Learning Path
                   </>
                 )}
               </Button>
@@ -139,15 +160,26 @@ export default function LearningPathsPage() {
       </Card>
 
       {learningPath && (
-        <Card className="shadow-lg mt-8">
+        <Card className="shadow-lg mt-8 rounded-xl">
           <CardHeader>
-            <CardTitle className="font-headline animated-text-gradient">Your Personalized Learning Path</CardTitle>
+            <div className="flex justify-between items-center">
+                <CardTitle className="font-headline text-2xl animated-text-gradient">Your Personalized Learning Path</CardTitle>
+                <Button variant="outline" size="sm" onClick={handleCopyToClipboard}>
+                    {copied ? <Check className="mr-2 h-4 w-4 text-green-500"/> : <Copy className="mr-2 h-4 w-4" />}
+                    {copied ? 'Copied!' : 'Copy Path'}
+                </Button>
+            </div>
+            <CardDescription>Based on: Role - {form.getValues().role}, Interests - {form.getValues().interests.substring(0,50)}..., Goals - {form.getValues().goals.substring(0,50)}...</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="prose dark:prose-invert max-w-none whitespace-pre-wrap rounded-md border p-4 bg-muted/50">
+            <div className="prose dark:prose-invert max-w-none whitespace-pre-wrap rounded-md border p-4 bg-muted/30 text-sm leading-relaxed">
               {learningPath.learningPath}
             </div>
           </CardContent>
+          <CardFooter className="flex justify-end gap-2">
+            <Button variant="outline" size="sm"><ThumbsUp className="mr-2 h-4 w-4"/> Helpful</Button>
+            <Button variant="outline" size="sm"><ThumbsDown className="mr-2 h-4 w-4"/> Not Helpful</Button>
+          </CardFooter>
         </Card>
       )}
     </div>

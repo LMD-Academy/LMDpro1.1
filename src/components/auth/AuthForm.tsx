@@ -1,16 +1,14 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Github, Chrome, Linkedin, Eye, EyeOff } from "lucide-react"; // Using Chrome for Google, as lucide-react doesn't have a generic "Google" icon
+import { Github, Chrome, Linkedin, Eye, EyeOff } from "lucide-react"; 
 import Link from "next/link";
 import { useState } from "react";
-
-interface AuthFormProps {
-  mode: "login" | "register";
-}
+import { useToast } from "@/hooks/use-toast"; // For showing messages
 
 // Placeholder icons for Microsoft, Apple, X.com
 const MicrosoftIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M11.57.01H.22v11.36h11.35V.01zm12.21 0H12.43v11.36h11.35V.01zM.22 12.63h11.35v11.36H.22V12.63zm12.21 0H23.78v11.36H12.43V12.63z"/></svg>;
@@ -18,33 +16,60 @@ const AppleIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="cu
 const XcomIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>;
 
 
+interface AuthFormProps {
+  mode: "login" | "register";
+}
+
 export default function AuthForm({ mode }: AuthFormProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { toast } = useToast();
 
   const socialButtons = [
-    { name: "Google", icon: Chrome, action: () => console.log("Continue with Google") },
-    { name: "Microsoft", icon: MicrosoftIcon, action: () => console.log("Continue with Microsoft") },
-    { name: "Apple", icon: AppleIcon, action: () => console.log("Continue with Apple") },
-    { name: "GitHub", icon: Github, action: () => console.log("Continue with GitHub") },
-    { name: "LinkedIn", icon: Linkedin, action: () => console.log("Continue with LinkedIn") },
-    { name: "X.com", icon: XcomIcon, action: () => console.log("Continue with X.com") },
+    { name: "Google", icon: Chrome, action: () => toast({title: "Social Login", description: "Continuing with Google (placeholder)..."}) },
+    { name: "Microsoft", icon: MicrosoftIcon, action: () => toast({title: "Social Login", description: "Continuing with Microsoft (placeholder)..."}) },
+    { name: "Apple", icon: AppleIcon, action: () => toast({title: "Social Login", description: "Continuing with Apple (placeholder)..."}) },
+    { name: "GitHub", icon: Github, action: () => toast({title: "Social Login", description: "Continuing with GitHub (placeholder)..."}) },
+    { name: "LinkedIn", icon: Linkedin, action: () => toast({title: "Social Login", description: "Continuing with LinkedIn (placeholder)..."}) },
+    { name: "X.com", icon: XcomIcon, action: () => toast({title: "Social Login", description: "Continuing with X.com (placeholder)..."}) },
   ];
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // Placeholder for actual auth logic
+    toast({
+        title: mode === "login" ? "Login Attempted" : "Registration Attempted",
+        description: `This is a placeholder for ${mode} functionality. In a real app, authentication would occur here. Redirecting to dashboard...`
+    });
+    // Simulate successful login/registration and redirect to dashboard
+    // In a real app, you'd use Next.js router after successful authentication
+    setTimeout(() => {
+      window.location.href = "/dashboard";
+    }, 1500);
+  };
+
 
   return (
     <Card className="w-full max-w-md shadow-xl">
       <CardHeader className="text-center">
         <CardTitle className="text-3xl font-headline animated-text-gradient">
-          {mode === "login" ? "Welcome Back!" : "Create Your Account"}
+          {mode === "login" ? "Welcome Back!" : "Create Your LMDpro Account"}
         </CardTitle>
         <CardDescription>
           {mode === "login" ? "Sign in to continue your learning journey." : "Join LMDpro and start enhancing your skills today."}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {mode === "register" && (
+            <div>
+                <Label htmlFor="fullName">Full Name</Label>
+                <Input id="fullName" type="text" placeholder="Your Full Name" required className="mt-1 focus-gradient-outline" />
+            </div>
+          )}
           <div>
             <Label htmlFor="email">Email address</Label>
-            <Input id="email" type="email" placeholder="you@example.com" required className="mt-1" />
+            <Input id="email" type="email" placeholder="you@example.com" required className="mt-1 focus-gradient-outline" />
           </div>
           <div className="relative">
             <Label htmlFor="password">Password</Label>
@@ -53,13 +78,13 @@ export default function AuthForm({ mode }: AuthFormProps) {
               type={showPassword ? "text" : "password"} 
               placeholder="••••••••" 
               required 
-              className="mt-1 pr-10" // Add padding for the icon
+              className="mt-1 pr-10 focus-gradient-outline"
             />
             <Button 
               type="button"
               variant="ghost" 
               size="icon" 
-              className="absolute right-1 top-7 h-7 w-7" // Adjust positioning
+              className="absolute right-1 top-7 h-7 w-7" 
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
@@ -69,38 +94,55 @@ export default function AuthForm({ mode }: AuthFormProps) {
           {mode === "register" && (
             <div className="relative">
               <Label htmlFor="confirm-password">Confirm Password</Label>
-              <Input id="confirm-password" type={showPassword ? "text" : "password"} placeholder="••••••••" required className="mt-1 pr-10" />
+              <Input 
+                id="confirm-password" 
+                type={showConfirmPassword ? "text" : "password"} 
+                placeholder="••••••••" 
+                required 
+                className="mt-1 pr-10 focus-gradient-outline" 
+              />
+               <Button 
+                type="button"
+                variant="ghost" 
+                size="icon" 
+                className="absolute right-1 top-7 h-7 w-7" 
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                >
+                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </Button>
             </div>
           )}
-        </div>
+        
 
-        {mode === "login" && (
-          <div className="text-sm text-right">
-            <Link href="/forgot-password" passHref>
-              <Button variant="link" className="p-0 h-auto font-normal text-primary hover:text-primary/80">
-                Forgot password?
-              </Button>
-            </Link>
-          </div>
-        )}
+            {mode === "login" && (
+            <div className="text-sm text-right">
+                <Link href="/forgot-password" passHref>
+                <Button variant="link" className="p-0 h-auto font-normal text-primary hover:text-primary/80">
+                    Forgot password?
+                </Button>
+                </Link>
+            </div>
+            )}
 
-        <Button type="submit" className="w-full button-animated-gradient">
-          {mode === "login" ? "Sign In" : "Create Account"}
-        </Button>
+            <Button type="submit" className="w-full button-animated-gradient">
+            {mode === "login" ? "Sign In" : "Create Account"}
+            </Button>
+        </form>
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
+            <span className="bg-card px-2 text-muted-foreground">
               Or continue with
             </span>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-          {socialButtons.slice(0,3).map((social) => ( // Show first 3 prominent ones
+          {socialButtons.slice(0,3).map((social) => ( 
             <Button key={social.name} variant="outline" onClick={social.action} className="flex items-center justify-center gap-2">
               <social.icon />
               <span className="sr-only">{social.name}</span>
@@ -108,7 +150,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           ))}
         </div>
          <div className="grid grid-cols-3 gap-3">
-          {socialButtons.slice(3).map((social) => ( // Show remaining
+          {socialButtons.slice(3).map((social) => ( 
             <Button key={social.name} variant="outline" onClick={social.action} className="flex items-center justify-center gap-2">
               <social.icon />
               <span className="sr-only">{social.name}</span>
@@ -131,10 +173,4 @@ export default function AuthForm({ mode }: AuthFormProps) {
             Already have an account?&nbsp;
             <Link href="/login" passHref>
               <Button variant="link" className="p-0 h-auto font-normal text-primary hover:text-primary/80">Sign in</Button>
-            </Link>
-          </>
-        )}
-      </CardFooter>
-    </Card>
-  );
-}
+            </Link

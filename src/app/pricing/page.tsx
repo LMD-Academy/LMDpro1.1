@@ -4,7 +4,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, Zap, Users, Building, Award as StudentCapIcon, Gem } from "lucide-react"; 
+import { CheckCircle, Zap, Users, Building, Award as StudentCapIcon, Gem, ShieldCheck as ShieldIcon } from "lucide-react"; 
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
 import Link from "next/link";
@@ -45,7 +45,7 @@ const tiers: SubscriptionTier[] = [
     features: [
       { text: "Limited Personalized Learning Paths", included: true },
       { text: "Basic Video Creation (watermarked)", included: true },
-      { text: "1 Resume Template, Limited PDF Exports", included: true },
+      { text: "1 Resume Template, Limited PDF Exports (watermarked)", included: true },
       { text: "Selection of Free Courses", included: true },
       { text: "Community Support Forum Access", included: true },
       { text: "Basic AI Research Capabilities", included: true },
@@ -59,10 +59,10 @@ const tiers: SubscriptionTier[] = [
     name: "Premium",
     price: "$5.80",
     priceFrequency: "/month",
-    annualBilling: "or $58 annually (Save 2 months!)",
+    annualBilling: "or $58 annually (Save ~16%!)",
     audience: "For dedicated individual learners & professionals",
     description: "Unlock the full suite of AI-powered tools, access all courses, and leverage advanced personalization for career growth.",
-    modelInfo: "Latest Flash Model",
+    modelInfo: "Latest Flash AI Models",
     icon: Gem,
     cta: "Go Premium",
     highlight: true,
@@ -76,7 +76,7 @@ const tiers: SubscriptionTier[] = [
       { text: "Priority AI Support (Chat & Email)", included: true },
       { text: "Comprehensive AI Suggestions & Optimization Tools", included: true },
       { text: "Advanced AI Research & Cognitive Processing", included: true },
-      { text: "Developer API Access (Included - Generous Free Tier)", included: true },
+      { text: "Developer API Access (Generous Free Tier Included)", included: true },
       { text: "Detailed Progress & Skills Analytics", included: true },
     ],
   },
@@ -87,7 +87,7 @@ const tiers: SubscriptionTier[] = [
     priceFrequency: "/month (up to 5 users)",
     audience: "For small to medium businesses & collaborative groups",
     description: "Empower your team with collaborative tools, centralized management, shared resources, and enhanced analytics.",
-    modelInfo: "Latest Pro Model",
+    modelInfo: "Latest Pro AI Models",
     icon: Users,
     cta: "Choose Teams Plan",
     features: [
@@ -105,23 +105,23 @@ const tiers: SubscriptionTier[] = [
   {
     id: "enterprise",
     name: "Enterprise",
-    price: "$1960",
-    priceFrequency: "/month (Customizable)",
+    price: "Custom",
+    priceFrequency: "",
     audience: "For large organizations requiring scale & bespoke solutions",
     description: "Tailored solutions, dedicated support, advanced security, custom AI model integration, and enterprise-grade features.",
-    modelInfo: "Latest Pro Model / Custom Multi-Model Options",
+    modelInfo: "Latest Pro AI Models / Custom Multi-Model Options",
     icon: Building,
     cta: "Contact Sales for Enterprise",
     features: [
       { text: "All Teams Features, scaled for enterprise needs", included: true, highlight: true },
-      { text: "Custom AI Model Tuning & Private Integrations (e.g., internal knowledge bases)", included: true },
+      { text: "Custom AI Model Tuning & Private Integrations", included: true },
       { text: "Advanced SSO, SCIM Provisioning & Granular Permissions", included: true },
-      { text: "Dedicated Account Manager & Premium SLA Support (24/7 options)", included: true },
-      { text: "Advanced Security Audits & Compliance Reporting (e.g., GDPR, CCPA, HIPAA as applicable)", included: true },
-      { text: "Custom Branding, Whitelabeling & Content Authoring Tools", included: true },
-      { text: "Enterprise API Access (Full, High Volume, Custom Endpoints, Dedicated Infrastructure options)", included: true },
-      { text: "On-demand Training Resources & Bespoke Onboarding Programs", included: true },
-      { text: "Beta Access to New Features & Direct Input into Product Roadmap", included: true },
+      { text: "Dedicated Account Manager & Premium SLA Support", included: true },
+      { text: "Advanced Security Audits & Compliance Reporting", included: true },
+      { text: "Custom Branding, Whitelabeling & Content Authoring", included: true },
+      { text: "Full Enterprise API Access (High Volume, Custom Endpoints)", included: true },
+      { text: "Bespoke Onboarding Programs & On-demand Training", included: true },
+      { text: "Beta Access to New Features & Roadmap Input", included: true },
     ],
   },
    {
@@ -131,7 +131,7 @@ const tiers: SubscriptionTier[] = [
     priceFrequency: "(Verification Required)",
     audience: "Empowering non-profits & enrolled students",
     description: "Special access to core LMDpro features to support education, skill development, and social impact initiatives.",
-    modelInfo: "Latest Flash Model",
+    modelInfo: "Latest Flash AI Models",
     icon: StudentCapIcon,
     cta: "Apply for Discount",
     features: [
@@ -141,27 +141,27 @@ const tiers: SubscriptionTier[] = [
       { text: "Resume Builder with Multiple Templates & PDF Export (No Watermark after verification)", included: true },
       { text: "Community Forum & Peer Support Network", included: true },
       { text: "Limited API Access for Educational Projects", included: true },
-      { text: "Watermarked Video Creation for educational use (upgrade for no watermark)", included: true },
+      { text: "Watermarked Video Creation for educational use", included: true },
     ],
   },
 ];
 
 const featureComparison = [
-    { category: "Core Learning", feature: "Personalized Learning Paths", community: "Limited", premium: "Unlimited AI Gen", teams: "Unlimited + Shared", enterprise: "Unlimited + Custom Paths", nonprofit: "AI Suggestions" },
+    { category: "Core Learning", feature: "Personalized Learning Paths", community: "Limited", premium: "Unlimited AI Gen", teams: "Unlimited + Shared", enterprise: "Unlimited + Custom Paths", nonprofit: "AI Suggestions (Premium level)" },
     { category: "Core Learning", feature: "Full Course Catalog Access", community: "Selection", premium: "Yes", teams: "Yes", enterprise: "Yes + Custom Content", nonprofit: "Yes" },
-    { category: "AI Agent Capabilities", feature: "AI Model Access", community: "Gemma (Free)", premium: "Flash (Latest)", teams: "Pro (Latest)", enterprise: "Pro / Custom Multi-Model", nonprofit: "Flash (Latest)" },
-    { category: "AI Agent Capabilities", feature: "AI Research Capabilities", community: "Basic", premium: "Advanced", teams: "Advanced", enterprise: "Bespoke", nonprofit: "Standard" },
-    { category: "AI Agent Capabilities", feature: "Advanced Cognitive Processing (RAG)", community: "Limited", premium: "Yes", teams: "Yes", enterprise: "Enhanced RAG", nonprofit: "Standard" },
-    { category: "Content Creation", feature: "Video Creation (Script & 3D Animation)", community: "Basic (Watermarked)", premium: "Advanced (No Watermark, Avatars, Branding)", teams: "Collaborative + Brand Kits", enterprise: "Full Suite + API", nonprofit: "Watermarked (Educational)" },
-    { category: "Career Tools", feature: "Resume Builder Templates", community: "1", premium: "All", teams: "All + Team Sharing", enterprise: "All + Custom Templates", nonprofit: "Multiple" },
+    { category: "AI Agent Capabilities", feature: "AI Model Access Tier", community: "Gemma (Free Tier)", premium: "Flash (Latest)", teams: "Pro (Latest)", enterprise: "Pro / Custom Multi-Model", nonprofit: "Flash (Latest)" },
+    { category: "AI Agent Capabilities", feature: "AI Research Capabilities", community: "Basic", premium: "Advanced", teams: "Advanced + Team History", enterprise: "Bespoke + Knowledge Base Integration", nonprofit: "Advanced" },
+    { category: "AI Agent Capabilities", feature: "Advanced Cognitive Processing (RAG)", community: "Limited", premium: "Yes", teams: "Yes", enterprise: "Enhanced RAG + Fine-tuning", nonprofit: "Yes" },
+    { category: "Content Creation", feature: "Video Creation (Script & 3D Animation)", community: "Basic (Watermarked, Limited Avatars)", premium: "Advanced (No Watermark, More Avatars, Custom Branding)", teams: "Collaborative Projects + Shared Brand Kits", enterprise: "Full Suite + API Access", nonprofit: "Advanced (Watermarked)" },
+    { category: "Career Tools", feature: "Resume Builder Templates", community: "1 Basic Template", premium: "All Premium Templates", teams: "All + Team Templates", enterprise: "All + Custom Org Templates", nonprofit: "All Premium Templates" },
     { category: "Career Tools", feature: "Resume PDF Export Watermark", community: "Yes ('Made with LMDpro')", premium: "No", teams: "No", enterprise: "No / Custom", nonprofit: "No (with verification)" },
-    { category: "Career Tools", feature: "Resume AI Optimization & ATS Scoring", community: "Limited", premium: "Yes", teams: "Yes", enterprise: "Advanced ATS Insights", nonprofit: "Yes" },
-    { category: "Career Tools", feature: "LinkedIn Profile Import", community: "Yes", premium: "Yes", teams: "Yes", enterprise: "Yes (with field mapping)", nonprofit: "Yes" },
-    { category: "Support & Utilities", feature: "Support Level", community: "Community Forum", premium: "Priority AI Chat & Email", teams: "Dedicated Onboarding + Team Support", enterprise: "Dedicated Account Manager & SLA", nonprofit: "Community & AI Chat" },
-    { category: "Support & Utilities", feature: "File Management & Google Docs Integration", community: "Limited", premium: "Yes", teams: "Yes (Team Storage)", enterprise: "Advanced Integration Options", nonprofit: "Standard" },
-    { category: "API & Admin", feature: "Developer API Access", community: "Usage-based Add-on", premium: "Developer Tier (Generous Free Quota)", teams: "Teams Tier (Higher Limits, More Features)", enterprise: "Full Enterprise Tier (Custom)", nonprofit: "Educational Projects Only" },
-    { category: "API & Admin", feature: "Team Management & Analytics", community: "No", premium: "No", teams: "Yes", enterprise: "Advanced + SSO, SCIM", nonprofit: "No" },
-    { category: "Security & Compliance", feature: "Data Encryption (At Rest & Transit)", community: "Yes", premium: "Yes", teams: "Yes", enterprise: "Enhanced + Audit Logs", nonprofit: "Yes" },
+    { category: "Career Tools", feature: "Resume AI Optimization & ATS Scoring", community: "Limited Suggestions", premium: "Full AI Optimization", teams: "Full + Team Benchmarking", enterprise: "Advanced ATS Insights & Custom Rules", nonprofit: "Full AI Optimization" },
+    { category: "Career Tools", feature: "LinkedIn Profile Import", community: "Yes (Basic Fields)", premium: "Yes (Enhanced Import)", teams: "Yes (Enhanced Import)", enterprise: "Yes (Enhanced + Field Mapping)", nonprofit: "Yes (Enhanced Import)" },
+    { category: "Support & Utilities", feature: "Support Level", community: "Community Forum", premium: "Priority AI Chat & Email", teams: "Dedicated Onboarding + Team Support Channels", enterprise: "Dedicated Account Manager & 24/7 SLA", nonprofit: "Community & Standard AI Chat" },
+    { category: "Support & Utilities", feature: "File Management & Google Docs Integration", community: "Limited Storage", premium: "Standard Storage + GDocs", teams: "Increased Team Storage + GDocs", enterprise: "Custom Storage Solutions + Advanced GSuite Integration", nonprofit: "Standard Storage + GDocs" },
+    { category: "API & Admin", feature: "Developer API Access", community: "Usage-based Add-on", premium: "Developer Tier (Included)", teams: "Teams Tier (Higher Limits)", enterprise: "Full Enterprise Tier (Custom Endpoints)", nonprofit: "Educational Projects Only (Limited)" },
+    { category: "API & Admin", feature: "Team Management & Analytics", community: "No", premium: "No", teams: "Yes (Admin Dashboard, Progress Tracking)", enterprise: "Advanced Analytics + SSO, SCIM", nonprofit: "No" },
+    { category: "Security & Compliance", feature: "Data Encryption (At Rest & Transit)", community: "Standard", premium: "Standard", teams: "Standard", enterprise: "Enhanced + Audit Logs, Compliance Certs", nonprofit: "Standard" },
 ];
 
 
@@ -178,15 +178,15 @@ export default function PricingPage() {
             </p>
           </section>
 
-          <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 items-stretch mb-24">
+          <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 items-stretch mb-20">
             {tiers.map((tier) => (
-              <Card key={tier.id} className={`flex flex-col shadow-xl hover:scale-105 transform transition-all duration-300 ${tier.highlight ? 'border-primary ring-2 ring-primary' : 'border-border'} ${tier.popular ? 'relative' : ''}`}>
+              <Card key={tier.id} className={`flex flex-col shadow-xl hover:scale-105 transform transition-all duration-300 rounded-xl overflow-hidden ${tier.highlight ? 'border-primary ring-2 ring-primary bg-card' : 'border-border bg-card'} ${tier.popular ? 'relative' : ''}`}>
                 {tier.popular && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-full shadow-lg button-animated-gradient border-2 border-background">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-full shadow-lg button-animated-gradient border-2 border-background z-10">
                     Most Popular
                   </div>
                 )}
-                <CardHeader className="text-center pb-4">
+                <CardHeader className="text-center pb-4 pt-8">
                   <tier.icon className={`h-10 w-10 mx-auto mb-3 ${tier.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
                   <CardTitle className="font-headline text-2xl">{tier.name}</CardTitle>
                    <p className="text-sm text-muted-foreground h-10 mt-1 px-2">{tier.audience}</p>
@@ -195,22 +195,23 @@ export default function PricingPage() {
                     {tier.priceFrequency && <span className="text-base font-normal text-muted-foreground">{tier.priceFrequency}</span>}
                   </p>
                   {tier.annualBilling && <p className="text-xs text-green-600 dark:text-green-400 mt-1">{tier.annualBilling}</p>}
-                   <p className="text-xs text-muted-foreground mt-2 h-5">AI Model: {tier.modelInfo}</p>
-                  <CardDescription className="mt-3 text-sm h-24 overflow-y-auto px-1">{tier.description}</CardDescription>
+                   <p className="text-xs text-muted-foreground mt-2 h-10">{tier.modelInfo}</p>
+                  <CardDescription className="mt-3 text-sm h-28 overflow-y-auto px-1 text-muted-foreground">{tier.description}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 pt-2">
-                  <h4 className="font-semibold text-sm mb-2 text-center">Key Features:</h4>
+                  <h4 className="font-semibold text-sm mb-3 text-center text-foreground">Key Features:</h4>
                   <ul className="space-y-2">
                     {tier.features.slice(0, 5).map((feature, index) => ( 
-                      <li key={index} className={`flex items-start gap-2 text-sm ${feature.included ? '' : 'text-muted-foreground line-through opacity-70'}`}>
+                      <li key={index} className={`flex items-start gap-2 text-sm ${feature.included ? 'text-foreground' : 'text-muted-foreground line-through opacity-70'}`}>
                         <CheckCircle className={`h-5 w-5 mt-0.5 shrink-0 ${feature.included ? (feature.highlight ? 'text-primary' : 'text-green-500') : 'text-muted-foreground/50'}`} />
                         <span>{feature.text}</span>
                       </li>
                     ))}
+                     {tier.features.length > 5 && <li className="text-xs text-muted-foreground text-center pt-1">...and more!</li>}
                   </ul>
                 </CardContent>
-                <CardFooter className="mt-4">
-                   <Link href={tier.id === 'enterprise' ? '/contact-sales' : `/register?tier=${tier.id}`} asChild className="w-full">
+                <CardFooter className="mt-auto pt-4">
+                   <Link href={tier.id === 'enterprise' ? '/contact-sales' : `/register?tier=${tier.id}`} passHref className="w-full">
                     <Button className={`w-full ${tier.highlight || tier.id === 'community' || tier.id === 'nonprofit-student' ? 'button-animated-gradient' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}>
                       {tier.cta}
                     </Button>
@@ -222,13 +223,13 @@ export default function PricingPage() {
 
           <section className="mb-24">
             <h2 className="text-3xl font-headline font-semibold text-center mb-12 animated-text-gradient">Detailed Feature Comparison</h2>
-            <Card className="shadow-lg overflow-x-auto">
+            <Card className="shadow-lg overflow-x-auto rounded-xl">
                 <table className="min-w-full divide-y divide-border">
                     <thead className="bg-muted/50 dark:bg-muted/30">
                         <tr>
-                            <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider sticky left-0 bg-muted/50 dark:bg-muted/30 z-10 w-1/5 min-w-[200px]">Feature</th>
+                            <th scope="col" className="px-4 py-3.5 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider sticky left-0 bg-muted/50 dark:bg-muted/30 z-10 w-1/5 min-w-[220px] rounded-tl-xl">Feature Category</th>
                             {tiers.map(tier => (
-                                <th key={tier.id} scope="col" className={`px-4 py-3 text-center text-xs font-medium uppercase tracking-wider min-w-[150px] ${tier.highlight ? "text-primary" : "text-muted-foreground"}`}>{tier.name}</th>
+                                <th key={tier.id} scope="col" className={`px-4 py-3.5 text-center text-xs font-medium uppercase tracking-wider min-w-[160px] ${tier.highlight ? "text-primary" : "text-muted-foreground"} ${tier.id === 'enterprise' ? 'rounded-tr-xl' : ''}`}>{tier.name}</th>
                             ))}
                         </tr>
                     </thead>
@@ -240,16 +241,16 @@ export default function PricingPage() {
                                         <td colSpan={tiers.length + 1} className="px-4 py-3 bg-muted/20 dark:bg-muted/40 text-sm font-semibold text-foreground sticky left-0 z-10">{item.category}</td>
                                     </tr>
                                 ) : null}
-                                <tr>
-                                    <td className="px-4 py-4 whitespace-normal text-sm font-medium text-foreground sticky left-0 bg-card z-10 w-1/5 min-w-[200px]">{item.feature}</td>
+                                <tr className="hover:bg-muted/20 dark:hover:bg-muted/40 transition-colors">
+                                    <td className="px-4 py-4 whitespace-normal text-sm font-medium text-foreground sticky left-0 bg-card z-10 w-1/5 min-w-[220px]">{item.feature}</td>
                                     {tiers.map(tier => {
                                         const featureValue = item[tier.id as keyof typeof item] as string | boolean;
                                         return (
-                                            <td key={`${tier.id}-${item.feature}`} className="px-4 py-4 whitespace-normal text-sm text-center text-muted-foreground min-w-[150px]">
+                                            <td key={`${tier.id}-${item.feature}`} className="px-4 py-4 whitespace-normal text-sm text-center text-muted-foreground min-w-[160px]">
                                                 {typeof featureValue === 'boolean' ? (
                                                     featureValue ? <CheckCircle className="h-5 w-5 text-green-500 mx-auto" /> : <span className="text-muted-foreground/50 text-lg">-</span>
                                                 ) : (
-                                                    featureValue
+                                                    <span className={featureValue.includes("Unlimited") || featureValue.includes("All") || featureValue.includes("Full") ? "font-semibold text-primary" : ""}>{featureValue}</span>
                                                 )}
                                             </td>
                                         );
@@ -266,7 +267,7 @@ export default function PricingPage() {
           <section className="mt-24 text-center">
             <h2 className="text-3xl font-headline font-semibold mb-6 animated-text-gradient">Frequently Asked Questions</h2>
             <div className="max-w-3xl mx-auto space-y-6 text-left">
-              <Card className="shadow-md">
+              <Card className="shadow-md rounded-lg">
                 <CardHeader>
                   <CardTitle className="font-headline text-lg">Can I change my LMDpro plan later?</CardTitle>
                 </CardHeader>
@@ -274,15 +275,15 @@ export default function PricingPage() {
                   <p className="text-muted-foreground">Yes, you can upgrade or downgrade your LMDpro plan at any time directly from your account settings page. Prorated charges or credits will be applied automatically to your next billing cycle based on your selection.</p>
                 </CardContent>
               </Card>
-              <Card className="shadow-md">
+              <Card className="shadow-md rounded-lg">
                 <CardHeader>
                   <CardTitle className="font-headline text-lg">Is there a discount for annual billing?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">Absolutely! Our Premium plan offers a significant discount, equivalent to two months free, when you opt for annual billing. Enterprise plans can also be customized with annual payment arrangements. The Non-Profit/Student and Community tiers are offered free of charge (verification may apply for Non-Profit/Student).</p>
+                  <p className="text-muted-foreground">Absolutely! Our Premium plan offers a significant discount, equivalent to about two months free, when you opt for annual billing. Enterprise plans can also be customized with annual payment arrangements. The Non-Profit/Student and Community tiers are offered free of charge (verification may apply for Non-Profit/Student).</p>
                 </CardContent>
               </Card>
-              <Card className="shadow-md">
+              <Card className="shadow-md rounded-lg">
                 <CardHeader>
                   <CardTitle className="font-headline text-lg">What kind of support is included with each LMDpro plan?</CardTitle>
                 </CardHeader>
@@ -290,7 +291,7 @@ export default function PricingPage() {
                   <p className="text-muted-foreground">All LMDpro plans include access to our 24/7 AI Support Chatbot and comprehensive community forums. Premium, Teams, and Enterprise plans benefit from progressively higher levels of support, including priority email, dedicated onboarding specialists for Teams, and direct account managers with Service Level Agreements (SLAs) for Enterprise clients.</p>
                 </CardContent>
               </Card>
-               <Card className="shadow-md">
+               <Card className="shadow-md rounded-lg">
                 <CardHeader>
                   <CardTitle className="font-headline text-lg">How does the "Latest AI Model" access work for different tiers?</CardTitle>
                 </CardHeader>
@@ -298,7 +299,7 @@ export default function PricingPage() {
                   <p className="text-muted-foreground">LMDpro is committed to providing cutting-edge AI capabilities. We continuously integrate and test the latest advancements in AI models (such as Google's Gemma, Flash, and Pro series, among others). Your subscription tier determines access to the corresponding class of model, ensuring you benefit from ongoing improvements in AI capabilities for personalized learning, content creation, research, and resume optimization. Enterprise clients may also have options for custom model integrations.</p>
                 </CardContent>
               </Card>
-               <Card className="shadow-md">
+               <Card className="shadow-md rounded-lg">
                 <CardHeader>
                   <CardTitle className="font-headline text-lg">What is the "Made with LMDpro" watermark on resumes?</CardTitle>
                 </CardHeader>
@@ -306,12 +307,4 @@ export default function PricingPage() {
                   <p className="text-muted-foreground">For users on our free Community tier, exported PDF resumes will include a subtle "Made with LMDpro" watermark. Premium, Teams, Enterprise, and verified Non-Profit/Student users can export resumes without this watermark, offering a fully professional presentation.</p>
                 </CardContent>
               </Card>
-            </div>
-          </section>
-        </div>
-      </main>
-      <PublicFooter />
-    </>
-  );
-}
-
+            

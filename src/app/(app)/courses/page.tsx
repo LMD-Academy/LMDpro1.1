@@ -3,26 +3,45 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Filter, List, Grid, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, ImageIcon } from "lucide-react"; 
+import { ArrowRight, Filter, List, Grid, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, ImageIcon, Video, FileText, Library, BookMarked, Lightbulb, Network, Info, Brain, FileVideo as FileVideoIcon, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText } from "lucide-react"; 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+
+const courseIcons = {
+    GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, Video, FileTextIcon, Library, BookMarked, Lightbulb, Network, Info, Brain, FileVideoIcon, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText
+};
 
 const allCourses = [
-  { id: "1", title: "Executive Leadership Development", category: "Business", difficulty: "Advanced", duration: "12 Weeks", type: "Learning Path", icon: GraduationCap, imageHint: "leadership team" },
-  { id: "2", title: "AI for Business Professionals", category: "Technology", difficulty: "Intermediate", duration: "8 Weeks", type: "Course", icon: Zap, imageHint: "AI business" },
-  { id: "3", title: "Full-Stack Web Development Bootcamp", category: "Technology", difficulty: "Beginner to Advanced", duration: "24 Weeks", type: "Learning Path", icon: Zap, imageHint: "web development" },
-  { id: "4", title: "Strategic Communication for Leaders", category: "Business", difficulty: "Intermediate", duration: "6 Weeks", type: "Course", icon: GraduationCap, imageHint: "communication strategy" },
-  { id: "5", title: "Introduction to UX Design", category: "Design", difficulty: "Beginner", duration: "4 Weeks", type: "Course", icon: Zap, imageHint: "UX design app" },
-  { id: "6", title: "Data Analysis with Python", category: "Technology", difficulty: "Intermediate", duration: "10 Weeks", type: "Course", icon: Zap, imageHint: "python data" },
+  { id: "FBS_L1", title: "Foundational Business Skills L1", category: "CORE_L1", difficulty: "Beginner", duration: "15 Weeks", type: "Standalone Course", icon: "GraduationCap", imageHint: "business foundations book" },
+  { id: "AMC_L2", title: "Applied Management & Communication L2", category: "CORE_L2", difficulty: "Intermediate", duration: "10 Weeks", type: "Standalone Course", icon: "Briefcase", imageHint: "team communication" },
+  { id: "AB_L3", title: "Agile Business Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "12 Weeks", type: "Specialization", icon: "Zap", imageHint: "agile board planning" },
+  { id: "CS_L3", title: "Computer Science Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "18 Weeks", type: "Specialization", icon: "Zap", imageHint: "computer code screen" },
+  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", category: "AI_SPEC", difficulty: "Advanced", duration: "20 Weeks", type: "Learning Path", icon: "Brain", imageHint: "ai robot brain" },
+  { id: "PYTHON_DS", title: "Python for Data Science", category: "TECH_DEV", difficulty: "Intermediate", duration: "10 Weeks", type: "Standalone Course", icon: "BookCopy", imageHint: "python data charts" },
+  { id: "LEAD_FOUND", title: "Foundations of Effective Leadership", category: "LEAD_MGMT_FUND", difficulty: "Beginner", duration: "8 Weeks", type: "Standalone Course", icon: "Users", imageHint: "leadership speech" },
+  { id: "GM_L5_CAP", title: "General Management Executive Capstone L5", category: "EXEC_L5", difficulty: "Executive", duration: "24 Weeks", type: "Capstone", icon: "Building", imageHint: "ceo office view" },
 ];
 
-const categories = ["All", "Business", "Technology", "Design", "Personal Development"];
-const difficulties = ["All", "Beginner", "Intermediate", "Advanced"];
-const durations = ["All", "1-4 Weeks", "4-8 Weeks", "8-12 Weeks", "12+ Weeks"];
+const categories = [
+    { value: "All", label: "All Categories" },
+    { value: "CORE_L1", label: "Core Skills L1" },
+    { value: "CORE_L2", label: "Core Skills L2" },
+    { value: "PROF_L3", label: "Professional Specializations L3" },
+    { value: "SENIOR_L4", label: "Senior Leadership L4" },
+    { value: "EXEC_L5", label: "Executive Capstone L5" },
+    { value: "TECH_DEV", label: "Technology Development" },
+    { value: "AI_SPEC", label: "AI Specialization" },
+    { value: "LEAD_MGMT_FUND", label: "Leadership & Management Fundamentals" },
+];
+const difficulties = ["All", "Beginner", "Intermediate", "Advanced", "Professional", "Senior", "Executive"];
+const durations = ["All", "1-4 Weeks", "4-8 Weeks", "8-12 Weeks", "12-20 Weeks", "20+ Weeks"];
+const courseTypes = ["All", "Standalone Course", "Learning Path", "Specialization", "Module", "Capstone"];
+
 
 export default function CoursesCatalogPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,12 +50,15 @@ export default function CoursesCatalogPage() {
     category: "All",
     difficulty: "All",
     duration: "All",
+    type: "All",
   });
 
   const filteredCourses = allCourses.filter(course => 
     course.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (filters.category === "All" || course.category === filters.category) &&
-    (filters.difficulty === "All" || course.difficulty === filters.difficulty)
+    (filters.difficulty === "All" || course.difficulty === filters.difficulty) &&
+    (filters.type === "All" || course.type === filters.type) 
+    // Duration filter needs more complex logic if based on ranges. For now, simple match.
   );
 
   const handleFilterChange = (filterType: keyof typeof filters, value: string) => {
@@ -55,7 +77,7 @@ export default function CoursesCatalogPage() {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Filters Column */}
         <aside className="lg:w-1/4 space-y-6 p-1">
-          <Card className="shadow-md">
+          <Card className="shadow-md sticky top-20">
             <CardHeader>
               <CardTitle className="font-headline flex items-center gap-2"><Filter className="h-5 w-5"/> Filters</CardTitle>
             </CardHeader>
@@ -69,23 +91,23 @@ export default function CoursesCatalogPage() {
                         placeholder="Search courses..." 
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-9"
+                        className="pl-9 focus-gradient-outline"
                     />
                 </div>
               </div>
               <div>
                 <Label htmlFor="category-filter" className="font-semibold">Category</Label>
                 <Select value={filters.category} onValueChange={(value) => handleFilterChange("category", value)}>
-                  <SelectTrigger id="category-filter" className="mt-1"><SelectValue /></SelectTrigger>
+                  <SelectTrigger id="category-filter" className="mt-1 focus-gradient-outline"><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    {categories.map(cat => <SelectItem key={cat} value={cat}>{cat}</SelectItem>)}
+                    {categories.map(cat => <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div>
                 <Label htmlFor="difficulty-filter" className="font-semibold">Difficulty</Label>
                 <Select value={filters.difficulty} onValueChange={(value) => handleFilterChange("difficulty", value)}>
-                  <SelectTrigger id="difficulty-filter" className="mt-1"><SelectValue /></SelectTrigger>
+                  <SelectTrigger id="difficulty-filter" className="mt-1 focus-gradient-outline"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {difficulties.map(diff => <SelectItem key={diff} value={diff}>{diff}</SelectItem>)}
                   </SelectContent>
@@ -94,9 +116,18 @@ export default function CoursesCatalogPage() {
               <div>
                 <Label htmlFor="duration-filter" className="font-semibold">Duration</Label>
                  <Select value={filters.duration} onValueChange={(value) => handleFilterChange("duration", value)}>
-                  <SelectTrigger id="duration-filter" className="mt-1"><SelectValue /></SelectTrigger>
+                  <SelectTrigger id="duration-filter" className="mt-1 focus-gradient-outline"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {durations.map(dur => <SelectItem key={dur} value={dur}>{dur}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="type-filter" className="font-semibold">Course Type</Label>
+                 <Select value={filters.type} onValueChange={(value) => handleFilterChange("type", value)}>
+                  <SelectTrigger id="type-filter" className="mt-1 focus-gradient-outline"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {courseTypes.map(type => <SelectItem key={type} value={type}>{type}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
@@ -122,7 +153,7 @@ export default function CoursesCatalogPage() {
             <div className="text-center py-12">
               <Zap className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <p className="text-xl font-semibold">No courses match your criteria.</p>
-              <p className="text-muted-foreground">Try adjusting your search or filters.</p>
+              <p className="text-muted-foreground">Try adjusting your search or filters, or search for a new topic to have AI generate a course outline!</p>
             </div>
           )}
 
@@ -130,49 +161,44 @@ export default function CoursesCatalogPage() {
             "gap-6",
             viewMode === "grid" ? "grid md:grid-cols-2 xl:grid-cols-3" : "space-y-4"
           )}>
-            {filteredCourses.map(course => (
+            {filteredCourses.map(course => {
+              const IconComponent = courseIcons[course.icon as keyof typeof courseIcons] || ImageIcon;
+              return (
               <Card 
                 key={course.id} 
                 className={cn(
-                  "shadow-lg hover:shadow-xl transition-shadow duration-300",
-                  viewMode === "list" && "flex flex-col sm:flex-row overflow-hidden"
+                  "shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden",
+                  viewMode === "list" && "flex flex-col sm:flex-row"
                 )}
               >
                 <div className={cn(
-                    "bg-muted flex items-center justify-center",
-                    viewMode === "grid" ? "w-full h-48" : "w-full sm:w-48 h-48 sm:h-auto"
+                    "relative bg-muted flex items-center justify-center",
+                    viewMode === "grid" ? "w-full h-48" : "w-full sm:w-48 h-48 sm:h-auto flex-shrink-0"
                   )}>
-                   <ImageIcon className="h-16 w-16 text-primary/30" />
+                   <Image src={`https://placehold.co/600x400.png`} alt={course.title} layout="fill" objectFit="cover" data-ai-hint={course.imageHint} />
+                   <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                        <IconComponent className="h-12 w-12 text-white/70" />
+                   </div>
                 </div>
-                <div className="flex flex-col flex-1">
-                  <CardHeader className={cn(viewMode === "list" && "sm:py-4 sm:pr-4")}>
-                    <div className="flex items-center gap-2 mb-1">
-                       <course.icon className="h-5 w-5 text-primary shrink-0" />
-                       <CardTitle className="font-headline text-lg leading-tight">{course.title}</CardTitle>
-                    </div>
-                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                        <span>{course.category}</span>
+                <div className="flex flex-col flex-1 p-4">
+                  <CardHeader className="p-0 mb-2">
+                    <CardTitle className="font-headline text-lg leading-tight hover:text-primary transition-colors">{course.title}</CardTitle>
+                    <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs text-muted-foreground mt-1">
+                        <span>{course.type}</span>
                         <span>&bull; {course.difficulty}</span>
                         <span>&bull; {course.duration}</span>
                     </div>
-                    <CardDescription className={cn("text-sm mt-2", viewMode === "grid" ? "h-12 overflow-hidden" : "line-clamp-2")}>
-                      A comprehensive {course.type.toLowerCase()} to master {course.title.toLowerCase()}.
-                    </CardDescription>
                   </CardHeader>
-                  <CardContent className={cn("flex-1 flex items-end", viewMode === "list" && "sm:pb-4 sm:pr-4")}>
-                    <Link href={`/courses/${course.id}`} asChild className="w-full">
-                      <Button className="w-full button-animated-gradient mt-2">
-                        View {course.type} <ArrowRight className="ml-2 h-4 w-4" />
+                  <CardContent className={cn("p-0 flex-1", viewMode === "grid" ? "h-16" : "")}>
+                    <CardDescription className={cn("text-sm", viewMode === "grid" ? "line-clamp-3" : "line-clamp-2")}>
+                      Explore {course.title.toLowerCase()}, a {course.type.toLowerCase()} designed for {course.difficulty.toLowerCase()} learners, spanning {course.duration}.
+                    </CardDescription>
+                  </CardContent>
+                  <CardFooter className="p-0 mt-3">
+                    <Link href={`/courses/${course.id}`} passHref className="w-full">
+                      <Button className="w-full button-animated-gradient">
+                        View Details <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
-                  </CardContent>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </main>
-      </div>
-    </div>
-  );
-}
-
+                  </CardFooter>
+                
