@@ -45,7 +45,7 @@ const courseFields = [
   },
   {
     name: "Leadership Fundamentals", // Added example category
-    icon: Lightbulb, 
+    icon: Lightbulb,
     courses: [
       { title: "Foundations of Effective Leadership", href: "/courses?category=LEAD_MGMT_FUND&course=LEAD_FOUND" },
       { title: "Applied Management & Communication L2", href: "/courses?category=CORE_L2&course=AMC_L2" },
@@ -68,11 +68,11 @@ export default function PublicHeader() {
         setCurrentTheme(savedTheme);
         document.documentElement.classList.toggle("dark", savedTheme === "dark");
       } else {
-        document.documentElement.classList.remove("dark"); 
+        document.documentElement.classList.remove("dark");
       }
     } catch (error) {
        console.warn("Could not load theme preference from localStorage", error);
-       document.documentElement.classList.remove("dark"); 
+       document.documentElement.classList.remove("dark");
     }
     // Auth state check placeholder
     // For demo, assume not authenticated or check a simple flag
@@ -94,7 +94,7 @@ export default function PublicHeader() {
   return (
     <header className={cn(
       "sticky top-0 md:top-4 z-50 w-full md:max-w-5xl mx-auto md:rounded-xl shadow-lg",
-      "bg-card" 
+      "bg-card"
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
@@ -109,7 +109,7 @@ export default function PublicHeader() {
                 Explore Courses <ChevronDown className="ml-1 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[550px] p-4" align="start"> 
+            <DropdownMenuContent className="w-[550px] p-4" align="start">
               <DropdownMenuLabel className="font-headline text-lg mb-2">Courses by Field</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -169,7 +169,7 @@ export default function PublicHeader() {
                 <Link href="/account?tab=profile" passHref><DropdownMenuItem>Profile</DropdownMenuItem></Link>
                 <Link href="/account" passHref><DropdownMenuItem>Settings</DropdownMenuItem></Link>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => {/* handle logout */ setIsAuthenticated(false);}}>Logout</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {setIsAuthenticated(false);}}>Logout</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
@@ -246,4 +246,28 @@ export default function PublicHeader() {
                 )}
               </div>
             </SheetContent>
-          </Sheet
+          </Sheet>
+        </div>
+      </div>
+    </header>
+  );
+}
+// Helper Avatar component (usually from ui/avatar)
+const Avatar: React.FC<{ className?: string; children: React.ReactNode }> = ({ className, children }) => (
+  <div className={cn("relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full", className)}>
+    {children}
+  </div>
+);
+const AvatarImage: React.FC<React.ImgHTMLAttributes<HTMLImageElement> & { "data-ai-hint"?: string }> = ({ className, ...props }) => (
+  <img className={cn("aspect-square h-full w-full", className)} {...props} />
+);
+AvatarImage.displayName = "AvatarImage";
+
+const AvatarFallback: React.FC<React.HTMLAttributes<HTMLSpanElement>> = ({ className, ...props }) => (
+  <span
+    className={cn("flex h-full w-full items-center justify-center rounded-full bg-muted", className)}
+    {...props}
+  />
+);
+AvatarFallback.displayName = "AvatarFallback";
+
