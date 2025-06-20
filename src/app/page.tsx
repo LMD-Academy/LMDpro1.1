@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; // Added import
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; // Corrected: Added import
 import { ArrowRight, Zap, Star, Lightbulb, Film, FileText as FileTextIcon, GraduationCap, Briefcase, ShieldCheck, Handshake, BookOpen, DollarSign, HelpCircle, Settings, Link as LinkIconProp, Users as UsersIcon, Building, CheckCircle, UserCircle, FileVideo, ClipboardList, Library, MessageSquare as MessageSquareIcon, DraftingCompass, Server, Cpu, Palette, LayoutGrid, Code2 } from "lucide-react";
 import Link from "next/link";
 import PublicHeader from "@/components/layout/PublicHeader";
@@ -306,3 +306,5 @@ export default function HomePage() {
     </>
   );
 }
+
+    
