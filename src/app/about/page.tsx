@@ -3,9 +3,9 @@ import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
+// import Image from "next/image"; // Image import removed
 import Link from "next/link";
-import { Users, Lightbulb, Zap, ShieldCheck, HeartHandshake } from "lucide-react";
+import { Users, Lightbulb, Zap, ShieldCheck, HeartHandshake, Briefcase } from "lucide-react"; // Added Briefcase
 
 export default function AboutUsPage() {
   return (
@@ -36,14 +36,10 @@ export default function AboutUsPage() {
                 </Link>
               </div>
               <div>
-                <Image
-                  src="https://placehold.co/600x400.png"
-                  alt="Team collaborating on LMDpro platform"
-                  width={600}
-                  height={400}
-                  className="rounded-lg shadow-xl border"
-                  data-ai-hint="team collaboration technology"
-                />
+                {/* Image removed */}
+                <div className="w-full h-64 md:h-96 bg-muted rounded-lg shadow-xl border flex items-center justify-center">
+                  <Briefcase className="h-24 w-24 text-primary/30" />
+                </div>
               </div>
             </div>
           </section>
@@ -77,7 +73,10 @@ export default function AboutUsPage() {
              <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
                 LMDpro is driven by a passionate team of educators, AI researchers, engineers, and designers dedicated to building the future of learning. (Placeholder for team member profiles or a group photo).
              </p>
-             <Image src="https://placehold.co/800x300.png" alt="Placeholder for LMDpro team" width={800} height={300} className="rounded-md mx-auto border" data-ai-hint="diverse team working" />
+             {/* Image removed */}
+             <div className="w-full max-w-3xl h-64 bg-muted rounded-md mx-auto border flex items-center justify-center">
+                <Users className="h-24 w-24 text-primary/30" />
+             </div>
           </section>
 
           <section className="text-center">

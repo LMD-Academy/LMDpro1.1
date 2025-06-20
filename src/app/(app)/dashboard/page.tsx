@@ -4,24 +4,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, RefreshCw, Activity, TrendingUp, Zap } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, RefreshCw, Activity, TrendingUp, Zap, Lightbulb, UserCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import Image from "next/image";
+// import Image from "next/image"; // Image import removed
+
 // Assuming a chart component exists or will be added from shadcn/ui/chart
 // import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'; // Example, replace with actual chart components
-
-// Example data - replace with actual data fetching and state management
-// const learningProgressData = [
-//   { name: 'Completed', value: 5, fill: 'hsl(var(--chart-2))' },
-//   { name: 'In Progress', value: 3, fill: 'hsl(var(--chart-1))' },
-//   { name: 'Not Started', value: 8, fill: 'hsl(var(--muted))' },
-// ];
-
-// const skillsActivityData = [
-//   { month: 'Jan', hours: 10 }, { month: 'Feb', hours: 15 }, { month: 'Mar', hours: 12 },
-//   { month: 'Apr', hours: 20 }, { month: 'May', hours: 18 }, { month: 'Jun', hours: 25 },
-// ];
-
 
 const ongoingCourses = [
   { id: "1", title: "Advanced AI for Business Strategy", progress: 65, imageHint: "AI business", type: "Learning Path" },
@@ -72,13 +60,6 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="h-48 flex items-center justify-center bg-muted/50 rounded-md text-muted-foreground mb-4">
-              {/* Placeholder for Pie Chart for course status */}
-              {/* <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={learningProgressData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={60} label />
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer> */}
               Learning Progress Chart (e.g., Pie Chart: 5 Completed, 3 In Progress, 2 Not Started)
             </div>
              <div className="space-y-2 text-sm">
@@ -151,7 +132,10 @@ export default function DashboardPage() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {ongoingCourses.map((course) => (
             <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <Image src={`https://placehold.co/600x300.png`} alt={course.title} width={600} height={300} className="w-full h-40 object-cover" data-ai-hint={course.imageHint} />
+              {/* Image removed */}
+              <div className="w-full h-40 bg-muted flex items-center justify-center">
+                <UserCircle className="h-16 w-16 text-primary/50" /> {/* Placeholder Icon */}
+              </div>
               <CardHeader>
                 <CardTitle className="font-headline text-lg">{course.title}</CardTitle>
                 <CardDescription>{course.type}</CardDescription>
@@ -231,27 +215,6 @@ export default function DashboardPage() {
             </Card>
         </div>
       </section>
-       {/* Learning Statistics / Charts Section
-      <section>
-        <h2 className="text-3xl font-headline font-semibold mb-4 animated-text-gradient">Your Learning Analytics</h2>
-         <Card className="shadow-lg">
-            <CardHeader>
-                <CardTitle className="font-headline">Skills Development Over Time</CardTitle>
-                <CardDescription>Track your hours spent and skills acquired.</CardDescription>
-            </CardHeader>
-            <CardContent className="h-72">
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={skillsActivityData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="month" />
-                        <YAxis />
-                        <Tooltip />
-                        <Bar dataKey="hours" fill="hsl(var(--chart-1))" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                </ResponsiveContainer>
-            </CardContent>
-         </Card>
-      </section> */}
     </div>
   );
 }

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -17,10 +18,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Loader2, Linkedin, Upload, Download, Sparkles, FileText } from "lucide-react";
+import { Loader2, Linkedin, Upload, Download, Sparkles, FileText, Brush } from "lucide-react"; // Added Brush icon
 import { improveResume, type ImproveResumeOutput } from "@/ai/flows/improve-resume";
 import { useToast } from "@/hooks/use-toast";
-import Image from "next/image";
+// import Image from "next/image"; // Image import removed
 
 const resumeFormSchema = z.object({
   linkedinProfile: z.string().url({ message: "Please enter a valid LinkedIn URL." }).optional().or(z.literal('')),
@@ -34,7 +35,7 @@ export default function ResumeBuilderPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [aiSuggestions, setAiSuggestions] = useState<ImproveResumeOutput | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState<string>("modern");
-  const [resumePreviewUrl, setResumePreviewUrl] = useState<string | null>(null);
+  const [resumePreviewText, setResumePreviewText] = useState<string | null>(null); // Changed to text
   const { toast } = useToast();
 
   const form = useForm<ResumeFormData>({
@@ -47,13 +48,10 @@ export default function ResumeBuilderPage() {
   });
 
   useEffect(() => {
-    // Simulate PDF generation for preview
     if (form.getValues("resumeText")) {
-      // In a real app, this would call a PDF generation service or client-side library
-      // For now, use a placeholder or update a preview component
-      setResumePreviewUrl(`https://placehold.co/800x1131.png?text=Resume+Preview+(${selectedTemplate})`);
+      setResumePreviewText(`Resume Preview (Template: ${selectedTemplate})\n\n${form.getValues("resumeText").substring(0, 300)}...`);
     } else {
-      setResumePreviewUrl(null);
+      setResumePreviewText(null);
     }
   }, [form.watch("resumeText"), selectedTemplate]);
 
@@ -67,8 +65,6 @@ export default function ResumeBuilderPage() {
         jobDescription: values.jobDescription,
       });
       setAiSuggestions(result);
-      // Optionally update resumeText field with improved version
-      // form.setValue("resumeText", result.improvedResume);
       toast({
         title: "Resume Optimized!",
         description: "AI suggestions have been generated.",
@@ -86,27 +82,28 @@ export default function ResumeBuilderPage() {
   }
   
   const handleImportLinkedIn = () => {
-    // Placeholder for LinkedIn import functionality
-    // This would typically involve OAuth and API calls
     toast({ title: "LinkedIn Import", description: "This feature is coming soon!" });
     form.setValue("resumeText", "Sample resume data imported from LinkedIn:\n\nJohn Doe\nSoftware Engineer at Tech Corp\nSkills: React, Node.js, TypeScript\nExperience: ...\nEducation: ...");
   };
   
   const handlePdfExport = () => {
     toast({ title: "PDF Export", description: "Generating PDF with 'Made with LMDpro' watermark (simulated)." });
-    // Simulate PDF download
+    // Simulate PDF download - In a real app, this would use a PDF library
+    const resumeContent = form.getValues("resumeText") || "LMDpro Resume Content";
+    const blob = new Blob([`LMDpro Resume (Template: ${selectedTemplate})\n\n${resumeContent}\n\n---\nMade with LMDpro`], { type: 'text/plain' });
     const link = document.createElement('a');
-    link.href = resumePreviewUrl || "https://placehold.co/800x1131.png?text=LMDpro+Resume";
-    link.download = 'LMDpro-Resume.png'; // In real app, it would be .pdf
+    link.href = URL.createObjectURL(blob);
+    link.download = 'LMDpro-Resume.txt'; // Simulate PDF by downloading text
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
   };
 
   const templates = [
-    { id: "modern", name: "Modern", imageUrl: "https://placehold.co/150x212.png?text=Modern" , aiHint: "resume template" },
-    { id: "classic", name: "Classic", imageUrl: "https://placehold.co/150x212.png?text=Classic", aiHint: "resume design" },
-    { id: "creative", name: "Creative", imageUrl: "https://placehold.co/150x212.png?text=Creative", aiHint: "cv example" },
+    { id: "modern", name: "Modern" },
+    { id: "classic", name: "Classic" },
+    { id: "creative", name: "Creative" },
   ];
 
   return (
@@ -220,26 +217,28 @@ export default function ResumeBuilderPage() {
               {templates.map(template => (
                 <button
                   key={template.id}
-                  className={`border-2 rounded-lg overflow-hidden transition-all ${selectedTemplate === template.id ? 'border-primary ring-2 ring-primary' : 'border-transparent hover:border-muted-foreground'}`}
+                  className={`border-2 rounded-lg overflow-hidden transition-all p-4 flex flex-col items-center justify-center aspect-square ${selectedTemplate === template.id ? 'border-primary ring-2 ring-primary' : 'border-border hover:border-muted-foreground'}`}
                   onClick={() => setSelectedTemplate(template.id)}
                   aria-pressed={selectedTemplate === template.id}
                 >
-                  <Image src={template.imageUrl} alt={template.name} width={150} height={212} className="w-full aspect-[150/212]" data-ai-hint={template.aiHint} />
-                  <p className="text-sm p-2 text-center bg-card">{template.name}</p>
+                  <Brush className="h-8 w-8 mb-2 text-muted-foreground" /> {/* Icon instead of image */}
+                  <p className="text-sm text-center">{template.name}</p>
                 </button>
               ))}
             </CardContent>
           </Card>
 
-          <Card className="shadow-lg sticky top-24"> {/* Sticky for preview */}
+          <Card className="shadow-lg sticky top-24">
             <CardHeader>
               <CardTitle className="font-headline">Preview & Export</CardTitle>
             </CardHeader>
             <CardContent>
-              {resumePreviewUrl ? (
-                <Image src={resumePreviewUrl} alt="Resume Preview" width={300} height={424} className="w-full border rounded-md aspect-[800/1131]" data-ai-hint="resume preview"/>
+              {resumePreviewText ? (
+                <div className="w-full h-64 border rounded-md p-4 overflow-y-auto bg-muted/30 text-xs whitespace-pre-wrap">
+                  {resumePreviewText}
+                </div>
               ) : (
-                <div className="w-full aspect-[800/1131] border rounded-md flex items-center justify-center bg-muted/50">
+                <div className="w-full h-64 border rounded-md flex items-center justify-center bg-muted/50">
                   <FileText className="w-16 h-16 text-muted-foreground" />
                 </div>
               )}

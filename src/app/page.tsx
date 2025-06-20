@@ -1,9 +1,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowRight, Zap, Star, Lightbulb, Film, FileText, GraduationCap, Briefcase, ShieldCheck, Handshake, BookOpen, DollarSign, HelpCircle, Settings, Link as LinkIcon, Users, Building, CheckCircle } from "lucide-react"; // Added CheckCircle
+import { ArrowRight, Zap, Star, Lightbulb, Film, FileText, GraduationCap, Briefcase, ShieldCheck, Handshake, BookOpen, DollarSign, HelpCircle, Settings, Link as LinkIcon, Users, Building, CheckCircle, UserCircle } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
 
@@ -44,21 +43,21 @@ const featureCards = [
 
 const pricingTiersHomepage = [
   { name: "Community", price: "Free", model: "Latest Free Gemma Model", features: ["Limited Personalized Learning Paths", "Basic Video Creation (watermarked)", "1 Resume Template", "Selection of Free Courses"], cta: "Join for Free", href:"/register?tier=community" },
-  { name: "Premium", price: "$5.80/mo", model: "Latest Flash Model", features: ["Unlimited Learning Paths & AI Generation", "Advanced Video Creation (No Watermark)", "All Resume Templates & AI Optimization", "Full Course Catalog Access"], cta: "Go Premium", href:"/register?tier=premium" },
+  { name: "Premium", price: "$5.80/mo", model: "Latest Flash Model", features: ["Unlimited Learning Paths & AI Generation", "Advanced Video Creation (No Watermark)", "All Resume Templates & AI Optimization", "Full Course Catalog Access"], cta: "Go Premium", href:"/register?tier=premium", popular: true },
   { name: "Teams", price: "$196/mo", model: "Latest Pro Model", features: ["All Premium Features", "Team Management & Analytics", "Shared Resources & Brand Kits", "Consolidated Billing"], cta: "Choose Teams", href:"/register?tier=teams" },
 ];
 
 
 const courseHighlights = [
-  { title: "Executive Leadership Development", icon: GraduationCap, imageHint: "leadership team", type: "Learning Path", description: "Master executive skills for top-tier roles. Develop strategic thinking, communication, and team motivation abilities essential for modern leadership." },
-  { title: "AI for Business Professionals", icon: Briefcase, imageHint: "AI business", type: "Course", description: "Understand and apply Artificial Intelligence in various business contexts to drive innovation, efficiency, and data-driven decision-making." },
-  { title: "Full-Stack Web Development Bootcamp", icon: Zap, imageHint: "web development code", type: "Learning Path", description: "Comprehensive training from foundational HTML/CSS/JS to advanced backend technologies, databases, and deployment strategies." },
+  { title: "Executive Leadership Development", icon: GraduationCap, type: "Learning Path", description: "Master executive skills for top-tier roles. Develop strategic thinking, communication, and team motivation abilities essential for modern leadership." },
+  { title: "AI for Business Professionals", icon: Briefcase, type: "Course", description: "Understand and apply Artificial Intelligence in various business contexts to drive innovation, efficiency, and data-driven decision-making." },
+  { title: "Full-Stack Web Development Bootcamp", icon: Zap, type: "Learning Path", description: "Comprehensive training from foundational HTML/CSS/JS to advanced backend technologies, databases, and deployment strategies." },
 ];
 
 const testimonials = [
-    { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path in AI was a game-changer. It helped me upskill effectively and secure a promotion. The AI resume builder polished my CV perfectly!", avatarHint: "software engineer typing" },
-    { name: "Maria S.", role: "Marketing Manager", quote: "The AI video creation tool is incredibly efficient for our team's internal training content. We're producing high-quality, professional videos in a fraction of the time.", avatarHint: "marketing manager presentation" },
-    { name: "David K.", role: "University Student", quote: "As a student, the Non-Profit/Student tier provides amazing value. I'm learning cutting-edge skills in data science that are preparing me for my future career.", avatarHint: "student with laptop" },
+    { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path in AI was a game-changer. It helped me upskill effectively and secure a promotion. The AI resume builder polished my CV perfectly!" },
+    { name: "Maria S.", role: "Marketing Manager", quote: "The AI video creation tool is incredibly efficient for our team's internal training content. We're producing high-quality, professional videos in a fraction of the time." },
+    { name: "David K.", role: "University Student", quote: "As a student, the Non-Profit/Student tier provides amazing value. I'm learning cutting-edge skills in data science that are preparing me for my future career." },
 ];
 
 const quickLinks = [
@@ -90,7 +89,9 @@ export default function HomePage() {
               </Button>
             </Link>
              <div className="mt-16">
-              <Image src="https://placehold.co/1200x600.png" alt="LMDpro Platform Showcase - Dashboard and Learning Interface" width={1200} height={600} className="rounded-lg shadow-2xl mx-auto border" data-ai-hint="platform user interface" />
+              <div className="w-full max-w-4xl h-[300px] md:h-[400px] bg-muted rounded-lg shadow-2xl mx-auto border flex items-center justify-center">
+                <p className="text-muted-foreground">LMDpro Platform Showcase Area</p>
+              </div>
             </div>
           </div>
         </section>
@@ -136,7 +137,9 @@ export default function HomePage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {courseHighlights.map((course, index) => (
                 <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col">
-                  <Image src={`https://placehold.co/600x400.png`} alt={course.title} width={600} height={400} className="w-full h-48 object-cover" data-ai-hint={course.imageHint} />
+                  <div className="w-full h-48 bg-muted flex items-center justify-center">
+                    <course.icon className="h-16 w-16 text-primary/50" data-ai-hint={course.title.toLowerCase().split(" ").slice(0,2).join(" ")} />
+                  </div>
                   <CardHeader>
                     <div className="flex items-center gap-3 mb-1">
                       <course.icon className="h-6 w-6 text-primary shrink-0" />
@@ -173,7 +176,12 @@ export default function HomePage() {
             </p>
             <div className="grid md:grid-cols-3 gap-8 items-stretch">
               {pricingTiersHomepage.map((tier) => (
-                <Card key={tier.name} className="flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <Card key={tier.name} className={`flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300 ${tier.popular ? 'border-primary ring-2 ring-primary relative' : 'border-border'}`}>
+                  {tier.popular && (
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-full shadow-lg border-2 border-background">
+                      Most Popular
+                    </div>
+                  )}
                   <CardHeader className="text-center">
                     <CardTitle className="font-headline text-2xl mb-2">{tier.name}</CardTitle>
                     <p className="text-3xl font-bold mb-1">{tier.price}</p>
@@ -218,7 +226,9 @@ export default function HomePage() {
                 <Card key={index} className="shadow-md">
                   <CardContent className="pt-6">
                     <div className="flex items-center mb-4">
-                      <Image src="https://placehold.co/100x100.png" alt={testimonial.name} width={50} height={50} className="rounded-full mr-4" data-ai-hint={testimonial.avatarHint} />
+                      <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mr-4">
+                        <UserCircle className="h-8 w-8 text-muted-foreground" data-ai-hint={testimonial.avatarHint || 'person silhouette'} />
+                      </div>
                       <div>
                         <p className="font-semibold">{testimonial.name}</p>
                         <p className="text-sm text-muted-foreground">{testimonial.role}</p>

@@ -4,12 +4,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, Share2, ChevronLeft, ChevronRight, Lightbulb } from "lucide-react";
+import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, Share2, ChevronLeft, ChevronRight, Lightbulb, Video } from "lucide-react"; // Added Video icon
 import Link from "next/link";
-import Image from "next/image";
-import { Progress } from "@/components/ui/progress"; // Assuming you have this component
+// import Image from "next/image"; // Image import removed
+import { Progress } from "@/components/ui/progress";
 
-// Dummy data for a single course - replace with actual data fetching
 const courseData = {
   id: "1",
   title: "Executive Leadership Development",
@@ -21,7 +20,7 @@ const courseData = {
   lastUpdated: "July 2024",
   language: "English",
   imageHint: "leadership conference",
-  progress: 35, // User's progress in this course
+  progress: 35, 
   modules: [
     {
       id: "m1",
@@ -53,9 +52,8 @@ const courseData = {
 };
 
 export default function CourseViewPage({ params }: { params: { id: string } }) {
-  // In a real app, fetch course data based on params.id
   const course = courseData;
-  const currentLesson = course.modules[0].lessons[2]; // Example: current lesson
+  const currentLesson = course.modules[0].lessons[2]; 
 
   return (
     <div className="flex flex-col lg:flex-row gap-8">
@@ -64,8 +62,11 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
         {/* Video Player Placeholder */}
         <Card className="shadow-lg overflow-hidden">
           <div className="aspect-video bg-black flex items-center justify-center text-white relative">
-            <Image src={`https://placehold.co/1280x720.png?text=${encodeURIComponent(currentLesson.title)}`} alt="Video placeholder" layout="fill" objectFit="cover" data-ai-hint="lesson video placeholder"/>
-            <PlayCircle className="h-20 w-20 text-white/70 absolute" />
+            {/* Image removed, replaced with an icon or text */}
+            <Video className="h-24 w-24 text-muted-foreground/50" />
+            <div className="absolute bottom-4 left-4 text-sm bg-black/50 p-2 rounded">
+              Video Player Area: {currentLesson.title}
+            </div>
           </div>
           <CardContent className="p-4">
             <div className="flex justify-between items-center">
@@ -91,7 +92,6 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
         {/* Tabs for Overview, Q&A, Notes */}
         <Card>
             <CardHeader className="p-0">
-                {/* Basic Tab structure placeholder - use actual Tabs component if available and needed */}
                 <div className="flex border-b">
                     <Button variant="ghost" className="rounded-none flex-1 border-b-2 border-primary">Overview</Button>
                     <Button variant="ghost" className="rounded-none flex-1">Q&A</Button>
@@ -123,7 +123,6 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
             </CardContent>
         </Card>
 
-
         {/* Q&A Section Placeholder */}
         <Card className="shadow-md">
           <CardHeader>
@@ -131,7 +130,6 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
             <CardDescription>Ask questions about the course content. Our AI will assist you by referencing course materials and validated web data.</CardDescription>
           </CardHeader>
           <CardContent>
-            {/* Q&A input and display would go here */}
             <p className="text-sm text-muted-foreground">AI Q&A section placeholder. (e.g., Input field for questions, display of conversation history with AI, ability for AI to reference specific timestamps or content sections)</p>
           </CardContent>
         </Card>
@@ -140,7 +138,7 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
 
       {/* Sidebar (Module Navigation) */}
       <aside className="lg:w-1/3 space-y-6">
-        <Card className="shadow-lg sticky top-20"> {/* Sticky for scroll */}
+        <Card className="shadow-lg sticky top-20">
           <CardHeader>
             <CardTitle className="font-headline text-xl">{course.title}</CardTitle>
             <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">

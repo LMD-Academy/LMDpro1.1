@@ -1,13 +1,12 @@
 
 // src/app/(app)/my-learning/page.tsx
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { BookOpen, CheckCircle, Clock, ArrowRight, TrendingUp, Star } from "lucide-react";
+import { BookOpen, CheckCircle, Clock, ArrowRight, TrendingUp, Star, Image as ImageIcon } from "lucide-react"; // Added ImageIcon
 import { Progress } from "@/components/ui/progress";
-import Image from "next/image";
+// import Image from "next/image"; // Image import removed
 
-// Dummy data for "My Learning" page
 const inProgressCourses = [
   { id: "lp1", title: "Executive Leadership Development Path", progress: 75, type: "Learning Path", imageHint: "leadership meeting", lastAccessed: "2 days ago" },
   { id: "c2", title: "AI for Business Professionals", progress: 40, type: "Course", imageHint: "ai analytics", lastAccessed: "Yesterday" },
@@ -45,7 +44,10 @@ export default function MyLearningPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {inProgressCourses.map((course) => (
               <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-                <Image src={`https://placehold.co/600x300.png`} alt={course.title} width={600} height={300} className="w-full h-40 object-cover" data-ai-hint={course.imageHint}/>
+                {/* Image removed */}
+                <div className="w-full h-40 bg-muted flex items-center justify-center">
+                  <ImageIcon className="h-16 w-16 text-primary/30" />
+                </div>
                 <CardHeader>
                   <CardTitle className="font-headline text-xl">{course.title}</CardTitle>
                   <CardDescription>{course.type}</CardDescription>
@@ -93,7 +95,10 @@ export default function MyLearningPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {completedCourses.map((course) => (
               <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300">
-                 <Image src={`https://placehold.co/600x300.png`} alt={course.title} width={600} height={300} className="w-full h-40 object-cover" data-ai-hint={course.imageHint} />
+                {/* Image removed */}
+                <div className="w-full h-40 bg-muted flex items-center justify-center">
+                   <CheckCircle className="h-16 w-16 text-green-500/50" />
+                </div>
                 <CardHeader>
                   <CardTitle className="font-headline text-xl flex items-center gap-2">
                     <CheckCircle className="text-green-500 h-6 w-6"/> {course.title}
@@ -131,7 +136,10 @@ export default function MyLearningPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {bookmarkedCourses.map((course) => (
               <Card key={course.id} className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-                 <Image src={`https://placehold.co/600x300.png`} alt={course.title} width={600} height={300} className="w-full h-40 object-cover" data-ai-hint={course.imageHint} />
+                 {/* Image removed */}
+                <div className="w-full h-40 bg-muted flex items-center justify-center">
+                   <Star className="h-16 w-16 text-yellow-400/50" />
+                </div>
                 <CardHeader>
                   <CardTitle className="font-headline text-xl">{course.title}</CardTitle>
                   <CardDescription>{course.category}</CardDescription>

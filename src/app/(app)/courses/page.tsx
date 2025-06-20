@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -5,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox"; // Checkbox import removed as it's not used
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Filter, List, Grid, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building } from "lucide-react";
+import { ArrowRight, Filter, List, Grid, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, Image as ImageIcon } from "lucide-react"; // Added ImageIcon
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image"; // Image import removed
 import { cn } from "@/lib/utils";
 
 const allCourses = [
@@ -34,12 +35,10 @@ export default function CoursesCatalogPage() {
     duration: "All",
   });
 
-  // Dummy filter logic
   const filteredCourses = allCourses.filter(course => 
     course.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (filters.category === "All" || course.category === filters.category) &&
     (filters.difficulty === "All" || course.difficulty === filters.difficulty)
-    // Add duration filter logic if needed
   );
 
   const handleFilterChange = (filterType: keyof typeof filters, value: string) => {
@@ -103,7 +102,6 @@ export default function CoursesCatalogPage() {
                   </SelectContent>
                 </Select>
               </div>
-              {/* More filters can be added like Content Type (Course, Learning Path) */}
             </CardContent>
           </Card>
         </aside>
@@ -142,17 +140,13 @@ export default function CoursesCatalogPage() {
                   viewMode === "list" && "flex flex-col sm:flex-row overflow-hidden"
                 )}
               >
-                <Image 
-                  src={`https://placehold.co/600x400.png`} 
-                  alt={course.title} 
-                  width={viewMode === "grid" ? 600 : 200} 
-                  height={viewMode === "grid" ? 400 : 150}
-                  className={cn(
-                    "object-cover",
+                {/* Image removed and replaced with placeholder div */}
+                <div className={cn(
+                    "bg-muted flex items-center justify-center",
                     viewMode === "grid" ? "w-full h-48" : "w-full sm:w-48 h-48 sm:h-auto"
-                  )}
-                  data-ai-hint={course.imageHint}
-                />
+                  )}>
+                   <ImageIcon className="h-16 w-16 text-primary/30" />
+                </div>
                 <div className="flex flex-col flex-1">
                   <CardHeader className={cn(viewMode === "list" && "sm:py-4 sm:pr-4")}>
                     <div className="flex items-center gap-2 mb-1">
@@ -179,7 +173,6 @@ export default function CoursesCatalogPage() {
               </Card>
             ))}
           </div>
-          {/* Pagination could be added here */}
         </main>
       </div>
     </div>
