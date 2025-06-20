@@ -36,37 +36,31 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    React.AnchorHTMLAttributes<HTMLAnchorElement>, // Allow Anchor props like href
+    React.AnchorHTMLAttributes<HTMLAnchorElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
 }
 
 const Button = React.forwardRef<
-  HTMLButtonElement | HTMLAnchorElement, // Ref can be button or anchor
+  HTMLButtonElement | HTMLAnchorElement,
   ButtonProps
->(({ className, variant, size, asChild: isSlotForButton = false, ...props }, ref) => {
-  // Determine the component type
-  let Comp: React.ElementType = "button";
-  if (isSlotForButton) {
-    Comp = Slot;
-  } else if (props.href) { // If href is passed, it should be an anchor
-    Comp = "a";
-  }
+>(({ className, variant, size, asChild: buttonOwnAsChild = false, ...restProps }, ref) => {
+  // Determine the component type based on Button's own asChild prop and presence of href
+  const Comp = buttonOwnAsChild ? Slot : (restProps.href ? "a" : "button");
 
-  // Explicitly remove 'asChild' if it exists in props before spreading to a DOM element.
-  // This handles the case where <Link asChild> might pass its own 'asChild' prop down.
-  // However, 'asChild' in ButtonProps is already destructured as 'isSlotForButton'.
-  // The main change is ensuring Comp becomes 'a' when href is present.
-  const { asChild, ...renderProps } = props as any; // Use 'as any' to handle potential 'asChild' in props
+  // Prepare props for the underlying component.
+  // Crucially, remove 'asChild' from restProps if it was passed down (e.g., from a Link component),
+  // to prevent it from being passed to a DOM element if Comp is not Slot.
+  const { asChild, ...finalProps } = restProps;
 
   return (
     <Comp
       className={cn(buttonVariants({ variant, size, className }))}
       ref={ref as any} // Cast ref to any due to Comp being dynamic
-      {...renderProps} // Spread the potentially cleaned props
+      {...finalProps} // Spread finalProps which should be clean of any 'asChild'
     />
-  )
-})
+  );
+});
 Button.displayName = "Button"
 
 export { Button, buttonVariants }
