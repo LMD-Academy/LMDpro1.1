@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -35,22 +36,37 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    React.AnchorHTMLAttributes<HTMLAnchorElement>, // Allow Anchor props like href
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    )
+const Button = React.forwardRef<
+  HTMLButtonElement | HTMLAnchorElement, // Ref can be button or anchor
+  ButtonProps
+>(({ className, variant, size, asChild: isSlotForButton = false, ...props }, ref) => {
+  // Determine the component type
+  let Comp: React.ElementType = "button";
+  if (isSlotForButton) {
+    Comp = Slot;
+  } else if (props.href) { // If href is passed, it should be an anchor
+    Comp = "a";
   }
-)
+
+  // Explicitly remove 'asChild' if it exists in props before spreading to a DOM element.
+  // This handles the case where <Link asChild> might pass its own 'asChild' prop down.
+  // However, 'asChild' in ButtonProps is already destructured as 'isSlotForButton'.
+  // The main change is ensuring Comp becomes 'a' when href is present.
+  const { asChild, ...renderProps } = props as any; // Use 'as any' to handle potential 'asChild' in props
+
+  return (
+    <Comp
+      className={cn(buttonVariants({ variant, size, className }))}
+      ref={ref as any} // Cast ref to any due to Comp being dynamic
+      {...renderProps} // Spread the potentially cleaned props
+    />
+  )
+})
 Button.displayName = "Button"
 
 export { Button, buttonVariants }
