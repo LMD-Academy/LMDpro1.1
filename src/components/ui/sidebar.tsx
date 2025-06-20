@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -431,8 +432,8 @@ SidebarGroup.displayName = "SidebarGroup"
 const SidebarGroupLabel = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & { asChild?: boolean }
->(({ className, asChild = false, ...props }, ref) => {
-  const Comp = asChild ? Slot : "div"
+>(({ className, asChild: asChildProp, ...rest }, ref) => {
+  const Comp = asChildProp ? Slot : "div"
 
   return (
     <Comp
@@ -443,7 +444,7 @@ const SidebarGroupLabel = React.forwardRef<
         "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
         className
       )}
-      {...props}
+      {...rest}
     />
   )
 })
@@ -452,8 +453,8 @@ SidebarGroupLabel.displayName = "SidebarGroupLabel"
 const SidebarGroupAction = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button"> & { asChild?: boolean }
->(({ className, asChild = false, ...props }, ref) => {
-  const Comp = asChild ? Slot : "button"
+>(({ className, asChild: asChildProp, ...rest }, ref) => {
+  const Comp = asChildProp ? Slot : "button"
 
   return (
     <Comp
@@ -466,7 +467,7 @@ const SidebarGroupAction = React.forwardRef<
         "group-data-[collapsible=icon]:hidden",
         className
       )}
-      {...props}
+      {...rest}
     />
   )
 })
@@ -543,17 +544,17 @@ const SidebarMenuButton = React.forwardRef<
 >(
   (
     {
-      asChild = false,
+      asChild: asChildProp,
       isActive = false,
       variant = "default",
       size = "default",
       tooltip,
       className,
-      ...props
+      ...rest
     },
     ref
   ) => {
-    const Comp = asChild ? Slot : "button"
+    const Comp = asChildProp ? Slot : "button"
     const { isMobile, state } = useSidebar()
 
     const button = (
@@ -563,7 +564,7 @@ const SidebarMenuButton = React.forwardRef<
         data-size={size}
         data-active={isActive}
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
-        {...props}
+        {...rest}
       />
     )
 
@@ -598,8 +599,8 @@ const SidebarMenuAction = React.forwardRef<
     asChild?: boolean
     showOnHover?: boolean
   }
->(({ className, asChild = false, showOnHover = false, ...props }, ref) => {
-  const Comp = asChild ? Slot : "button"
+>(({ className, asChild: asChildProp, showOnHover = false, ...rest }, ref) => {
+  const Comp = asChildProp ? Slot : "button"
 
   return (
     <Comp
@@ -617,7 +618,7 @@ const SidebarMenuAction = React.forwardRef<
           "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
         className
       )}
-      {...props}
+      {...rest}
     />
   )
 })
@@ -712,8 +713,8 @@ const SidebarMenuSubButton = React.forwardRef<
     size?: "sm" | "md"
     isActive?: boolean
   }
->(({ asChild = false, size = "md", isActive, className, ...props }, ref) => {
-  const Comp = asChild ? Slot : "a"
+>(({ asChild: asChildProp, size = "md", isActive, className, ...rest }, ref) => {
+  const Comp = asChildProp ? Slot : "a"
 
   return (
     <Comp
@@ -729,7 +730,7 @@ const SidebarMenuSubButton = React.forwardRef<
         "group-data-[collapsible=icon]:hidden",
         className
       )}
-      {...props}
+      {...rest}
     />
   )
 })
@@ -761,3 +762,5 @@ export {
   SidebarTrigger,
   useSidebar,
 }
+
+    
