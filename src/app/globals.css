@@ -8,9 +8,9 @@ body {
 
 @layer base {
   :root {
-    --background: 271 33% 61%; /* #9f79bf - User defined background */
+    --background: 271 33% 92%; /* Lighter version of #9f79bf for overall page background */
     --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
+    --card: 271 33% 96%; /* Slightly lighter than background for cards */
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
@@ -21,12 +21,12 @@ body {
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
     --accent: 222 23% 16%; /* #202632 - User defined accent */
-    --accent-foreground: 0 0% 98%; /* Changed for better contrast with dark accent */
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%; /* Default ring, custom gradient focus will be applied separately */
+    --ring: 340 9% 16%; /* Using primary for ring */
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -34,7 +34,10 @@ body {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Main app background - user defined #9f79bf */
+    --app-background-light: 271 33% 78%; /* #9f79bf */
+
+    --sidebar-background: 0 0% 98%; /* Default for app layout sidebar */
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
     --sidebar-primary-foreground: 0 0% 98%;
@@ -43,38 +46,41 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Light theme gradient colors for background */
-    --gradient-color-1: 271 50% 85%; /* Lighter #9f79bf related */
-    --gradient-color-2: 250 60% 88%; /* Lighter desaturated blue */
-    --gradient-color-3: 290 55% 86%; /* Lighter desaturated purple */
-    --gradient-color-4: 271 45% 82%; /* Mid tone of #9f79bf related */
+    /* Light theme gradient colors from new palette */
+    --gradient-color-1: 175 58% 61%; /* #5fd8ce */
+    --gradient-color-2: 308 66% 62%; /* #db60cc */
+    --gradient-color-3: 349 100% 73%; /* #ff7590 */
+    --gradient-color-4: 238 26% 63%; /* #55588f */
   }
 
   .dark {
-    --background: 222 47% 11%; /* Dark blue, similar to Google AI Studio dark */
+    --background: 222 23% 12%; /* Darker version of accent for general background */
     --foreground: 0 0% 98%;
-    --card: 222 47% 13%;
+    --card: 222 23% 15%; /* Slightly lighter for cards */
     --card-foreground: 0 0% 98%;
     --popover: 222 47% 11%;
     --popover-foreground: 0 0% 98%;
-    --primary: 340 9% 70%; /* Lighter version of user's primary for dark mode */
+    --primary: 340 9% 70%; /* Lighter version of primary for dark mode */
     --primary-foreground: 340 9% 16%;
     --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 222 23% 60%; /* Lighter version of user's accent for dark mode */
+    --accent: 222 23% 60%; /* Lighter version of accent for dark mode */
     --accent-foreground: 222 23% 16%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --ring: 340 9% 70%; /* Lighter primary for ring */
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    /* Main app background - derived from dark palette */
+    --app-background-light: 222 23% 10%; /* Darker version of accent */
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -85,11 +91,11 @@ body {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
     
-    /* Dark theme gradient colors for background */
-    --gradient-color-1: 222 40% 10%; /* Dark blue */
-    --gradient-color-2: 240 30% 8%;  /* Darker blue */
-    --gradient-color-3: 260 35% 12%; /* Dark purple/blue */
-    --gradient-color-4: 222 30% 14%; /* Darker variant of accent */
+    /* Dark theme gradient colors from new palette */
+    --gradient-color-1: 183 81% 26%; /* #0d737a */
+    --gradient-color-2: 184 49% 30%; /* #266c72 */
+    --gradient-color-3: 327 20% 31%; /* #604058 */
+    --gradient-color-4: 222 23% 16%; /* #202632 */
   }
 }
 
@@ -99,6 +105,10 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+  /* Specific background for the authenticated app area */
+  .app-area-background {
+     background-color: hsl(var(--app-background-light));
   }
 }
 
@@ -139,7 +149,7 @@ body {
   }
 
   .focus-gradient-outline:focus-visible {
-    outline: none; /* Remove default outline to prevent overlap */
+    outline: none; 
     position: relative;
     z-index: 1; 
   }

@@ -3,10 +3,13 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import AnimatedGradientBackground from '@/components/layout/AnimatedGradientBackground';
+import PublicHeader from '@/components/layout/PublicHeader';
+import PublicFooter from '@/components/layout/PublicFooter';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'LMDpro',
-  description: 'Personalized Learning, Video Creation, Resume Building, and AI Support.',
+  title: 'LMDpro - AI-Powered Learning & Career Growth',
+  description: 'Personalized learning paths, AI video creation, intelligent resume building, and 24/7 AI support to supercharge your career.',
 };
 
 export default function RootLayout({
@@ -23,10 +26,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased">
+      <body className={cn("font-body antialiased flex flex-col min-h-screen")}>
+        <AnimatedGradientBackground />
         <SidebarProvider defaultOpen={true}>
-          <AnimatedGradientBackground />
-          <div className="relative z-10 min-h-screen">
+          {/* Children will determine if PublicHeader/Footer or AppLayout is shown based on route */}
+          <div className="relative z-10 flex flex-col flex-1">
             {children}
           </div>
           <Toaster />
