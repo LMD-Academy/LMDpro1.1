@@ -8,7 +8,7 @@ import { PanelLeft } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button" // Button import might not be used directly by SidebarMenuButton here
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
@@ -526,18 +526,15 @@ const sidebarMenuButtonVariants = cva(
 
 type SidebarMenuButtonElement = HTMLButtonElement | HTMLAnchorElement;
 
-// Props for SidebarMenuButton
 export type SidebarMenuButtonProps = VariantProps<typeof sidebarMenuButtonVariants> & {
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
   children?: React.ReactNode;
   className?: string;
-  // Allow all HTMLButtonElement props
 } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> 
-  // Allow all HTMLAnchorElement props, but make href optional as Link might not always pass it
   & Partial<Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>> & { href?: string }
   & {
-    asChild?: boolean; // This is to catch the asChild prop from a parent Link component
+    asChild?: boolean; // To catch asChild from parent Link
   };
 
 
@@ -545,40 +542,46 @@ const SidebarMenuButton = React.forwardRef<
   SidebarMenuButtonElement,
   SidebarMenuButtonProps
 >(
-  ({
-    className,
-    variant,
-    size,
-    isActive = false,
-    tooltip,
-    children,
-    asChild: asChildFromParent, // This prop is specifically for the Link component's asChild.
-                                // It will be destructured and not passed to the DOM element.
-    ...props // All other props, including href if passed by Link, and any button/anchor attributes.
-  }, ref) => {
+  (props, ref) => {
+    // Explicitly destructure all known props, including 'asChild' and 'href'
+    // that might be passed by a parent <Link asChild>.
+    const {
+      className,
+      variant,
+      size,
+      isActive = false,
+      tooltip,
+      children,
+      asChild, // This 'asChild' is from the parent Link. It should be consumed and not spread.
+      href,   // This 'href' is from the parent Link.
+      ...restOfNativeProps // These are other button/anchor attributes intended for the DOM element.
+    } = props;
+
     const { isMobile, state } = useSidebar();
 
-    // Determine the component type: 'a' if href is present, otherwise 'button'.
-    // SidebarMenuButton itself does not use Slot for its primary rendering in this context.
-    const Comp = props.href ? "a" : "button";
+    // If href is present (passed from Link), this component should render as an 'a' tag.
+    // Otherwise, it defaults to a 'button' tag.
+    const Comp = href ? "a" : "button";
 
-    // The 'asChildFromParent' is destructured.
-    // 'props' here already contains href if provided by Link, and other attributes.
-    // We don't need to do anything special with asChildFromParent other than not spreading it.
-    
-    const elementProps = {
-      ...props, // Spread all other props like href, onClick, etc.
-      ref: ref,
-      className: cn(sidebarMenuButtonVariants({ variant, size, className })),
-      "data-sidebar": "menu-button",
-      "data-size": size,
-      "data-active": isActive,
-    };
-
-    const buttonElement = <Comp {...elementProps}>{children}</Comp>;
+    // 'restOfNativeProps' should now be clean of 'asChild' (from Link) and 'href'
+    // because they were explicitly destructured above.
+    // We then spread these 'clean' props onto the Comp.
+    const buttonContent = (
+      <Comp
+        ref={ref as React.Ref<any>}
+        href={href} // Pass href explicitly if Comp is 'a'
+        {...restOfNativeProps} // Spread the remaining props
+        className={cn(sidebarMenuButtonVariants({ variant, size, className }))}
+        data-sidebar="menu-button"
+        data-size={size}
+        data-active={isActive}
+      >
+        {children}
+      </Comp>
+    );
 
     if (!tooltip) {
-      return buttonElement;
+      return buttonContent;
     }
 
     const tooltipContentProps =
@@ -586,10 +589,8 @@ const SidebarMenuButton = React.forwardRef<
     
     return (
       <Tooltip>
-        <TooltipTrigger asChild>
-           {/* TooltipTrigger's asChild expects its child (buttonElement) to handle props
-               or be a DOM element. Since buttonElement is a DOM element, this is fine. */}
-          {buttonElement}
+        <TooltipTrigger asChild> 
+          {buttonContent}
         </TooltipTrigger>
         <TooltipContent
           side="right"
@@ -770,4 +771,3 @@ export {
   SidebarTrigger,
   useSidebar,
 }
-
