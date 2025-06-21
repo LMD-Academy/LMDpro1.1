@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Send, FileCode, Mic, Paperclip, Search, MessageSquare, ThumbsUp, ThumbsDown, Copy } from "lucide-react";
+import { Send, FileCode, Mic, Paperclip, Search, ThumbsUp, ThumbsDown, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface ResearchMessage {
   id: string;
@@ -34,6 +35,52 @@ export default function AcademicResearchPage() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
+
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const [isListening, setIsListening] = useState(false);
+
+  useEffect(() => {
+    // @ts-ignore
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.lang = 'en-US';
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.maxAlternatives = 1;
+
+      recognitionRef.current.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInputValue(prev => prev ? `${prev} ${transcript}`: transcript);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onerror = (event) => {
+        console.error('Speech recognition error', event.error);
+        toast({ title: "Speech Recognition Error", description: event.error, variant: "destructive" });
+        setIsListening(false);
+      };
+      
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+  }, [toast]);
+
+  const handleVoiceInput = () => {
+    if (recognitionRef.current && !isListening) {
+      recognitionRef.current.start();
+      setIsListening(true);
+      toast({title: "Listening...", description: "Please start speaking."});
+    } else if (recognitionRef.current && isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      toast({ title: "Speech Recognition Not Supported", description: "Your browser does not support the Web Speech API.", variant: "destructive" });
+    }
+  };
+
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
@@ -193,17 +240,17 @@ export default function AcademicResearchPage() {
             </Button>
             <Input
               type="text"
-              placeholder="Ask about any topic, e.g., 'Explain quantum entanglement' or 'Summarize the impact of AI on healthcare'..."
+              placeholder="Ask about any topic, e.g., 'Explain quantum entanglement'..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && !isTyping && handleSendMessage()}
               className="flex-1 focus-gradient-outline"
-              disabled={isTyping}
+              disabled={isTyping || isListening}
             />
-            <Button variant="ghost" size="icon" aria-label="Use voice input">
+            <Button variant="ghost" size="icon" aria-label="Use voice input" onClick={handleVoiceInput} disabled={isTyping} className={cn(isListening && "text-destructive animate-pulse")}>
                 <Mic className="h-5 w-5" />
             </Button>
-            <Button type="submit" onClick={handleSendMessage} className="button-animated-gradient" disabled={isTyping}>
+            <Button type="submit" onClick={handleSendMessage} className="button-animated-gradient" disabled={isTyping || isListening}>
               <Send className="h-4 w-4 mr-2" /> Send
             </Button>
           </div>

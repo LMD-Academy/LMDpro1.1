@@ -7,42 +7,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Filter, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, ImageIcon, Video, FileText as FileTextIcon, Library, BookMarked, Lightbulb, Network, Info, Brain, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText } from "lucide-react"; 
+import { ArrowRight, Filter, Search, BookOpen } from "lucide-react"; 
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { getAllCourses, courseData } from "@/lib/course-data";
 
-const courseIcons: { [key: string]: React.ElementType } = {
-    GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, Video, FileTextIcon, Library, BookMarked, Lightbulb, Network, Info, Brain, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText, ImageIcon,
-    // Adding fallbacks or default icons if needed
-    default: BookOpen,
-};
+const allCourses = getAllCourses();
 
-const allCourses = [
-  { id: "FBS_L1", title: "Foundational Business Skills L1", category: "CORE_L1", difficulty: "Beginner", duration: "15-18 hours", type: "Standalone Course", icon: "GraduationCap", description: "Essential concepts for understanding the business world and developing core professional competencies." },
-  { id: "AMC_L2", title: "Applied Management & Communication L2", category: "CORE_L2", difficulty: "Intermediate", duration: "15-20 hours", type: "Standalone Course", icon: "Briefcase", description: "Enhancing skills in leadership, communication, financial understanding, problem-solving, and operational efficiency." },
-  { id: "AB_L3", title: "Agile Business Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "20-25 hours", type: "Specialization", icon: "Zap", description: "Deep dive into Agile methodologies, product ownership, and coaching for business agility." },
-  { id: "CS_L3", title: "Computer Science Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "25-30 hours", type: "Specialization", icon: "Network", description: "Core concepts in programming (Python), data structures, algorithms, operating systems, and computer networking." },
-  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", category: "AI_SPEC", difficulty: "Advanced", duration: "40-60 hours", type: "Learning Path", icon: "Brain", description: "A comprehensive program to design, build, evaluate, and deploy autonomous AI agents." },
-  { id: "PYTHON_DS", title: "Python for Data Science", category: "TECH_DEV", difficulty: "Intermediate", duration: "25 hours", type: "Standalone Course", icon: "BookCopy", description: "Learn to use Python and its powerful libraries (Pandas, NumPy, Matplotlib, Scikit-learn) for data analysis and machine learning." },
-  { id: "LEAD_FOUND", title: "Foundations of Effective Leadership", category: "LEAD_MGMT_FUND", difficulty: "Beginner", duration: "10 hours", type: "Standalone Course", icon: "Users", description: "Explores various leadership styles, motivational theories, team dynamics, and communication strategies for inspiring and guiding teams." },
-  { id: "GM_L5_CAP", title: "General Management Executive Capstone L5", category: "EXEC_L5", difficulty: "Executive", duration: "20-30 hours", type: "Capstone", icon: "Building", description: "Leading global organizations and mastering C-suite strategy, large-scale transformation, and executive-level governance." },
-  { id: "CY_L3", title: "Cybersecurity Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "20-25 hours", type: "Specialization", icon: "ShieldCheck", description: "Foundation of cybersecurity principles, common threats, network security fundamentals, and basic cryptography." },
-  { id: "OMS_L3", title: "Online Marketing & Sales Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "23-28 hours", type: "Specialization", icon: "Zap", description: "Digital marketing strategy, content marketing, SEO optimization, CRM systems, and marketing automation." },
-];
-
-const categories = [
-    { value: "All", label: "All Categories" },
-    { value: "CORE_L1", label: "Core Skills L1" },
-    { value: "CORE_L2", label: "Core Skills L2" },
-    { value: "PROF_L3", label: "Professional Specializations" },
-    { value: "SENIOR_L4", label: "Senior Leadership" },
-    { value: "EXEC_L5", label: "Executive Capstone" },
-    { value: "TECH_DEV", label: "Technology Development" },
-    { value: "AI_SPEC", label: "AI Specialization" },
-    { value: "LEAD_MGMT_FUND", label: "Leadership & Management" },
-];
+const categories = [{ value: "All", label: "All Categories" }].concat(
+    courseData.map(field => ({ value: field.id, label: field.name }))
+);
 const difficulties = ["All", "Beginner", "Intermediate", "Advanced", "Professional", "Senior", "Executive"];
-const courseTypes = ["All", "Standalone Course", "Learning Path", "Specialization", "Module", "Capstone"];
+const courseTypes = ["All", "Standalone Course", "Learning Path", "Specialization", "Capstone"];
 
 
 export default function CoursesCatalogPage() {
@@ -133,7 +108,7 @@ export default function CoursesCatalogPage() {
 
           {filteredCourses.length === 0 && (
             <div className="text-center py-12">
-              <Zap className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <Search className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <p className="text-xl font-semibold">No courses match your criteria.</p>
               <p className="text-muted-foreground">Try adjusting your search or filters, or search for a new topic to have AI generate a course outline!</p>
             </div>
@@ -141,7 +116,7 @@ export default function CoursesCatalogPage() {
 
           <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
             {filteredCourses.map(course => {
-              const IconComponent = courseIcons[course.icon as keyof typeof courseIcons] || BookOpen;
+              const IconComponent = course.icon || BookOpen;
               return (
                 <Card key={course.id} className="shadow-lg hover:shadow-primary/20 transition-shadow duration-300 rounded-xl overflow-hidden flex flex-col">
                   <CardHeader className="relative p-4 pb-2">
@@ -154,11 +129,11 @@ export default function CoursesCatalogPage() {
                       <span className="text-muted-foreground/50">&bull;</span>
                       <span>{course.difficulty}</span>
                       <span className="text-muted-foreground/50">&bull;</span>
-                      <span>{course.duration}</span>
+                      <span>{course.length}</span>
                     </div>
                   </CardHeader>
                   <CardContent className="p-4 pt-0 flex-1">
-                    <p className="text-sm text-muted-foreground line-clamp-3">{course.description}</p>
+                    <p className="text-sm text-muted-foreground line-clamp-3">{course.overview}</p>
                   </CardContent>
                   <CardFooter className="p-4 pt-0 mt-auto">
                     <Link href={`/courses/${course.id}`} passHref className="w-full">

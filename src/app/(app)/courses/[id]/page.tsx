@@ -4,16 +4,17 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, Share2, ChevronLeft, ChevronRight, Lightbulb, Video, FileText, Brain, Award, Users, Type, ClockIcon, Activity } from "lucide-react"; 
+import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, Share2, ChevronLeft, ChevronRight, Lightbulb, Video, FileText, Brain, Award, Users, Type, ClockIcon, Activity, Volume2, PauseCircle } from "lucide-react"; 
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getCourseById } from "@/lib/course-data";
+import { useToast } from "@/hooks/use-toast";
 
 // In a real app, this data would come from a database/CMS via API calls based on params.id
-// For this demo, we simulate a database with a few course structures based on course_structure.md
 const coursesDatabase: Record<string, any> = {
   "AI_AGENT_DEV": {
     id: "AI_AGENT_DEV",
@@ -35,27 +36,19 @@ const coursesDatabase: Record<string, any> = {
       {
         id: "ai_module_1_foundations", title: "Module 1: Foundations of Autonomous AI Agents",
         lessons: [
-          { id: "lesson1_1", title: "The Evolution of Automation to Autonomy", duration: "22 min read", completed: true, type: "reading" },
-          { id: "lesson1_2", title: "Core Architectural Pillars", duration: "18 min read", completed: true, type: "reading" },
-          { id: "lesson1_3", title: "The LLM as the Central Orchestrator", duration: "15 min read", completed: false, type: "reading" },
-          { id: "quiz_mod1", title: "Module 1 Quiz", duration: "10 min quiz", completed: false, type: "quiz" },
+          { id: "lesson1_1", title: "The Evolution of Automation to Autonomy", duration: "22 min read", completed: true, type: "reading", content: "This lesson explores the evolution from automation to autonomy..." },
+          { id: "lesson1_2", title: "Core Architectural Pillars", duration: "18 min read", completed: true, type: "reading", content: "We will discuss the core pillars: LLM Brain, Perception, Planning, Action, and Memory." },
+          { id: "lesson1_3", title: "The LLM as the Central Orchestrator", duration: "15 min read", completed: false, type: "reading", content: "Understanding the LLM's role is key..." },
+          { id: "quiz_mod1", title: "Module 1 Quiz", duration: "10 min quiz", completed: false, type: "quiz", content: "This is a quiz for module 1." },
         ],
       },
       {
         id: "ai_module_2_architectures", title: "Module 2: Designing Agentic Architectures",
         lessons: [
-          { id: "lesson2_1", title: "Essential System Components", duration: "20 min video", completed: false, type: "video" },
-          { id: "lesson2_2", title: "Architectural Patterns and Frameworks", duration: "25 min reading", completed: false, type: "reading" },
-          { id: "lesson2_3", title: "Learning from Industry Examples", duration: "15 min case study", completed: false, type: "activity" },
-          { id: "quiz_mod2", title: "Module 2 Quiz", duration: "10 min quiz", completed: false, type: "quiz" },
-        ],
-      },
-      {
-        id: "ai_module_3_perception", title: "Module 3: Perception and Understanding",
-        lessons: [
-          { id: "lesson3_1", title: "Textual and Structured Data Perception", duration: "18 min reading", completed: false, type: "reading" },
-          { id: "lesson3_2", title: "Visual Perception with MLLMs", duration: "22 min video", completed: false, type: "video" },
-           { id: "quiz_mod3", title: "Module 3 Quiz", duration: "10 min quiz", completed: false, type: "quiz" },
+          { id: "lesson2_1", title: "Essential System Components", duration: "20 min video", completed: false, type: "video", content: "Video content about system components." },
+          { id: "lesson2_2", title: "Architectural Patterns and Frameworks", duration: "25 min reading", completed: false, type: "reading", content: "Learn about different agent architectures." },
+          { id: "lesson2_3", title: "Learning from Industry Examples", duration: "15 min case study", completed: false, type: "activity", content: "A case study activity." },
+          { id: "quiz_mod2", title: "Module 2 Quiz", duration: "10 min quiz", completed: false, type: "quiz", content: "This is a quiz for module 2." },
         ],
       },
       // ... Add all 8 modules from course_structure.md
@@ -78,9 +71,9 @@ const coursesDatabase: Record<string, any> = {
     progress: 70,
     skills: ["Python Programming", "Data Structures", "Algorithm Analysis", "Operating Systems", "Networking Fundamentals"],
      modules: [
-        { id: "cs_mod1", title: "Programming Fundamentals (Python)", lessons: [ { id: "cs1_1", title: "Core Concepts & Syntax", duration: "30 min video", completed: true, type: "video" } ] },
-        { id: "cs_mod2", title: "Data Structures & Algorithms I", lessons: [ { id: "cs2_1", title: "Big O & Linear Structures", duration: "45 min reading", completed: true, type: "reading" } ] },
-        { id: "cs_mod3", title: "OS & Networking Fundamentals", lessons: [ { id: "cs3_1", title: "Processes & Protocols", duration: "40 min video", completed: false, type: "video" } ] }
+        { id: "cs_mod1", title: "Programming Fundamentals (Python)", lessons: [ { id: "cs1_1", title: "Core Concepts & Syntax", duration: "30 min video", completed: true, type: "video", content: "Video content about python." } ] },
+        { id: "cs_mod2", title: "Data Structures & Algorithms I", lessons: [ { id: "cs2_1", title: "Big O & Linear Structures", duration: "45 min reading", completed: true, type: "reading", content: "Reading about data structures." } ] },
+        { id: "cs_mod3", title: "OS & Networking Fundamentals", lessons: [ { id: "cs3_1", title: "Processes & Protocols", duration: "40 min video", completed: false, type: "video", content: "Video on OS and networking." } ] }
     ]
   },
   // Add other courses here based on course_structure.md if needed for linking
@@ -88,11 +81,44 @@ const coursesDatabase: Record<string, any> = {
 
 
 export default function CourseViewPage({ params: { id } }: { params: { id: string } }) {
-  const course = coursesDatabase[id] || coursesDatabase["AI_AGENT_DEV"]; // Fallback to a default if ID not found
+  const course = getCourseById(id) || coursesDatabase["AI_AGENT_DEV"];
+  const { toast } = useToast();
   
   // Placeholder for current lesson logic
   const [currentLesson, setCurrentLesson] = useState(course.modules[0].lessons[2]); 
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const currentModule = course.modules.find(m => m.lessons.some(l => l.id === currentLesson.id));
+  
+  const handleTextToSpeech = (textToSpeak: string) => {
+    if ('speechSynthesis' in window) {
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => {
+        setIsSpeaking(false);
+        toast({ title: "TTS Error", description: "Could not play audio.", variant: "destructive" });
+      };
+      window.speechSynthesis.speak(utterance);
+    } else {
+      toast({ title: "TTS Not Supported", description: "Your browser does not support text-to-speech.", variant: "destructive" });
+    }
+  };
+  
+  useEffect(() => {
+      // Cancel speech synthesis on component unmount or when lesson changes
+      return () => {
+          if(window.speechSynthesis.speaking){
+              window.speechSynthesis.cancel();
+              setIsSpeaking(false);
+          }
+      }
+  }, [currentLesson]);
+
 
   const getLessonIcon = (type: string) => {
     switch(type) {
@@ -119,6 +145,15 @@ export default function CourseViewPage({ params: { id } }: { params: { id: strin
             <div className="absolute bottom-4 left-4 text-sm bg-black/50 p-2 rounded">
               Content Area for: {currentLesson.title} ({currentLesson.type})
             </div>
+            <Button
+                variant="secondary"
+                size="icon"
+                onClick={() => handleTextToSpeech(currentLesson.content || 'No content available to read.')}
+                className="absolute top-4 right-4 rounded-full h-10 w-10 z-10"
+                title={isSpeaking ? "Stop Audio" : "Play Paragraph Audio"}
+            >
+                {isSpeaking ? <PauseCircle className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+            </Button>
           </div>
           <CardContent className="p-4">
             <div className="flex justify-between items-center">
@@ -155,8 +190,7 @@ export default function CourseViewPage({ params: { id } }: { params: { id: strin
                   <div>
                       <h2 className="text-xl font-semibold mb-2 font-headline">About this lesson: {currentLesson.title}</h2>
                       <p className="text-muted-foreground">
-                          This lesson explores {currentLesson.title.toLowerCase()}. You will learn key concepts and practical applications related to {currentModule?.title.toLowerCase()}. 
-                          Estimated duration: {currentLesson.duration}. Upon completion, this skill will be added to your profile.
+                          {currentLesson.content || `This lesson explores ${currentLesson.title.toLowerCase()}. You will learn key concepts and practical applications related to ${currentModule?.title.toLowerCase()}. Estimated duration: ${currentLesson.duration}. Upon completion, this skill will be added to your profile.`}
                       </p>
                   </div>
                   <div>
@@ -281,4 +315,3 @@ export default function CourseViewPage({ params: { id } }: { params: { id: strin
     </div>
   );
 }
-

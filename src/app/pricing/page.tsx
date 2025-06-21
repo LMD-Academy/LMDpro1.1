@@ -45,7 +45,6 @@ const tiers: SubscriptionTier[] = [
     cta: "Join for Free",
     features: [
       { text: "Limited Personalized Learning Paths", included: true },
-      { text: "Basic Video Creation (watermarked)", included: true },
       { text: "1 Resume Template, Limited PDF Exports (watermarked)", included: true },
       { text: "Selection of Free Courses", included: true },
       { text: "Community Support Forum Access", included: true },
@@ -71,7 +70,6 @@ const tiers: SubscriptionTier[] = [
     features: [
       { text: "Unlimited Personalized Learning Paths", included: true, highlight: true },
       { text: "AI-Powered Learning Path Generation & Adaptation", included: true },
-      { text: "Advanced Video Creation (no watermark, more avatars, custom branding)", included: true },
       { text: "All Resume Templates & Unlimited PDF Exports (No Watermark)", included: true },
       { text: "Full Course Catalog Access (including premium content)", included: true, highlight: true },
       { text: "Priority AI Support (Chat & Email)", included: true },
@@ -95,7 +93,6 @@ const tiers: SubscriptionTier[] = [
       { text: "All Premium Features for each user", included: true, highlight: true },
       { text: "Team Management Dashboard & Admin Controls", included: true },
       { text: "Shared Learning Paths & Custom Team Content Uploads", included: true },
-      { text: "Collaborative Video Projects & Shared Brand Kits", included: true },
       { text: "Consolidated Billing & Team Progress Reporting", included: true },
       { text: "Volume-based User Seat Discounts (beyond 5 users)", included: true },
       { text: "Teams API Access (Higher Limits, More Features)", included: true },
@@ -134,7 +131,7 @@ const tiers: SubscriptionTier[] = [
     description: "Special access to core LMDpro features to support education, skill development, and social impact initiatives.",
     modelInfo: "Latest Flash AI Models",
     icon: StudentCapIcon,
-    cta: "Apply for Discount",
+    cta: "Apply Now",
     features: [
       { text: "Most Premium Features (annual verification)", included: true, highlight: true },
       { text: "Full Course Catalog Access", included: true },
@@ -142,7 +139,6 @@ const tiers: SubscriptionTier[] = [
       { text: "Resume Builder with Multiple Templates & PDF Export (No Watermark after verification)", included: true },
       { text: "Community Forum & Peer Support Network", included: true },
       { text: "Limited API Access for Educational Projects", included: true },
-      { text: "Watermarked Video Creation for educational use", included: true },
     ],
   },
 ];
@@ -153,7 +149,6 @@ const featureComparison = [
     { category: "AI Agent Capabilities", feature: "AI Model Access Tier", community: "Gemma (Free Tier)", premium: "Flash (Latest)", teams: "Pro (Latest)", enterprise: "Pro / Custom Multi-Model", nonprofit: "Flash (Latest)" },
     { category: "AI Agent Capabilities", feature: "AI Research Capabilities", community: "Basic", premium: "Advanced", teams: "Advanced + Team History", enterprise: "Bespoke + Knowledge Base Integration", nonprofit: "Advanced" },
     { category: "AI Agent Capabilities", feature: "Advanced Cognitive Processing (RAG)", community: "Limited", premium: "Yes", teams: "Yes", enterprise: "Enhanced RAG + Fine-tuning", nonprofit: "Yes" },
-    { category: "Content Creation", feature: "Video Creation (Script & 3D Animation)", community: "Basic (Watermarked, Limited Avatars)", premium: "Advanced (No Watermark, More Avatars, Custom Branding)", teams: "Collaborative Projects + Shared Brand Kits", enterprise: "Full Suite + API Access", nonprofit: "Advanced (Watermarked)" },
     { category: "Career Tools", feature: "Resume Builder Templates", community: "1 Basic Template", premium: "All Premium Templates", teams: "All + Team Templates", enterprise: "All + Custom Org Templates", nonprofit: "All Premium Templates" },
     { category: "Career Tools", feature: "Resume PDF Export Watermark", community: "Yes ('Made with LMDpro')", premium: "No", teams: "No", enterprise: "No / Custom", nonprofit: "No (with verification)" },
     { category: "Career Tools", feature: "Resume AI Optimization & ATS Scoring", community: "Limited Suggestions", premium: "Full AI Optimization", teams: "Full + Team Benchmarking", enterprise: "Advanced ATS Insights & Custom Rules", nonprofit: "Full AI Optimization" },
@@ -298,15 +293,7 @@ export default function PricingPage() {
                   <CardTitle className="font-headline text-lg">How does the "Latest AI Model" access work for different tiers?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">LMDpro is committed to providing cutting-edge AI capabilities. We continuously integrate and test the latest advancements in AI models (such as Google's Gemma, Flash, and Pro series, among others). Your subscription tier determines access to the corresponding class of model, ensuring you benefit from ongoing improvements in AI capabilities for personalized learning, content creation, research, and resume optimization. Enterprise clients may also have options for custom model integrations.</p>
-                </CardContent>
-              </Card>
-               <Card className="shadow-md rounded-lg">
-                <CardHeader>
-                  <CardTitle className="font-headline text-lg">What is the "Made with LMDpro" watermark on resumes?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">For users on our free Community tier, exported PDF resumes will include a subtle "Made with LMDpro" watermark. Premium, Teams, Enterprise, and verified Non-Profit/Student users can export resumes without this watermark, offering a fully professional presentation.</p>
+                  <p className="text-muted-foreground">LMDpro is committed to providing cutting-edge AI capabilities. We continuously integrate and test the latest advancements in AI models (such as Google's Gemma, Flash, and Pro series, among others). Your subscription tier determines access to the corresponding class of model, ensuring you benefit from ongoing improvements in AI capabilities for personalized learning, research, and resume optimization.</p>
                 </CardContent>
               </Card>
             </div>

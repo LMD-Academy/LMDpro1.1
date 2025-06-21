@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowRight, Zap, Lightbulb, Film, FileVideo, ClipboardList, Library, Code2, DollarSign, HelpCircle, LayoutGrid, BookOpen, FileText as FileTextIcon, Users, Building, CheckCircle, GraduationCap } from "lucide-react";
+import { ArrowRight, Zap, Lightbulb, ClipboardList, Library, Code2, DollarSign, HelpCircle, LayoutGrid, BookOpen, Users, Building, CheckCircle, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
@@ -20,16 +20,8 @@ const featureCards = [
     href: "/learning-paths",
   },
   {
-    title: "Automated Video Creation",
-    description: "Automatically generate engaging educational videos from research scripts or your own text. Supports multiple languages, diverse 3D animated avatar selections, and custom branding application for streamlined, professional content creation. Ideal for educators and corporate training.",
-    icon: FileVideo,
-    bgColor: "bg-green-500/10 dark:bg-green-900/30",
-    textColor: "text-green-600 dark:text-green-400",
-    href: "/video-creation",
-  },
-  {
     title: "Intelligent Resume Builder",
-    description: "Import data from LinkedIn, design with customizable templates, and optimize content with AI suggestions tailored to specific job descriptions and ATS scoring. Export professional resumes as PDF, with a subtle 'Made with LMDpro' watermark on the free tier.",
+    description: "Import data from LinkedIn, design with customizable templates, and optimize content with AI suggestions tailored to specific job descriptions and ATS scoring. Export professional resumes as PDF.",
     icon: ClipboardList,
     bgColor: "bg-purple-500/10 dark:bg-purple-900/30",
     textColor: "text-purple-600 dark:text-purple-400",
@@ -43,12 +35,20 @@ const featureCards = [
     textColor: "text-orange-600 dark:text-orange-400",
     href: "/academic-research",
   },
+   {
+    title: "Comprehensive Course Catalog",
+    description: "Explore a vast library of courses across Technology, Business, Leadership, and more. Our content is structured for deep learning, from foundational skills to executive-level strategy, all accessible through our intelligent learning platform.",
+    icon: BookOpen,
+    bgColor: "bg-green-500/10 dark:bg-green-900/30",
+    textColor: "text-green-600 dark:text-green-400",
+    href: "/courses",
+  },
 ];
 
 const pricingTiersHomepage = [
-  { name: "Community", price: "Free", model: "Latest Free Gemma Model", features: ["Limited Personalized Learning Paths", "Basic Video Creation (watermarked)", "1 Resume Template (watermarked export)", "Selection of Free Courses"], cta: "Join for Free", href:"/register?tier=community" },
-  { name: "Premium", price: "$5.80/mo", model: "Latest Flash AI Models", features: ["Unlimited Learning Paths & AI Generation", "Advanced Video Creation (No Watermark)", "All Resume Templates & AI Optimization", "Full Course Catalog Access"], cta: "Go Premium", href:"/register?tier=premium", popular: true },
-  { name: "Teams", price: "$196/mo", model: "Latest Pro AI Models", features: ["All Premium Features", "Team Management & Analytics", "Shared Resources & Brand Kits", "Consolidated Billing"], cta: "Choose Teams", href:"/register?tier=teams" },
+  { name: "Community", price: "Free", model: "Latest Free Gemma Model", features: ["Limited Personalized Learning Paths", "Basic Resume Builder (watermarked)", "Selection of Free Courses"], cta: "Join for Free", href:"/register?tier=community" },
+  { name: "Premium", price: "$5.80/mo", model: "Latest Flash AI Models", features: ["Unlimited Learning Paths & AI Generation", "Full Resume Optimization", "Full Course Catalog Access"], cta: "Go Premium", href:"/register?tier=premium", popular: true },
+  { name: "Teams", price: "$196/mo", model: "Latest Pro AI Models", features: ["All Premium Features", "Team Management & Analytics", "Shared Resources & Brand Kits"], cta: "Choose Teams", href:"/register?tier=teams" },
 ];
 
 const courseHighlights = [
@@ -59,14 +59,14 @@ const courseHighlights = [
 
 const testimonials = [
     { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path in AI was a game-changer. It helped me upskill effectively and secure a promotion. The AI resume builder polished my CV perfectly!", avatarHint: "software engineer", avatarImage: "https://placehold.co/100x100.png" },
-    { name: "Maria S.", role: "Marketing Manager", quote: "The AI video creation tool is incredibly efficient for our team's internal training content. We're producing high-quality, professional videos in a fraction of the time.", avatarHint: "marketing manager", avatarImage: "https://placehold.co/100x100.png" },
+    { name: "Maria S.", role: "Marketing Manager", quote: "The AI features for content strategy and market research are top-notch. It feels like having a dedicated research assistant on my team. Highly recommended for professionals looking to stay ahead.", avatarHint: "marketing manager", avatarImage: "https://placehold.co/100x100.png" },
     { name: "Dr. David K.", role: "University Professor", quote: "LMDpro is an invaluable resource for my students. The Non-Profit/Student tier offers exceptional value, providing access to cutting-edge AI tools and courses that prepare them for future careers. The AI research agent is fantastic.", avatarHint: "university professor", avatarImage: "https://placehold.co/100x100.png" },
 ];
 
 const quickLinks = [
     { href: "/dashboard", label: "My Dashboard", icon: LayoutGrid },
     { href: "/courses", label: "Explore Courses", icon: GraduationCap },
-    { href: "/resume-builder", label: "Build My Resume", icon: FileTextIcon },
+    { href: "/resume-builder", label: "Build My Resume", icon: ClipboardList },
     { href: "/api-management", label: "Developer APIs", icon: Code2 },
     { href: "/pricing", label: "View Plans", icon: DollarSign },
     { href: "/support", label: "Get Support", icon: HelpCircle },
@@ -84,7 +84,7 @@ export default function HomePage() {
               Unlock Your Potential with LMDpro
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10">
-              Your AI-powered partner for personalized learning, skill enhancement, automated video creation, and career advancement. Experience the future of education, tailored to you, by an advanced AI-driven agentic system.
+              Your AI-powered partner for personalized learning, skill enhancement, and career advancement. Experience the future of education, tailored to you, by an advanced AI-driven agentic system.
             </p>
             <Link href="/register" passHref>
               <Button size="lg" className="button-animated-gradient text-lg px-10 py-6">

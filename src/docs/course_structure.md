@@ -1,4 +1,3 @@
-
 # LMDpro Enhanced Course Structure Guide
 
 This document outlines the preferred structure and pedagogical approach for courses within the LMDpro platform. It serves as a guideline for AI when generating new course outlines and for organizing existing content.
@@ -10,13 +9,13 @@ Courses are organized as follows:
   - **Standalone Course:** A comprehensive course within a Field (e.g., Introduction to Modern Management, Autonomous AI Agent Development).
     - **Sub-Course (Module):** Specific learning units within a Standalone Course (e.g., The Evolution of Management Thought, Foundations of Autonomous AI Agents).
       - **Lesson:** An individual teaching unit focused on a single concept or a few closely related concepts within a Module.
-        - **Activity:** The actual content or task a user engages with in a lesson (e.g., Video, Reading, Quiz, Assessment, Interactive Scenario, Project).
+        - **Activity:** The actual content or task a user engages with in a lesson (e.g., Reading, Quiz, Assessment, Interactive Scenario, Project).
 
 ## 2. Content Principles for Sub-Courses (Modules) & Lessons
 
 - **Clear Learning Objectives:** Each module and lesson should have clear, actionable learning objectives.
 - **Practical Application:** Emphasize real-world application, case studies, and examples.
-- **Engaging Content:** Use a mix of text, 3D animated videos (AI-generated), interactive elements (quizzes, scenarios), and practical exercises.
+- **Engaging Content:** Use a mix of text, interactive elements (quizzes, scenarios), and practical exercises.
 - **Structured Sections:** Break down content into logical sections with clear headings (H1-H6 in Markdown).
 - **Concise Overviews:** Each Field, Standalone Course, and Sub-Course (Module) should have a brief overview (1-3 sentences) summarizing its content and purpose. Lesson overviews can be integrated into the module content.
 - **Appropriate Difficulty and Length:** Clearly indicate estimated difficulty (Beginner, Intermediate, Advanced, Professional, Senior, Executive) and length (in hours or pages, or by number of activities for lessons).
@@ -639,7 +638,7 @@ Icon: BookCopy
 ### Standalone Course: Python_for_Data_Science
 Course ID: PYTHON_DS
 Overview: Learn to use Python and its powerful libraries (Pandas, NumPy, Matplotlib, Scikit-learn) for data analysis, visualization, and machine learning.
-Difficulty: Intermediate to Advanced
+Difficulty: Intermediate
 Length: "25 hours (Approx. 75-100 pages total)"
 assessmentPath: EducationalMaterial/Assessments/Level_3_DS_Exam.md # Using DS exam as a placeholder
 Sub-Courses:
@@ -829,4 +828,3 @@ Sub-Courses:
     *   overview: "Defines 'waste' (Muda) in Lean thinking and its impact. Details the eight common types of waste (DOWNTIME/TIM WOODS + Non-Utilized Talent), provides practical techniques for observing and identifying waste (Gemba walks, VSM), and explores strategies for elimination."
     *   difficulty: Intermediate
     *   length: "4 hours (15-20 pages)"
-```
