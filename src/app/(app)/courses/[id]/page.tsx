@@ -97,7 +97,7 @@ export default function CourseViewPage() {
     setCurrentLesson(newInitialLesson);
   }, [id, course]);
 
-  const currentModule = course?.subCourses?.find(m => m.lessons.some(l => l.id === currentLesson?.id));
+  const currentModule = course?.subCourses?.find(m => m.lessons?.some(l => l.id === currentLesson?.id));
 
   const handleTextToSpeech = (textToSpeak: string) => {
     if ('speechSynthesis' in window) {
@@ -316,7 +316,7 @@ export default function CourseViewPage() {
                   </AccordionTrigger>
                   <AccordionContent>
                     <ul className="space-y-1 pl-2">
-                      {moduleItem.lessons.map((lesson: any) => (
+                      {moduleItem.lessons && moduleItem.lessons.map((lesson: any) => (
                         <li key={lesson.id}>
                           <Button 
                               variant="ghost" 
@@ -329,6 +329,7 @@ export default function CourseViewPage() {
                           </Button>
                         </li>
                       ))}
+                      {!moduleItem.lessons && <p className="text-xs text-muted-foreground p-2">No lessons available for this module yet.</p>}
                     </ul>
                   </AccordionContent>
                 </AccordionItem>
