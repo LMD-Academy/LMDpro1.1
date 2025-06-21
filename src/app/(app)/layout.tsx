@@ -1,7 +1,7 @@
 
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -29,7 +29,7 @@ import {
   StickyNote,
   HelpCircle,
   Lightbulb, 
-  Video,
+  FileVideo,
   Bell,
   Moon,
   Sun,
@@ -41,10 +41,11 @@ import {
   Settings2,
   BookMarked,
   Brain,
-  FileVideo,
   Library,
   Network,
   Info,
+  Download,
+  Share2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -72,16 +73,15 @@ const navItems = [
   { href: "/resume-builder", label: "Resume Builder", icon: ClipboardList },
   { href: "/academic-research", label: "Academic Research", icon: Library },
   { href: "/api-management", label: "API Management", icon: Network },
-  { href: "/docs", label: "App Documentation", icon: Info }, // Renamed and changed icon
-  { href: "/account", label: "Account Settings", icon: Settings2 }, // Changed icon
+  { href: "/docs", label: "App Documentation", icon: Info }, 
+  { href: "/account", label: "Account Settings", icon: Settings2 },
   { href: "/support", label: "Help & Support", icon: HelpCircle },
 ];
 
 export default function AppLayout({ children: layoutChildren }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { open, toggleSidebar, isMobile, state } = useSidebar();
+  const { open, toggleSidebar, isMobile } = useSidebar();
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
-  const [isSidebarFixedOpen, setIsSidebarFixedOpen] = React.useState(false); 
   const [currentTheme, setCurrentTheme] = React.useState("light"); 
   const [notepadContent, setNotepadContent] = React.useState("");
   const { toast } = useToast();
@@ -124,6 +124,10 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
   };
 
   const exportNotepadContent = () => {
+    if (!notepadContent.trim()) {
+      toast({title: "Notepad Empty", description: "There is no content to export.", variant: "destructive"});
+      return;
+    }
     const blob = new Blob([notepadContent], { type: 'text/plain;charset=utf-8' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -140,18 +144,13 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
         toast({title: "Notepad Too Short", description: "Please write more in your notepad before asking AI.", variant: "destructive"});
         return;
     }
-    toast({ title: "AI Analysis (Notepad)", description: "AI is analyzing your notes... (Feature coming soon)"});
-    // Placeholder for Genkit flow call
+    toast({ title: "AI Analysis (Notepad)", description: "AI is analyzing your notes... (This is a placeholder for the Genkit flow call)"});
   };
 
   const handleLogout = () => {
-    // In a real app, this would clear auth tokens, call a backend logout, etc.
-    // For now, we'll just redirect to the login page.
     window.location.href = "/login"; 
   };
 
-
-  const effectiveSidebarOpen = isMobile ? open : (isSidebarFixedOpen || state === 'expanded');
 
   return (
     <div className={cn("flex min-h-screen app-area-background")}>
@@ -164,24 +163,10 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
         <SidebarHeader className="p-4 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-2 group">
              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-primary"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
-            <h1 className={cn(
-                "text-2xl font-headline font-bold animated-text-gradient",
-                (!effectiveSidebarOpen && !isMobile && !isSidebarFixedOpen && state === 'collapsed') && "hidden"
-              )}>
+            <h1 className="text-2xl font-headline font-bold animated-text-gradient group-data-[collapsible=icon]:hidden">
               LMDpro
             </h1>
           </Link>
-          {!isMobile && (
-             <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSidebarFixedOpen(!isSidebarFixedOpen)}
-              className={cn((state === 'collapsed' && !isSidebarFixedOpen) && "hidden group-hover/sidebar-wrapper:flex", (state === 'expanded' || isSidebarFixedOpen) && "flex" )}
-              title={isSidebarFixedOpen ? "Unpin Sidebar (Icon View)" : "Pin Sidebar (Expanded View)"}
-            >
-              {isSidebarFixedOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
-            </Button>
-          )}
         </SidebarHeader>
         <SidebarContent className="p-2">
           <SidebarMenu>
@@ -193,9 +178,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                     tooltip={item.label}
                   >
                       <item.icon />
-                      <span className={cn(
-                        (!effectiveSidebarOpen && !isMobile && !isSidebarFixedOpen && state === 'collapsed') && "hidden"
-                      )}>{item.label}</span>
+                      <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
                   </SidebarMenuButton>
                 </Link>
               </SidebarMenuItem>
@@ -205,7 +188,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
       </Sidebar>
 
       <SidebarInset className="flex flex-1">
-        <div className="flex flex-col flex-1 min-w-0"> {/* Added min-w-0 */}
+        <div className="flex flex-col flex-1 min-w-0">
             <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-card/80 backdrop-blur-sm px-4 md:px-6">
             <div className="flex items-center gap-2">
                 <Button variant="ghost" size="icon" onClick={toggleSidebar} className="md:hidden">
@@ -214,7 +197,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 </Button>
 
                 <div className="hidden md:block">
-                    <SidebarTrigger onClick={() => setIsSidebarFixedOpen(false)} />
+                    <SidebarTrigger />
                 </div>
 
                 <div className="relative flex items-center">
@@ -255,7 +238,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                     <Avatar className="h-9 w-9">
-                        <AvatarImage src="https://placehold.co/100x100.png" alt="@user" data-ai-hint="user avatar"/>
+                        <AvatarImage src="" alt="@user" />
                         <AvatarFallback>U</AvatarFallback>
                     </Avatar>
                     </Button>
@@ -275,13 +258,13 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 </DropdownMenu>
             </div>
             </header>
-            <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8"> {/* Added overflow-x-hidden */}
+            <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8">
             {layoutChildren}
             </main>
         </div>
 
         <aside className="hidden lg:flex flex-col w-72 border-l bg-card p-4 space-y-4 sticky top-0 h-screen overflow-y-auto">
-            <Card className="flex-shrink-0">
+            <Card className="flex-shrink-0 shadow-md rounded-xl">
                 <CardHeader>
                     <CardTitle className="text-lg font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
                 </CardHeader>
@@ -293,25 +276,28 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 </CardContent>
             </Card>
 
-            <Card className="flex-grow flex flex-col min-h-0">
+            <Card className="flex-grow flex flex-col min-h-0 shadow-md rounded-xl">
                 <CardHeader>
                     <CardTitle className="text-lg font-headline flex items-center gap-2"><StickyNote className="h-5 w-5 text-primary" /> Notepad</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col min-h-0">
                     <Textarea 
-                        placeholder="Take notes here... they will persist across pages. Use for quick thoughts, reminders, or drafting content." 
+                        placeholder="Take notes here... they will persist across pages." 
                         className="flex-1 h-full min-h-[150px] focus-gradient-outline"
                         value={notepadContent}
                         onChange={handleNotepadChange}
                     />
                 </CardContent>
                 <CardFooter className="gap-2 pt-4 flex-col sm:flex-row">
-                    <Button variant="outline" size="sm" className="flex-1 w-full sm:w-auto" onClick={exportNotepadContent}>Export Notes (.txt)</Button>
-                    <Button size="sm" className="flex-1 button-animated-gradient w-full sm:w-auto" onClick={askAiAboutNotepad}>Ask AI About Notes</Button>
+                    <Button variant="outline" size="sm" className="flex-1 w-full sm:w-auto" onClick={exportNotepadContent} title="Export notes as a .txt file">
+                        <Download className="h-4 w-4 mr-1"/> Export
+                    </Button>
+                    <Button size="sm" className="flex-1 button-animated-gradient w-full sm:w-auto" onClick={askAiAboutNotepad}>
+                        <Sparkles className="h-4 w-4 mr-1"/> Ask AI
+                    </Button>
                 </CardFooter>
             </Card>
             
-             {/* AI Support Chatbot FAB - conceptual, real one might open a modal or different UI */}
             <Button 
                 variant="outline" 
                 size="lg" 
