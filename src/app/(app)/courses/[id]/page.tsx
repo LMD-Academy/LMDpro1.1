@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState, useEffect } from "react";
 import { getCourseById } from "@/lib/course-data";
 import { useToast } from "@/hooks/use-toast";
+import { useParams } from "next/navigation";
 
 // In a real app, this data would come from a database/CMS via API calls based on params.id
 const coursesDatabase: Record<string, any> = {
@@ -80,7 +81,9 @@ const coursesDatabase: Record<string, any> = {
 };
 
 
-export default function CourseViewPage({ params: { id } }: { params: { id: string } }) {
+export default function CourseViewPage() {
+  const params = useParams();
+  const id = params.id as string;
   const course = getCourseById(id) || coursesDatabase["AI_AGENT_DEV"];
   const { toast } = useToast();
   
