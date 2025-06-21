@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { UserCircle, LogIn, LayoutDashboard, Info, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ShoppingBag, ChevronDown, Lightbulb, Zap, HelpCircle, Languages } from "lucide-react";
+import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, Languages } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -20,24 +20,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const mainNavLinks = [
   { href: "/pricing", label: "Pricing", icon: Tag },
-  { href: "/docs/general_documentation", label: "Docs & Guides", icon: BookOpen }, // Updated path
+  { href: "/docs", label: "Documentation", icon: BookOpen },
   { href: "/about", label: "About Us", icon: Users },
-  { href: "/support", label: "Support", icon: HelpCircle },
 ];
 
 const courseFields = [
   {
     name: "Technology Development",
-    icon: Zap, // Changed icon
+    icon: Zap, 
     courses: [
-      { title: "Python for Data Science", href: "/courses?category=TECH_DEV&course=PYTHON_DS" }, // Example link structure
+      { title: "Python for Data Science", href: "/courses?category=TECH_DEV&course=PYTHON_DS" },
       { title: "Autonomous AI Agent Development", href: "/courses?category=AI_SPEC&course=AI_AGENT_DEV" },
       { title: "Cybersecurity Specialization L3", href: "/courses?category=PROF_L3&course=CY_L3" },
     ]
   },
   {
     name: "Business & Management",
-    icon: Briefcase, // Changed icon
+    icon: Briefcase,
     courses: [
       { title: "Executive Leadership Capstone L5", href: "/courses?category=EXEC_L5&course=GM_L5_CAP" },
       { title: "Agile Business Specialization L3", href: "/courses?category=PROF_L3&course=AB_L3" },
@@ -45,7 +44,7 @@ const courseFields = [
     ]
   },
   {
-    name: "Leadership Fundamentals", // Added example category
+    name: "Leadership Fundamentals",
     icon: Lightbulb,
     courses: [
       { title: "Foundations of Effective Leadership", href: "/courses?category=LEAD_MGMT_FUND&course=LEAD_FOUND" },
@@ -94,8 +93,8 @@ export default function PublicHeader() {
 
   return (
     <header className={cn(
-      "sticky top-0 md:top-4 z-50 w-full md:max-w-5xl mx-auto md:rounded-xl shadow-lg",
-      "bg-card"
+      "sticky top-2 md:top-4 z-50 w-[calc(100%-1rem)] md:w-full md:max-w-5xl mx-auto rounded-xl shadow-lg",
+      "bg-card/80 backdrop-blur-sm"
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
@@ -217,7 +216,7 @@ export default function PublicHeader() {
                   <span className="text-xl font-headline font-bold animated-text-gradient">LMDpro</span>
                 </Link>
                 <Link href="/courses" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
-                  <ShoppingBag className="h-5 w-5" /> {}
+                  <BookOpen className="h-5 w-5" />
                   Explore Courses
                 </Link>
                 {mainNavLinks.map(link => (
@@ -231,12 +230,12 @@ export default function PublicHeader() {
                     <>
                      <Link href="/dashboard" passHref>
                         <Button variant="outline" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
-                            <LayoutDashboard className="h-5 w-5"/> Dashboard
+                           Dashboard
                         </Button>
                      </Link>
                      <Link href="/account?tab=profile" passHref>
                         <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={() => setIsMobileMenuOpen(false)}>
-                            <UserCircle className="h-5 w-5" /> Account
+                           Account
                         </Button>
                      </Link>
                      <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={() => {setIsAuthenticated(false); setIsMobileMenuOpen(false);}}>

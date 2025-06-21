@@ -198,4 +198,14 @@
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
+
+  @keyframes glowing {
+    0% { box-shadow: 0 0 4px hsl(var(--primary) / 0.5); }
+    50% { box-shadow: 0 0 16px hsl(var(--primary)); }
+    100% { box-shadow: 0 0 4px hsl(var(--primary) / 0.5); }
+  }
+  .animate-glow {
+    animation: glowing 2.5s ease-in-out infinite;
+    border-radius: 9999px; /* To make shadow circular */
+  }
 }
