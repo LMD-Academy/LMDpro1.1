@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { UserCircle, LogIn, LayoutDashboard, Info, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ShoppingBag, ChevronDown, Lightbulb, Zap, HelpCircle } from "lucide-react";
+import { UserCircle, LogIn, LayoutDashboard, Info, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ShoppingBag, ChevronDown, Lightbulb, Zap, HelpCircle, Languages } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -60,6 +60,7 @@ export default function PublicHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("light");
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Placeholder, manage with auth context
+  const [currentLanguage, setCurrentLanguage] = useState("English"); // Language state
 
   useEffect(() => {
     // Theme initialization
@@ -76,7 +77,6 @@ export default function PublicHeader() {
        document.documentElement.classList.remove("dark");
     };
     // Auth state check placeholder
-    // For demo, assume not authenticated or check a simple flag
     // const loggedIn = localStorage.getItem('lmdpro-auth-token'); // Example check
     // setIsAuthenticated(!!loggedIn);
   }, []);
@@ -153,6 +153,18 @@ export default function PublicHeader() {
             {currentTheme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             <span className="sr-only">Toggle Theme</span>
           </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" title="Change Language">
+                    <Languages className="h-5 w-5"/>
+                    <span className="sr-only">Change Language</span>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setCurrentLanguage("English")}>English</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setCurrentLanguage("Arabic")}>العربية (Arabic)</DropdownMenuItem>
+            </DropdownMenuContent>
+           </DropdownMenu>
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

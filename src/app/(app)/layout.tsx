@@ -8,9 +8,9 @@ import {
   SidebarHeader,
   SidebarMenuItem,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarTrigger,
   useSidebar,
+  SidebarTrigger,
+  SidebarMenuButton
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import {
@@ -36,6 +36,7 @@ import {
   Info,
   Download,
   Sparkles,
+  Languages, // Added Languages icon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -74,6 +75,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
   const [currentTheme, setCurrentTheme] = React.useState("light"); 
   const [notepadContent, setNotepadContent] = React.useState("");
   const { toast } = useToast();
+  const [currentLanguage, setCurrentLanguage] = React.useState("English");
 
   React.useEffect(() => {
     try {
@@ -223,6 +225,18 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                       {currentTheme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
                       <span className="sr-only">Toggle Theme</span>
                     </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" title="Change Language">
+                              <Languages className="h-5 w-5"/>
+                              <span className="sr-only">Change Language</span>
+                          </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => setCurrentLanguage("English")}>English</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setCurrentLanguage("Arabic")}>العربية (Arabic)</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="relative h-9 w-9 rounded-full">
