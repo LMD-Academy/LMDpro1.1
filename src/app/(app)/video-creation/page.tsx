@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -22,6 +23,8 @@ import { Loader2, Film, Copy, ThumbsUp, ThumbsDown, Check, UserCircle, Upload } 
 import { generateVideoScript, type GenerateVideoScriptOutput } from "@/ai/flows/generate-video-script";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   topic: z.string().min(10, "Topic must be at least 10 characters.").max(300, "Topic too long."),
