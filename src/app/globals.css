@@ -43,6 +43,11 @@
     --gradient-color-2: 295 20% 30%;  /* A purple tone between primary and accent */
     --gradient-color-3: 222 23% 16%;  /* accent */
     --gradient-color-4: 271 33% 50%;  /* A lighter, more vibrant purple like the app background */
+
+    --font-sans: 'Inter', sans-serif;
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-code: 'Source Code Pro', monospace;
+    --font-arabic: 'Almarai', sans-serif;
   }
 
   .dark {
@@ -52,7 +57,7 @@
     --card: 222 23% 12%; /* Slightly lighter than dark background */
     --card-foreground: 0 0% 98%;
 
-    --popover: 222 23% 5%;
+    --popover: 222 23% 10%;
     --popover-foreground: 0 0% 98%;
     
     --primary: 340 9% 70%; /* Lighter version of primary for dark mode */
@@ -92,7 +97,11 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-sans);
+  }
+
+  body:lang(ar) {
+    font-family: var(--font-arabic);
   }
   
   /* Specific background for the authenticated app area */
@@ -101,11 +110,15 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
+  }
+
+  h1:lang(ar), h2:lang(ar), h3:lang(ar), h4:lang(ar), h5:lang(ar), h6:lang(ar) {
+    font-family: var(--font-arabic);
   }
 
   code, pre {
-    font-family: 'Source Code Pro', monospace;
+    font-family: var(--font-code);
   }
 }
 

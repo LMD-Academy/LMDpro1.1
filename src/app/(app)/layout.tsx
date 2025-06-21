@@ -36,7 +36,8 @@ import {
   Info,
   Download,
   Sparkles,
-  Languages, // Added Languages icon
+  Languages,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -48,7 +49,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -68,14 +70,28 @@ const navItems = [
   { href: "/support", label: "Help & Support", icon: HelpCircle },
 ];
 
+interface AiMessage {
+  id: string;
+  text: string;
+  sender: 'user' | 'ai';
+}
+
 export default function AppLayout({ children: layoutChildren }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { open, toggleSidebar, isMobile } = useSidebar();
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
   const [currentTheme, setCurrentTheme] = React.useState("light"); 
   const [notepadContent, setNotepadContent] = React.useState("");
+  const [aiChatMessages, setAiChatMessages] = React.useState<AiMessage[]>([{id: 'init', text: "Hello! How can I help you learn today?", sender: 'ai'}]);
+  const [aiChatInput, setAiChatInput] = React.useState("");
   const { toast } = useToast();
   const [currentLanguage, setCurrentLanguage] = React.useState("English");
+
+  React.useEffect(() => {
+    // Set language on the HTML element for CSS targeting
+    document.documentElement.lang = currentLanguage === 'Arabic' ? 'ar' : 'en';
+    document.documentElement.dir = currentLanguage === 'Arabic' ? 'rtl' : 'ltr';
+  }, [currentLanguage]);
 
   React.useEffect(() => {
     try {
@@ -84,12 +100,19 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
         setCurrentTheme(savedTheme);
         document.documentElement.classList.toggle("dark", savedTheme === "dark");
       }
+      
       const savedNotepadContent = localStorage.getItem('lmdpro-notepad');
       if (savedNotepadContent) {
         setNotepadContent(savedNotepadContent);
       }
+      
+      const savedAiChat = localStorage.getItem('lmdpro-ai-chat');
+      if(savedAiChat) {
+          setAiChatMessages(JSON.parse(savedAiChat));
+      }
+
     } catch (error) {
-       console.warn("Error accessing localStorage for theme or notepad:", error);
+       console.warn("Could not access localStorage:", error);
     }
   }, []);
 
@@ -129,6 +152,24 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
     URL.revokeObjectURL(link.href);
     toast({ title: "Notepad Exported", description: "Your notes have been downloaded as lmdpro_notes.txt."});
   };
+  
+  const handleAiChatSubmit = () => {
+    if(!aiChatInput.trim()) return;
+    const newMessages: AiMessage[] = [...aiChatMessages, {id: Date.now().toString(), text: aiChatInput, sender: 'user'}];
+    setAiChatMessages(newMessages);
+    setAiChatInput("");
+    // Simulate AI response
+    setTimeout(() => {
+        const aiResponse: AiMessage = {id: (Date.now() + 1).toString(), text: "I'm processing your request... (This is a placeholder AI response).", sender: 'ai'};
+        const updatedMessages = [...newMessages, aiResponse];
+        setAiChatMessages(updatedMessages);
+        try {
+            localStorage.setItem('lmdpro-ai-chat', JSON.stringify(updatedMessages));
+        } catch (error) {
+            console.warn("Could not save AI chat history to localStorage", error);
+        }
+    }, 1000);
+  };
 
   const askAiAboutNotepad = () => {
     if (notepadContent.trim().length < 10) {
@@ -144,8 +185,8 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
 
 
   return (
-    <div className={cn("flex min-h-screen w-full flex-col", "app-area-background")}>
-      <div className="flex flex-1 overflow-hidden">
+    <div className="flex h-screen w-full flex-col app-area-background overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
         <Sidebar
           side="left"
           variant="sidebar"
@@ -180,39 +221,31 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
         </Sidebar>
 
         <div className="flex-1 flex flex-col min-w-0">
-              <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-card/80 backdrop-blur-sm px-4 md:px-6">
+          <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-card/80 backdrop-blur-sm px-4 md:px-6">
               <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="icon" onClick={toggleSidebar} className="md:hidden">
-                  {open ? <PanelLeftClose /> : <PanelLeftOpen />}
-                  <span className="sr-only">Toggle Menu</span>
-                  </Button>
-
-                  <div className="hidden md:block">
-                      <SidebarTrigger />
-                  </div>
-
+                  <SidebarTrigger />
                   <div className="relative flex items-center">
-                  <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setIsSearchExpanded(!isSearchExpanded)}
-                      className={cn("sm:flex", isSearchExpanded && "hidden")}
-                      aria-label="Open search"
-                  >
-                      <Search className="h-5 w-5" />
-                      <span className="sr-only">Search</span>
-                  </Button>
-                  <Input
-                      type="search"
-                      placeholder="Search LMDpro..."
-                      className={cn(
-                      "transition-all duration-300 ease-in-out focus-gradient-outline",
-                      isSearchExpanded ? "w-60 sm:w-72 opacity-100 px-3 py-2 h-10" : "w-0 opacity-0 p-0 border-none",
-                      !isSearchExpanded && !isMobile && "sm:opacity-100 sm:w-52 sm:px-3 sm:py-2 sm:h-10 sm:border" 
-                      )}
-                      onFocus={() => !isMobile && setIsSearchExpanded(true)} 
-                      onBlur={() => setIsSearchExpanded(false)} 
-                  />
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setIsSearchExpanded(!isSearchExpanded)}
+                        className={cn("sm:flex", isSearchExpanded && "hidden")}
+                        aria-label="Open search"
+                    >
+                        <Search className="h-5 w-5" />
+                        <span className="sr-only">Search</span>
+                    </Button>
+                    <Input
+                        type="search"
+                        placeholder="Search LMDpro..."
+                        className={cn(
+                        "transition-all duration-300 ease-in-out focus-gradient-outline",
+                        isSearchExpanded ? "w-60 sm:w-72 opacity-100 px-3 py-2 h-10" : "w-0 opacity-0 p-0 border-none",
+                        !isSearchExpanded && !isMobile && "sm:opacity-100 sm:w-52 sm:px-3 sm:py-2 sm:h-10 sm:border" 
+                        )}
+                        onFocus={() => !isMobile && setIsSearchExpanded(true)} 
+                        onBlur={() => setIsSearchExpanded(false)} 
+                    />
                   </div>
               </div>
 
@@ -236,7 +269,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                           <DropdownMenuItem onClick={() => setCurrentLanguage("English")}>English</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => setCurrentLanguage("Arabic")}>العربية (Arabic)</DropdownMenuItem>
                       </DropdownMenuContent>
-                    </DropdownMenu>
+                   </DropdownMenu>
                   <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="relative h-9 w-9 rounded-full">
@@ -260,57 +293,93 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                   </DropdownMenuContent>
                   </DropdownMenu>
               </div>
-              </header>
-              <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8">
+          </header>
+          <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8">
+            <div className="min-w-0">
               {layoutChildren}
-              </main>
-          </div>
+            </div>
+          </main>
+        </div>
 
-        <aside className="hidden lg:flex flex-col w-72 border-l bg-card p-4 space-y-4 sticky top-0 h-screen overflow-y-auto">
-            <Card className="flex-shrink-0 shadow-md rounded-xl">
-                <CardHeader>
-                    <CardTitle className="text-lg font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-sm text-muted-foreground mb-2">
-                        Your intelligent learning partner. Ask questions about course content, get summaries, or brainstorm ideas for your projects.
-                    </p>
-                     <Button variant="outline" size="sm" className="w-full" onClick={() => toast({title: "AI Assistant", description: "AI Assistant chat opened (placeholder)."})}>Chat with AI</Button>
-                </CardContent>
-            </Card>
+        {/* Right Tools Sidebar */}
+        <aside className="hidden lg:flex flex-col w-14 border-l bg-card py-4 items-center justify-between">
+            <div className="flex flex-col items-center space-y-4">
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button variant="ghost" size="icon" title="AI Assistant">
+                            <MessageSquare className="h-6 w-6"/>
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent side="left" align="end" className="w-96 flex flex-col h-[70vh] p-0">
+                       <CardHeader className="flex-shrink-0">
+                            <CardTitle className="text-lg font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
+                            <CardDescription>Your intelligent learning partner.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex-grow overflow-y-auto p-4 space-y-4">
+                            {aiChatMessages.map(msg => (
+                                <div key={msg.id} className={cn("flex gap-2 text-sm", msg.sender === 'user' ? 'justify-end' : 'justify-start')}>
+                                    {msg.sender === 'ai' && <Avatar className="h-7 w-7"><AvatarFallback>AI</AvatarFallback></Avatar>}
+                                    <p className={cn("max-w-[85%] rounded-lg px-3 py-2", msg.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted')}>{msg.text}</p>
+                                </div>
+                            ))}
+                        </CardContent>
+                        <CardFooter className="pt-4 border-t">
+                            <div className="flex w-full items-center gap-2">
+                                <Input placeholder="Ask anything..." value={aiChatInput} onChange={(e) => setAiChatInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleAiChatSubmit()} />
+                                <Button size="icon" onClick={handleAiChatSubmit}><Send className="h-4 w-4"/></Button>
+                            </div>
+                        </CardFooter>
+                    </PopoverContent>
+                </Popover>
 
-            <Card className="flex-grow flex flex-col min-h-0 shadow-md rounded-xl">
-                <CardHeader>
-                    <CardTitle className="text-lg font-headline flex items-center gap-2"><StickyNote className="h-5 w-5 text-primary" /> Notepad</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col min-h-0">
-                    <Textarea 
-                        placeholder="Take notes here... they will persist across pages." 
-                        className="flex-1 h-full min-h-[150px] focus-gradient-outline"
-                        value={notepadContent}
-                        onChange={handleNotepadChange}
-                    />
-                </CardContent>
-                <CardFooter className="gap-2 pt-4 flex-col sm:flex-row">
-                    <Button variant="outline" size="sm" className="flex-1 w-full sm:w-auto" onClick={exportNotepadContent} title="Export notes as a .txt file">
-                        <Download className="h-4 w-4 mr-1"/> Export
-                    </Button>
-                    <Button size="sm" className="flex-1 button-animated-gradient w-full sm:w-auto" onClick={askAiAboutNotepad}>
-                        <Sparkles className="h-4 w-4 mr-1"/> Ask AI
-                    </Button>
-                </CardFooter>
-            </Card>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button variant="ghost" size="icon" title="Notepad">
+                            <StickyNote className="h-6 w-6"/>
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent side="left" align="end" className="w-96 p-0">
+                        <Card className="flex-grow flex flex-col min-h-0 shadow-md rounded-xl border-0">
+                            <CardHeader>
+                                <CardTitle className="text-lg font-headline flex items-center gap-2"><StickyNote className="h-5 w-5 text-primary" /> Notepad</CardTitle>
+                                <CardDescription>Notes are saved automatically in your browser.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex-1 flex flex-col min-h-0">
+                                <Textarea 
+                                    placeholder="Take notes here... they will persist across pages." 
+                                    className="flex-1 h-full min-h-[250px] focus-gradient-outline"
+                                    value={notepadContent}
+                                    onChange={handleNotepadChange}
+                                />
+                            </CardContent>
+                            <CardFooter className="gap-2 pt-4 border-t">
+                                <Button variant="outline" size="sm" className="flex-1" onClick={exportNotepadContent} title="Export notes as a .txt file">
+                                    <Download className="h-4 w-4 mr-1"/> Export
+                                </Button>
+                                <Button size="sm" className="flex-1 button-animated-gradient" onClick={askAiAboutNotepad}>
+                                    <Sparkles className="h-4 w-4 mr-1"/> Ask AI
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    </PopoverContent>
+                </Popover>
+            </div>
             
-            <Button 
-                variant="outline" 
-                size="lg" 
-                className="w-full mt-auto flex-shrink-0 button-animated-gradient"
-                onClick={() => toast({title: "AI Support", description:"AI Support Chat opened (placeholder). For detailed help, navigate to the Help & Support page."})}
-            >
-                <HelpCircle className="mr-2 h-5 w-5"/> AI Support Chat
-            </Button>
+            <div className="flex flex-col items-center">
+                <Popover>
+                    <PopoverTrigger asChild>
+                         <Button variant="ghost" size="icon" title="Help & Support">
+                            <HelpCircle className="h-6 w-6"/>
+                        </Button>
+                    </PopoverTrigger>
+                     <PopoverContent side="left" align="end" className="w-96">
+                        <h4 className="font-semibold mb-2">Need Help?</h4>
+                        <p className="text-sm text-muted-foreground mb-4">Our AI can help with most platform questions, or you can visit our full support center.</p>
+                        <Link href="/support"><Button className="w-full">Go to Support Center</Button></Link>
+                     </PopoverContent>
+                </Popover>
+            </div>
         </aside>
-
       </div>
     </div>
   );
