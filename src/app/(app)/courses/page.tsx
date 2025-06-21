@@ -16,29 +16,30 @@ const courseIcons: { [key: string]: React.ElementType } = {
 };
 
 const allCourses = [
-  { id: "FBS_L1", title: "Foundational Business Skills L1", category: "CORE_L1", difficulty: "Beginner", duration: "15 Weeks", type: "Standalone Course", icon: "GraduationCap" },
-  { id: "AMC_L2", title: "Applied Management & Communication L2", category: "CORE_L2", difficulty: "Intermediate", duration: "10 Weeks", type: "Standalone Course", icon: "Briefcase" },
-  { id: "AB_L3", title: "Agile Business Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "12 Weeks", type: "Specialization", icon: "Zap" },
-  { id: "CS_L3", title: "Computer Science Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "18 Weeks", type: "Specialization", icon: "Network" },
-  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", category: "AI_SPEC", difficulty: "Advanced", duration: "20 Weeks", type: "Learning Path", icon: "Brain" },
-  { id: "PYTHON_DS", title: "Python for Data Science", category: "TECH_DEV", difficulty: "Intermediate", duration: "10 Weeks", type: "Standalone Course", icon: "BookCopy" },
-  { id: "LEAD_FOUND", title: "Foundations of Effective Leadership", category: "LEAD_MGMT_FUND", difficulty: "Beginner", duration: "8 Weeks", type: "Standalone Course", icon: "Users" },
-  { id: "GM_L5_CAP", title: "General Management Executive Capstone L5", category: "EXEC_L5", difficulty: "Executive", duration: "24 Weeks", type: "Capstone", icon: "Building" },
+  { id: "FBS_L1", title: "Foundational Business Skills L1", category: "CORE_L1", difficulty: "Beginner", duration: "15-18 hours", type: "Standalone Course", icon: "GraduationCap" },
+  { id: "AMC_L2", title: "Applied Management & Communication L2", category: "CORE_L2", difficulty: "Intermediate", duration: "15-20 hours", type: "Standalone Course", icon: "Briefcase" },
+  { id: "AB_L3", title: "Agile Business Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "20-25 hours", type: "Specialization", icon: "Zap" },
+  { id: "CS_L3", title: "Computer Science Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "25-30 hours", type: "Specialization", icon: "Network" },
+  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", category: "AI_SPEC", difficulty: "Advanced", duration: "40-60 hours", type: "Learning Path", icon: "Brain" },
+  { id: "PYTHON_DS", title: "Python for Data Science", category: "TECH_DEV", difficulty: "Intermediate", duration: "25 hours", type: "Standalone Course", icon: "BookCopy" },
+  { id: "LEAD_FOUND", title: "Foundations of Effective Leadership", category: "LEAD_MGMT_FUND", difficulty: "Beginner", duration: "10 hours", type: "Standalone Course", icon: "Users" },
+  { id: "GM_L5_CAP", title: "General Management Executive Capstone L5", category: "EXEC_L5", difficulty: "Executive", duration: "20-30 hours", type: "Capstone", icon: "Building" },
+  { id: "CY_L3", title: "Cybersecurity Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "20-25 hours", type: "Specialization", icon: "ShieldCheck" },
+  { id: "OMS_L3", title: "Online Marketing & Sales Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "23-28 hours", type: "Specialization", icon: "Zap" },
 ];
 
 const categories = [
     { value: "All", label: "All Categories" },
     { value: "CORE_L1", label: "Core Skills L1" },
     { value: "CORE_L2", label: "Core Skills L2" },
-    { value: "PROF_L3", label: "Professional Specializations L3" },
-    { value: "SENIOR_L4", label: "Senior Leadership L4" },
-    { value: "EXEC_L5", label: "Executive Capstone L5" },
+    { value: "PROF_L3", label: "Professional Specializations" },
+    { value: "SENIOR_L4", label: "Senior Leadership" },
+    { value: "EXEC_L5", label: "Executive Capstone" },
     { value: "TECH_DEV", label: "Technology Development" },
     { value: "AI_SPEC", label: "AI Specialization" },
-    { value: "LEAD_MGMT_FUND", label: "Leadership & Management Fundamentals" },
+    { value: "LEAD_MGMT_FUND", label: "Leadership & Management" },
 ];
 const difficulties = ["All", "Beginner", "Intermediate", "Advanced", "Professional", "Senior", "Executive"];
-const durations = ["All", "1-4 Weeks", "4-8 Weeks", "8-12 Weeks", "12-20 Weeks", "20+ Weeks"];
 const courseTypes = ["All", "Standalone Course", "Learning Path", "Specialization", "Module", "Capstone"];
 
 
@@ -48,7 +49,6 @@ export default function CoursesCatalogPage() {
   const [filters, setFilters] = useState({
     category: "All",
     difficulty: "All",
-    duration: "All",
     type: "All",
   });
 
@@ -57,7 +57,6 @@ export default function CoursesCatalogPage() {
     (filters.category === "All" || course.category === filters.category) &&
     (filters.difficulty === "All" || course.difficulty === filters.difficulty) &&
     (filters.type === "All" || course.type === filters.type) 
-    // Duration filter needs more complex logic if based on ranges. For now, simple match.
   );
 
   const handleFilterChange = (filterType: keyof typeof filters, value: string) => {
@@ -76,7 +75,7 @@ export default function CoursesCatalogPage() {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Filters Column */}
         <aside className="lg:w-1/4 xl:w-1/5 space-y-6 p-1">
-          <Card className="shadow-md sticky top-20">
+          <Card className="shadow-md sticky top-20 rounded-xl">
             <CardHeader>
               <CardTitle className="font-headline flex items-center gap-2"><Filter className="h-5 w-5"/> Filters</CardTitle>
             </CardHeader>
@@ -109,15 +108,6 @@ export default function CoursesCatalogPage() {
                   <SelectTrigger id="difficulty-filter" className="mt-1 focus-gradient-outline"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {difficulties.map(diff => <SelectItem key={diff} value={diff}>{diff}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="duration-filter" className="font-semibold">Duration</Label>
-                 <Select value={filters.duration} onValueChange={(value) => handleFilterChange("duration", value)}>
-                  <SelectTrigger id="duration-filter" className="mt-1 focus-gradient-outline"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {durations.map(dur => <SelectItem key={dur} value={dur}>{dur}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
@@ -166,12 +156,12 @@ export default function CoursesCatalogPage() {
               <Card 
                 key={course.id} 
                 className={cn(
-                  "shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden flex flex-col",
+                  "shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden flex flex-col",
                   viewMode === "list" && "sm:flex-row"
                 )}
               >
                 {viewMode === "list" && (
-                    <div className="w-full sm:w-20 flex-shrink-0 bg-muted/50 flex items-center justify-center p-4 rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none">
+                    <div className="w-full sm:w-20 flex-shrink-0 bg-muted/50 flex items-center justify-center p-4 rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none">
                         <IconComponent className="h-10 w-10 text-primary" />
                     </div>
                 )}
@@ -186,7 +176,7 @@ export default function CoursesCatalogPage() {
                   </CardHeader>
                   <CardContent className={cn("p-0 flex-1", viewMode === "grid" ? "h-16" : "mt-2")}>
                     <CardDescription className={cn("text-sm", viewMode === "grid" ? "line-clamp-3" : "line-clamp-2")}>
-                      Explore {course.title.toLowerCase()}, a {course.type.toLowerCase()} designed for {course.difficulty.toLowerCase()} learners, spanning {course.duration}.
+                      Explore {course.title.toLowerCase()}, a {course.type.toLowerCase()} designed for {course.difficulty.toLowerCase()} learners.
                     </CardDescription>
                   </CardContent>
                   <CardFooter className="p-0 mt-4">

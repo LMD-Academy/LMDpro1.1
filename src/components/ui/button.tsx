@@ -36,34 +36,21 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    React.AnchorHTMLAttributes<HTMLAnchorElement>, // Allow anchor props
+    React.AnchorHTMLAttributes<HTMLAnchorElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
 
 const Button = React.forwardRef<
-  HTMLButtonElement | HTMLAnchorElement,
+  HTMLButtonElement,
   ButtonProps
->(({ className, variant, size, asChild: buttonOwnAsChild = false, ...allOtherProps }, ref) => {
-  // Determine if the Button itself should render as a Slot based on its own asChild prop
-  const isSlot = buttonOwnAsChild;
-  
-  // Determine if the component should render as an anchor tag if an href is present 
-  // AND it's not meant to be a Slot itself.
-  const isLink = !isSlot && allOtherProps.href !== undefined;
-  
-  const Comp = isSlot ? Slot : (isLink ? "a" : "button");
-
-  // Explicitly remove 'asChild' from the props that will be spread to the DOM element.
-  // This is crucial to prevent the "React does not recognize the `asChild` prop" warning
-  // when <Link asChild> wraps this Button.
-  const { asChild, ...domProps } = allOtherProps;
-
+>(({ className, variant, size, asChild = false, ...props }, ref) => {
+  const Comp = asChild ? Slot : "button";
   return (
     <Comp
       className={cn(buttonVariants({ variant, size, className }))}
-      ref={ref as any} // Cast ref to any due to Comp being dynamic
-      {...domProps} // Spread domProps which are now clean of any 'asChild'
+      ref={ref}
+      {...props}
     />
   );
 });

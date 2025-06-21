@@ -2,103 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: 'Inter', sans-serif;
-}
-
 @layer base {
   :root {
     --background: 271 33% 92%; /* Light-scheme desaturated blue for overall page background */
     --foreground: 240 10% 3.9%; /* Dark text for light background */
-    --card: 271 33% 96%; /* Slightly lighter than background for cards */
+    
+    --card: 0 0% 100%; /* White cards for a clean look on the light background */
     --card-foreground: 240 10% 3.9%;
+
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     
-    --primary: 340 9% 16%; /* #2e2427 - Vibrant Blue (User defined) - Adjusted HSL for closer match */
-    --primary-foreground: 0 0% 98%; /* White/very light gray for text on primary */
+    --primary: 340 9% 16%; /* #2e2427 - A deep, near-black blue/purple */
+    --primary-foreground: 0 0% 98%;
     
-    --secondary: 240 4.8% 95.9%; /* A light gray */
-    --secondary-foreground: 240 5.9% 10%; /* Dark text for secondary */
+    --secondary: 240 4.8% 95.9%; /* A light gray for secondary elements */
+    --secondary-foreground: 240 5.9% 10%;
     
     --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%; /* Softer gray for muted text */
+    --muted-foreground: 240 3.8% 46.1%;
     
-    --accent: 222 23% 16%; /* #202632 - Analogous Green (User defined) - This HSL seems more blue/gray, adjust if actual green is desired */
-    --accent-foreground: 0 0% 98%; /* White/very light gray for text on accent */
+    /* Analogous Green (#202632) -> HSL(222, 23%, 16%) */
+    --accent: 222 23% 16%; 
+    --accent-foreground: 0 0% 98%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%; /* Light border */
-    --input: 240 5.9% 90%; /* Light input background */
-    --ring: 340 9% 40%; /* Ring color based on primary but perhaps slightly lighter/desaturated for focus */
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 340 9% 40%;
     
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* Slightly larger radius for a modern feel */
 
-    /* Main app background for authenticated view - User defined #9f79bf */
-    --app-background-light: 271 33% 78%; /* Original #9f79bf */
+    /* Main app area background for authenticated view - Desaturated blue #9f79bf -> HSL(271, 33%, 75%) */
+    --app-background-light: 271 33% 75%;
 
-    --sidebar-background: 240 5.9% 10%; /* Darker sidebar for contrast in app layout */
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 340 9% 70%; /* Lighter primary for sidebar active items */
-    --sidebar-primary-foreground: 340 9% 16%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 340 9% 60%;
-
-    /* Light theme gradient colors - Vibrant Blue base, Analogous Green accent */
-    --gradient-color-1: 340 9% 16%; /* primary */
-    --gradient-color-2: 295 20% 30%; /* A purple tone between primary and accent */
-    --gradient-color-3: 222 23% 16%; /* accent */
-    --gradient-color-4: 271 33% 50%; /* A lighter, more vibrant purple */
+    /* Light theme gradient colors for animations - Vibrant Blue (#2e2427) to Analogous Green (#202632) */
+    --gradient-color-1: 340 9% 16%;   /* primary */
+    --gradient-color-2: 295 20% 30%;  /* A purple tone between primary and accent */
+    --gradient-color-3: 222 23% 16%;  /* accent */
+    --gradient-color-4: 271 33% 50%;  /* A lighter, more vibrant purple like the app background */
   }
 
   .dark {
-    --background: 222 23% 10%; /* Dark background based on accent */
+    --background: 222 23% 8%; /* Darker version of accent */
     --foreground: 0 0% 98%;
-    --card: 222 23% 13%; /* Slightly lighter than dark background for cards */
+
+    --card: 222 23% 12%; /* Slightly lighter than dark background */
     --card-foreground: 0 0% 98%;
-    --popover: 222 23% 8%;
+
+    --popover: 222 23% 5%;
     --popover-foreground: 0 0% 98%;
     
     --primary: 340 9% 70%; /* Lighter version of primary for dark mode */
-    --primary-foreground: 340 9% 10%; /* Dark text on light primary */
+    --primary-foreground: 340 9% 10%;
     
-    --secondary: 240 3.7% 15.9%; /* Darker gray */
+    --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
     
-    --accent: 222 23% 50%; /* Lighter version of accent for dark mode */
+    --accent: 222 23% 50%; /* Lighter accent */
     --accent-foreground: 0 0% 98%;
     
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
+
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 340 9% 60%;
     
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    /* Main app background for authenticated view in dark mode - derived from dark palette */
-    --app-background-light: 222 23% 8%; /* Even darker for app background */
-
-    --sidebar-background: 240 5.9% 7%; /* Very dark sidebar */
-    --sidebar-foreground: 0 0% 80%;
-    --sidebar-primary: 340 9% 60%; /* Lighter primary for dark sidebar active items */
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 3.7% 12.9%;
-    --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 240 3.7% 12.9%;
-    --sidebar-ring: 340 9% 50%;
-
+    --app-background-light: 222 23% 10%; /* Darker app background */
+    
     /* Dark theme gradient colors - deeper, more intense */
-    --gradient-color-1: 340 15% 20%; /* Deeper primary-like */
-    --gradient-color-2: 271 33% 25%; /* Deeper #9f79bf-like */
-    --gradient-color-3: 222 25% 12%; /* Deeper accent-like */
-    --gradient-color-4: 300 40% 30%; /* Another deep vibrant tone */
+    --gradient-color-1: 340 15% 20%;
+    --gradient-color-2: 271 33% 25%;
+    --gradient-color-3: 222 25% 12%;
+    --gradient-color-4: 300 40% 30%;
   }
 }
 
@@ -110,6 +94,7 @@ body {
     @apply bg-background text-foreground;
     font-family: 'Inter', sans-serif;
   }
+  
   /* Specific background for the authenticated app area */
   .app-area-background {
      background-color: hsl(var(--app-background-light));
@@ -139,9 +124,13 @@ body {
 
   .animated-text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); /* Primary to Accent and back to Primary */
+    background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)));
     background-size: 200% auto;
     animation: text-gradient-animation 4s linear infinite;
+  }
+  
+  .dark .animated-text-gradient {
+    background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)));
   }
 
   @keyframes text-gradient-animation {
@@ -152,10 +141,15 @@ body {
   
   .button-animated-gradient {
     @apply text-primary-foreground;
-    background-image: linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary)) 100%); /* Primary to Accent and back to Primary */
+    background-image: linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary)) 100%);
     background-size: 200% auto;
     transition: background-position 0.5s ease;
   }
+  
+  .dark .button-animated-gradient {
+      background-image: linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary)) 100%);
+  }
+
   .button-animated-gradient:hover {
     background-position: right center;
   }
@@ -165,13 +159,14 @@ body {
     position: relative;
     z-index: 1; 
   }
+  
   .focus-gradient-outline:focus-visible::before {
     content: "";
     position: absolute;
     inset: -2px; 
     border-radius: calc(var(--radius) + 2px); 
     padding: 2px; 
-    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))); /* Primary to Accent to Primary for border */
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)));
     background-size: 200% 200%;
     -webkit-mask:
         linear-gradient(#fff 0 0) content-box,
@@ -184,7 +179,7 @@ body {
     pointer-events: none;
     animation: animated-gradient-border-flow 3s infinite linear;
   }
-
+  
   @keyframes animated-gradient-border-flow {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
