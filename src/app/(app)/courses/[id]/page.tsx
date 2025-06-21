@@ -87,8 +87,8 @@ const coursesDatabase: Record<string, any> = {
 };
 
 
-export default function CourseViewPage({ params }: { params: { id: string } }) {
-  const course = coursesDatabase[params.id] || coursesDatabase["AI_AGENT_DEV"]; // Fallback to a default if ID not found
+export default function CourseViewPage({ params: { id } }: { params: { id: string } }) {
+  const course = coursesDatabase[id] || coursesDatabase["AI_AGENT_DEV"]; // Fallback to a default if ID not found
   
   // Placeholder for current lesson logic
   const [currentLesson, setCurrentLesson] = useState(course.modules[0].lessons[2]); 
@@ -281,3 +281,4 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
     </div>
   );
 }
+
