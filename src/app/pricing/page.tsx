@@ -224,43 +224,45 @@ export default function PricingPage() {
 
           <section className="mb-24">
             <h2 className="text-3xl font-headline font-semibold text-center mb-12 animated-text-gradient">Detailed Feature Comparison</h2>
-            <Card className="shadow-lg overflow-hidden rounded-xl">
-              <Table>
-                <TableHeader className="bg-muted/50 dark:bg-muted/30">
-                  <TableRow>
-                    <TableHead className="px-4 py-3.5 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider sticky left-0 bg-muted/50 dark:bg-muted/30 z-10 w-1/5 min-w-[220px] rounded-tl-xl">Feature</TableHead>
-                    {tiers.map(tier => (
-                      <TableHead key={tier.id} className={`px-4 py-3.5 text-center text-xs font-medium uppercase tracking-wider min-w-[160px] ${tier.highlight ? "text-primary" : "text-muted-foreground"} ${tier.id === 'enterprise' ? 'rounded-tr-xl' : ''}`}>{tier.name}</TableHead>
-                    ))}
-                  </TableRow>
-                </TableHeader>
-                <TableBody className="bg-card divide-y divide-border">
-                  {featureComparison.map((item, itemIndex) => (
-                    <React.Fragment key={item.feature}>
-                      {itemIndex === 0 || item.category !== featureComparison[itemIndex - 1].category ? (
-                        <TableRow>
-                          <TableCell colSpan={tiers.length + 1} className="px-4 py-3 bg-secondary/50 dark:bg-secondary/20 text-sm font-semibold text-foreground sticky left-0 z-10">{item.category}</TableCell>
+            <Card className="shadow-lg rounded-xl">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader className="bg-muted/50 dark:bg-muted/30">
+                    <TableRow>
+                      <TableHead className="px-4 py-3.5 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider sticky left-0 bg-muted/50 dark:bg-muted/30 z-10 w-1/5 min-w-[220px] rounded-tl-xl">Feature</TableHead>
+                      {tiers.map(tier => (
+                        <TableHead key={tier.id} className={`px-4 py-3.5 text-center text-xs font-medium uppercase tracking-wider min-w-[160px] ${tier.highlight ? "text-primary" : "text-muted-foreground"} ${tier.id === 'enterprise' ? 'rounded-tr-xl' : ''}`}>{tier.name}</TableHead>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody className="bg-card divide-y divide-border">
+                    {featureComparison.map((item, itemIndex) => (
+                      <React.Fragment key={item.feature}>
+                        {itemIndex === 0 || item.category !== featureComparison[itemIndex - 1].category ? (
+                          <TableRow>
+                            <TableCell colSpan={tiers.length + 1} className="px-4 py-3 bg-secondary/50 dark:bg-secondary/20 text-sm font-semibold text-foreground sticky left-0 z-10">{item.category}</TableCell>
+                          </TableRow>
+                        ) : null}
+                        <TableRow className="hover:bg-muted/20 dark:hover:bg-muted/40 transition-colors">
+                          <TableCell className="px-4 py-4 whitespace-normal text-sm font-medium text-foreground sticky left-0 bg-card hover:bg-muted/20 dark:hover:bg-muted/40 z-10 w-1/5 min-w-[220px]">{item.feature}</TableCell>
+                          {tiers.map(tier => {
+                            const featureValue = item[tier.id as keyof typeof item] as string | boolean;
+                            return (
+                              <TableCell key={`${tier.id}-${item.feature}`} className="px-4 py-4 whitespace-normal text-sm text-center text-muted-foreground min-w-[160px]">
+                                {typeof featureValue === 'boolean' ? (
+                                  featureValue ? <CheckCircle className="h-5 w-5 text-green-500 mx-auto" /> : <span className="text-muted-foreground/50 text-lg">-</span>
+                                ) : (
+                                  <span className={featureValue.includes("Unlimited") || featureValue.includes("All") || featureValue.includes("Full") ? "font-semibold text-primary" : ""}>{featureValue}</span>
+                                )}
+                              </TableCell>
+                            );
+                          })}
                         </TableRow>
-                      ) : null}
-                      <TableRow className="hover:bg-muted/20 dark:hover:bg-muted/40 transition-colors">
-                        <TableCell className="px-4 py-4 whitespace-normal text-sm font-medium text-foreground sticky left-0 bg-card hover:bg-muted/20 dark:hover:bg-muted/40 z-10 w-1/5 min-w-[220px]">{item.feature}</TableCell>
-                        {tiers.map(tier => {
-                          const featureValue = item[tier.id as keyof typeof item] as string | boolean;
-                          return (
-                            <TableCell key={`${tier.id}-${item.feature}`} className="px-4 py-4 whitespace-normal text-sm text-center text-muted-foreground min-w-[160px]">
-                              {typeof featureValue === 'boolean' ? (
-                                featureValue ? <CheckCircle className="h-5 w-5 text-green-500 mx-auto" /> : <span className="text-muted-foreground/50 text-lg">-</span>
-                              ) : (
-                                <span className={featureValue.includes("Unlimited") || featureValue.includes("All") || featureValue.includes("Full") ? "font-semibold text-primary" : ""}>{featureValue}</span>
-                              )}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    </React.Fragment>
-                  ))}
-                </TableBody>
-              </Table>
+                      </React.Fragment>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </Card>
           </section>
 

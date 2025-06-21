@@ -17,9 +17,7 @@ import Link from "next/link";
 import {
   LayoutDashboard,
   GraduationCap,
-  FileText,
   BookOpen,
-  LifeBuoy,
   Settings,
   UserCircle,
   PanelLeftClose,
@@ -189,7 +187,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
           <SidebarMenu>
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href}>
-                <Link href={item.href} asChild>
+                <Link href={item.href} passHref>
                   <SidebarMenuButton
                     isActive={pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))}
                     tooltip={item.label}
@@ -207,7 +205,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
       </Sidebar>
 
       <SidebarInset className="flex flex-1">
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-1 min-w-0"> {/* Added min-w-0 */}
             <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-card/80 backdrop-blur-sm px-4 md:px-6">
             <div className="flex items-center gap-2">
                 <Button variant="ghost" size="icon" onClick={toggleSidebar} className="md:hidden">
@@ -265,7 +263,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <Link href="/account?tab=profile" passHref>
+                    <Link href="/dashboard" passHref>
                         <DropdownMenuItem><UserCircle className="mr-2"/>Profile</DropdownMenuItem>
                     </Link>
                     <Link href="/account" passHref>
@@ -277,7 +275,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 </DropdownMenu>
             </div>
             </header>
-            <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+            <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8"> {/* Added overflow-x-hidden */}
             {layoutChildren}
             </main>
         </div>
