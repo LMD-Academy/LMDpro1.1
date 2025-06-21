@@ -130,11 +130,11 @@ export default function PublicHeader() {
                 ))}
               </div>
                <DropdownMenuSeparator className="my-3" />
-               <Link href="/courses" passHref>
-                <DropdownMenuItem asChild>
-                  <a className="font-semibold text-primary hover:underline cursor-pointer">View All Courses & Learning Paths &rarr;</a>
-                </DropdownMenuItem>
-              </Link>
+               <DropdownMenuItem asChild>
+                <Link href="/courses" className="font-semibold text-primary hover:underline cursor-pointer">
+                    View All Courses & Learning Paths &rarr;
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
