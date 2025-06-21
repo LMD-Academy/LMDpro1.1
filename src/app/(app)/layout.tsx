@@ -46,7 +46,8 @@ import {
   Info,
   Download,
   Share2,
-  Sparkles
+  Sparkles,
+  Activity
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
