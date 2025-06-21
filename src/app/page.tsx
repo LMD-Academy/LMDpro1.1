@@ -3,13 +3,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ArrowRight, Zap, Star, Lightbulb, Film, FileText as FileTextIcon, GraduationCap, Briefcase, ShieldCheck, Handshake, BookOpen, DollarSign, HelpCircle, Settings, Link as LinkIconProp, Users as UsersIcon, Building, CheckCircle, UserCircle, FileVideo, ClipboardList, Library, MessageSquare as MessageSquareIcon, DraftingCompass, Server, Cpu, Palette, LayoutGrid, Code2 } from "lucide-react";
+import { ArrowRight, Zap, Lightbulb, Film, FileVideo, ClipboardList, Library, Code2, DollarSign, HelpCircle, LayoutGrid, BookOpen, FileText as FileTextIcon, Users, Building, CheckCircle, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
-import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const featureCards = [
   {
@@ -53,20 +52,20 @@ const pricingTiersHomepage = [
 ];
 
 const courseHighlights = [
-  { id: "GM_L5_CAP", title: "Executive Leadership Capstone L5", icon: Building, type: "Learning Path", description: "Lead global organizations and master C-suite strategy, large-scale transformation, and executive-level governance.", imageHint: "executive leadership team", category: "Leadership" },
-  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", icon: Cpu, type: "Learning Path", description: "Comprehensive training from foundational AI principles to designing, building, and deploying advanced autonomous AI agents.", imageHint: "AI robot development", category: "AI & Tech" },
-  { id: "DS_L3", title: "Data Science Specialization L3", icon: DraftingCompass, type: "Specialization", description: "Core Python data science libraries, data analysis, visualization, and an introduction to machine learning concepts and algorithms.", imageHint: "data science dashboard", category: "Data Science" },
+  { id: "GM_L5_CAP", title: "Executive Leadership Capstone L5", icon: Building, type: "Learning Path", description: "Lead global organizations and master C-suite strategy, large-scale transformation, and executive-level governance.", category: "Leadership" },
+  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", icon: Zap, type: "Learning Path", description: "Comprehensive training from foundational AI principles to designing, building, and deploying advanced autonomous AI agents.", category: "AI & Tech" },
+  { id: "DS_L3", title: "Data Science Specialization L3", icon: BookOpen, type: "Specialization", description: "Core Python data science libraries, data analysis, visualization, and an introduction to machine learning concepts and algorithms.", category: "Data Science" },
 ];
 
 const testimonials = [
-    { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path in AI was a game-changer. It helped me upskill effectively and secure a promotion. The AI resume builder polished my CV perfectly!" , avatarHint: "software engineer", avatarImage: "https://placehold.co/100x100.png" },
-    { name: "Maria S.", role: "Marketing Manager", quote: "The AI video creation tool is incredibly efficient for our team's internal training content. We're producing high-quality, professional videos in a fraction of the time." , avatarHint: "marketing manager", avatarImage: "https://placehold.co/100x100.png" },
-    { name: "Dr. David K.", role: "University Professor", quote: "LMDpro is an invaluable resource for my students. The Non-Profit/Student tier offers exceptional value, providing access to cutting-edge AI tools and courses that prepare them for future careers. The AI research agent is fantastic." , avatarHint: "university professor", avatarImage: "https://placehold.co/100x100.png" },
+    { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path in AI was a game-changer. It helped me upskill effectively and secure a promotion. The AI resume builder polished my CV perfectly!", avatarHint: "software engineer", avatarImage: "https://placehold.co/100x100.png" },
+    { name: "Maria S.", role: "Marketing Manager", quote: "The AI video creation tool is incredibly efficient for our team's internal training content. We're producing high-quality, professional videos in a fraction of the time.", avatarHint: "marketing manager", avatarImage: "https://placehold.co/100x100.png" },
+    { name: "Dr. David K.", role: "University Professor", quote: "LMDpro is an invaluable resource for my students. The Non-Profit/Student tier offers exceptional value, providing access to cutting-edge AI tools and courses that prepare them for future careers. The AI research agent is fantastic.", avatarHint: "university professor", avatarImage: "https://placehold.co/100x100.png" },
 ];
 
 const quickLinks = [
     { href: "/dashboard", label: "My Dashboard", icon: LayoutGrid },
-    { href: "/courses", label: "Explore Courses", icon: BookOpen },
+    { href: "/courses", label: "Explore Courses", icon: GraduationCap },
     { href: "/resume-builder", label: "Build My Resume", icon: FileTextIcon },
     { href: "/api-management", label: "Developer APIs", icon: Code2 },
     { href: "/pricing", label: "View Plans", icon: DollarSign },
@@ -74,19 +73,6 @@ const quickLinks = [
 ];
 
 export default function HomePage() {
-  const [userName, setUserName] = useState("Learner");
-
-  useEffect(() => {
-    // In a real app, fetch user name from auth context
-    const storedUser = localStorage.getItem("lmdpro-user");
-    if (storedUser) {
-      try {
-        const userData = JSON.parse(storedUser);
-        if(userData.name) setUserName(userData.name);
-      } catch (e) { console.error("Failed to parse user from localStorage");}
-    }
-  }, []);
-
   return (
     <>
       <PublicHeader />
@@ -129,7 +115,7 @@ export default function HomePage() {
                   <CardContent className="flex-1">
                     <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
                   </CardContent>
-                  <CardFooter>
+                  <CardFooter className="mt-auto pt-4">
                     <Link href={feature.href} passHref className="w-full">
                        <Button variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/5 hover:text-primary/90">
                         Learn More <ArrowRight className="ml-2 h-4 w-4" />
@@ -162,7 +148,7 @@ export default function HomePage() {
                      <p className="text-xs text-muted-foreground mb-3">Category: {course.category}</p>
                      <p className="text-sm h-16 overflow-hidden line-clamp-3 text-muted-foreground">{course.description}</p>
                   </CardContent>
-                  <CardFooter className="mt-auto">
+                  <CardFooter className="mt-auto pt-4">
                     <Link href={`/courses/${course.id}`} passHref className="w-full">
                         <Button variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/5 hover:text-primary/90">
                         View Details <ArrowRight className="ml-2 h-4 w-4" />

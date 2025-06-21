@@ -1,16 +1,23 @@
 
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, Lightbulb, FileVideo as FileVideoIcon, Briefcase, TrendingUp, Zap, Users as UsersIcon, Handshake, Brain, Activity } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, Lightbulb, TrendingUp, Zap, Brain, Handshake, Activity } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { PieChart, Pie, Cell } from "recharts";
+
 
 const ongoingCourses = [
-  { id: "1", title: "Advanced AI for Business Strategy", progress: 65, icon: Brain, type: "Learning Path" },
-  { id: "2", title: "Strategic Communication & Negotiation", progress: 30, icon: Handshake, type: "Course"},
-  { id: "3", title: "Python for Data Science & ML", progress: 80, icon: BookOpen, type: "Course" },
+  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", progress: 45, icon: Brain, type: "Learning Path" },
+  { id: "CS_L3", title: "Computer Science Specialization L3", progress: 70, icon: Handshake, type: "Course"},
+  { id: "PYTHON_DS", title: "Python for Data Science & ML", progress: 80, icon: BookOpen, type: "Course" },
 ];
 
 const completedCourses = [
@@ -19,7 +26,8 @@ const completedCourses = [
 ];
 
 const favoriteCourses = [
-  { id: "ai-ethics", title: "Ethical Considerations in AI Development", category: "Technology" },
+  { id: "DS_L4", title: "Data Science Advanced L4", category: "Technology" },
+  { id: "GM_L5_CAP", title: "General Management Executive Capstone L5", category: "Leadership" },
 ];
 
 const activityFeedItems = [
@@ -28,6 +36,19 @@ const activityFeedItems = [
   { id: "act3", text: "AI recommends 'Natural Language Processing' course.", time: "1 day ago", icon: Lightbulb },
   { id: "act4", text: "Started 'Python for Data Science & ML' course.", time: "3 days ago", icon: BookOpen },
 ];
+
+const chartData = [
+  { name: 'Completed', value: 5, fill: 'hsl(var(--primary))' },
+  { name: 'In Progress', value: 3, fill: 'hsl(var(--accent))' },
+  { name: 'Not Started', value: 2, fill: 'hsl(var(--secondary))' },
+];
+
+const chartConfig = {
+  value: { label: 'Courses' },
+  Completed: { label: 'Completed', color: 'hsl(var(--primary))' },
+  'In Progress': { label: 'In Progress', color: 'hsl(var(--accent))' },
+  'Not Started': { label: 'Not Started', color: 'hsl(var(--secondary))' },
+} satisfies import("@/components/ui/chart").ChartConfig;
 
 
 export default function DashboardPage() {
@@ -55,14 +76,29 @@ export default function DashboardPage() {
             <CardDescription>Overview of your course engagement.</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="h-48 flex items-center justify-center bg-muted/50 rounded-md text-muted-foreground mb-4 border">
-              {/* Placeholder for a real chart component */}
-              <p className="text-sm p-4 text-center">Dynamic Learning Progress Chart Area (e.g., Pie Chart: 5 Completed, 3 In Progress, 2 Not Started)</p>
-            </div>
-             <div className="space-y-2 text-sm">
-                <div className="flex justify-between"><span>Courses Completed</span> <span className="font-semibold">5</span></div>
-                <div className="flex justify-between"><span>Skills Acquired</span> <span className="font-semibold">25</span></div>
-                <div className="flex justify-between"><span>Average Score</span> <span className="font-semibold">88%</span></div>
+            <ChartContainer config={chartConfig} className="mx-auto aspect-square h-48">
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie data={chartData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5}>
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+             <div className="space-y-2 text-sm mt-4">
+                {chartData.map(item => (
+                  <div key={item.name} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                       <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.fill }}></span>
+                       <span>{item.name}</span>
+                    </div>
+                    <span className="font-semibold">{item.value}</span>
+                  </div>
+                ))}
              </div>
           </CardContent>
         </Card>
@@ -79,7 +115,7 @@ export default function DashboardPage() {
              <div className="relative mx-auto h-32 w-32">
                 <svg className="h-full w-full -rotate-90" viewBox="0 0 36 36">
                     <circle className="text-muted/30" strokeWidth="3" stroke="currentColor" fill="transparent" r="15.9155" cx="18" cy="18"></circle>
-                    <circle className="text-primary" strokeWidth="3" strokeDasharray="75, 100" strokeLinecap="round" stroke="currentColor" fill="transparent" r="15.9155" cx="18" cy="18"></circle>
+                    <circle className="text-primary transition-all duration-500" strokeWidth="3" strokeDasharray="75, 100" strokeLinecap="round" stroke="currentColor" fill="transparent" r="15.9155" cx="18" cy="18"></circle>
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center text-2xl font-bold animated-text-gradient">75%</div>
             </div>
@@ -108,7 +144,7 @@ export default function DashboardPage() {
                     <span className="text-xs text-primary/80 group-hover:underline">Why it&apos;s recommended?</span>
                 </Link>
             ))}
-            <Link href="/courses" passHref>
+            <Link href="/courses?filter=recommended" passHref>
               <Button variant="outline" className="w-full mt-2">
                 Explore All Recommendations
               </Button>
@@ -212,6 +248,7 @@ export default function DashboardPage() {
                             </div>
                         </div>
                     ))}
+                     {activityFeedItems.length === 0 && <p className="text-sm text-muted-foreground">No recent activity.</p>}
                 </CardContent>
             </Card>
         </div>

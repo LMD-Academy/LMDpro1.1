@@ -9,25 +9,24 @@ import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import Image from "next/image"; // For placeholder
+import { useState } from "react";
 
-// Dummy course data - In a real app, this would come from a database/CMS via params.id
+// In a real app, this data would come from a database/CMS via API calls based on params.id
+// For this demo, we simulate a database with a few course structures based on course_structure.md
 const coursesDatabase: Record<string, any> = {
   "AI_AGENT_DEV": {
     id: "AI_AGENT_DEV",
     title: "Autonomous AI Agent Development",
     description: "A comprehensive program to design, build, evaluate, and deploy autonomous AI agents capable of complex reasoning, planning, and action.",
     instructor: "Dr. Alex Turing & LMDpro AI",
-    instructorImage: "https://placehold.co/100x100.png?text=AT",
+    instructorImage: "",
     instructorTitle: "Lead AI Researcher",
     rating: 4.9,
     reviews: 2850,
     students: 7500,
     lastUpdated: "August 2024",
     language: "English",
-    imageHint: "ai robot brain interface",
     category: "AI Specialization",
     level: "Advanced",
     progress: 15, 
@@ -47,11 +46,42 @@ const coursesDatabase: Record<string, any> = {
         lessons: [
           { id: "lesson2_1", title: "Essential System Components", duration: "20 min video", completed: false, type: "video" },
           { id: "lesson2_2", title: "Architectural Patterns and Frameworks", duration: "25 min reading", completed: false, type: "reading" },
-          { id: "lesson2_3", title: "Learning from Industry Examples (Manus AI, Cline AI)", duration: "15 min case study", completed: false, type: "activity" },
+          { id: "lesson2_3", title: "Learning from Industry Examples", duration: "15 min case study", completed: false, type: "activity" },
+          { id: "quiz_mod2", title: "Module 2 Quiz", duration: "10 min quiz", completed: false, type: "quiz" },
         ],
       },
-      // Add more modules as per course_structure.md
+      {
+        id: "ai_module_3_perception", title: "Module 3: Perception and Understanding",
+        lessons: [
+          { id: "lesson3_1", title: "Textual and Structured Data Perception", duration: "18 min reading", completed: false, type: "reading" },
+          { id: "lesson3_2", title: "Visual Perception with MLLMs", duration: "22 min video", completed: false, type: "video" },
+           { id: "quiz_mod3", title: "Module 3 Quiz", duration: "10 min quiz", completed: false, type: "quiz" },
+        ],
+      },
+      // ... Add all 8 modules from course_structure.md
     ],
+  },
+  "CS_L3": {
+    id: "CS_L3",
+    title: "Computer Science Specialization L3",
+    description: "Core concepts in programming (Python), data structures, algorithms, operating systems, and computer networking.",
+    instructor: "Prof. Ada Lovelace",
+    instructorImage: "",
+    instructorTitle: "Professor of Computer Science",
+    rating: 4.8,
+    reviews: 3200,
+    students: 9800,
+    lastUpdated: "July 2024",
+    language: "English",
+    category: "Professional Specialization",
+    level: "Professional",
+    progress: 70,
+    skills: ["Python Programming", "Data Structures", "Algorithm Analysis", "Operating Systems", "Networking Fundamentals"],
+     modules: [
+        { id: "cs_mod1", title: "Programming Fundamentals (Python)", lessons: [ { id: "cs1_1", title: "Core Concepts & Syntax", duration: "30 min video", completed: true, type: "video" } ] },
+        { id: "cs_mod2", title: "Data Structures & Algorithms I", lessons: [ { id: "cs2_1", title: "Big O & Linear Structures", duration: "45 min reading", completed: true, type: "reading" } ] },
+        { id: "cs_mod3", title: "OS & Networking Fundamentals", lessons: [ { id: "cs3_1", title: "Processes & Protocols", duration: "40 min video", completed: false, type: "video" } ] }
+    ]
   },
   // Add other courses here based on course_structure.md if needed for linking
 };
@@ -149,15 +179,15 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
             <Card className="shadow-md rounded-lg">
                 <CardHeader><CardTitle className="font-headline">Interactive Transcript</CardTitle></CardHeader>
                 <CardContent>
-                    <ScrollArea className="h-64 border rounded-md p-3 bg-muted/30">
+                    <div className="h-64 border rounded-md p-3 bg-muted/30 overflow-y-auto">
                         <p className="text-sm text-muted-foreground whitespace-pre-line">
                             [00:00:05] Welcome to the lesson on {currentLesson.title}. Today, we will cover...
-                            {"\n"}[00:00:15] The first key concept is X, which refers to... (Interactive transcript highlighting based on video/audio playback - placeholder)
+                            {"\n"}[00:00:15] The first key concept is X, which refers to... (Interactive transcript highlighting based on video/audio playback would be implemented here.)
                             {"\n"}[00:01:30] Another important aspect is Y. Consider this example...
                             {"\n"}[00:02:50] Finally, let's discuss Z and its implications...
                             {"\n"}[00:04:00] (More transcript content based on the lesson topic would go here.)
                         </p>
-                    </ScrollArea>
+                    </div>
                 </CardContent>
             </Card>
           </TabsContent>
@@ -183,7 +213,7 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
                 <CardDescription>AI-generated summaries, key takeaways, and related concept explorations for this lesson.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-sm text-muted-foreground">AI Insights for "{currentLesson.title}" (Content placeholder - e.g., key concepts summary, links to related LMDpro modules, external research links).</p>
+                    <p className="text-sm text-muted-foreground">AI Insights for "{currentLesson.title}" (AI-generated key concepts summary, links to related LMDpro modules, external research links would appear here).</p>
                 </CardContent>
             </Card>
           </TabsContent>
@@ -198,7 +228,7 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
              <Link href={`/instructors/${course.instructor.replace(/\s+/g, '-').toLowerCase()}`} className="group">
                 <div className="flex items-center gap-2 mt-2">
                     <Avatar className="h-8 w-8">
-                        <AvatarImage src={course.instructorImage} alt={course.instructor} data-ai-hint="instructor headshot" />
+                        <AvatarImage src={course.instructorImage} alt={course.instructor} />
                         <AvatarFallback>{course.instructor.split(' ').map((n:string)=>n[0]).join('')}</AvatarFallback>
                     </Avatar>
                     <div>
@@ -244,9 +274,10 @@ export default function CourseViewPage({ params }: { params: { id: string } }) {
             </Accordion>
           </CardContent>
            <CardFooter className="pt-4 border-t">
-            <Button className="w-full button-animated-gradient">Enroll in Full Learning Path (Placeholder)</Button>
+            <Button className="w-full button-animated-gradient">Enroll in Full Learning Path (Not Implemented)</Button>
            </CardFooter>
         </Card>
       </aside>
     </div>
-  
+  );
+}
