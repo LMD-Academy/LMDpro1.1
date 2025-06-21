@@ -7,25 +7,27 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Filter, List, Grid, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, ImageIcon, Video, FileText as FileTextIcon, Library, BookMarked, Lightbulb, Network, Info, Brain, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText } from "lucide-react"; 
+import { ArrowRight, Filter, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, ImageIcon, Video, FileText as FileTextIcon, Library, BookMarked, Lightbulb, Network, Info, Brain, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText } from "lucide-react"; 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const courseIcons: { [key: string]: React.ElementType } = {
-    GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, Video, FileTextIcon, Library, BookMarked, Lightbulb, Network, Info, Brain, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText, ImageIcon
+    GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, Video, FileTextIcon, Library, BookMarked, Lightbulb, Network, Info, Brain, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText, ImageIcon,
+    // Adding fallbacks or default icons if needed
+    default: BookOpen,
 };
 
 const allCourses = [
-  { id: "FBS_L1", title: "Foundational Business Skills L1", category: "CORE_L1", difficulty: "Beginner", duration: "15-18 hours", type: "Standalone Course", icon: "GraduationCap" },
-  { id: "AMC_L2", title: "Applied Management & Communication L2", category: "CORE_L2", difficulty: "Intermediate", duration: "15-20 hours", type: "Standalone Course", icon: "Briefcase" },
-  { id: "AB_L3", title: "Agile Business Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "20-25 hours", type: "Specialization", icon: "Zap" },
-  { id: "CS_L3", title: "Computer Science Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "25-30 hours", type: "Specialization", icon: "Network" },
-  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", category: "AI_SPEC", difficulty: "Advanced", duration: "40-60 hours", type: "Learning Path", icon: "Brain" },
-  { id: "PYTHON_DS", title: "Python for Data Science", category: "TECH_DEV", difficulty: "Intermediate", duration: "25 hours", type: "Standalone Course", icon: "BookCopy" },
-  { id: "LEAD_FOUND", title: "Foundations of Effective Leadership", category: "LEAD_MGMT_FUND", difficulty: "Beginner", duration: "10 hours", type: "Standalone Course", icon: "Users" },
-  { id: "GM_L5_CAP", title: "General Management Executive Capstone L5", category: "EXEC_L5", difficulty: "Executive", duration: "20-30 hours", type: "Capstone", icon: "Building" },
-  { id: "CY_L3", title: "Cybersecurity Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "20-25 hours", type: "Specialization", icon: "ShieldCheck" },
-  { id: "OMS_L3", title: "Online Marketing & Sales Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "23-28 hours", type: "Specialization", icon: "Zap" },
+  { id: "FBS_L1", title: "Foundational Business Skills L1", category: "CORE_L1", difficulty: "Beginner", duration: "15-18 hours", type: "Standalone Course", icon: "GraduationCap", description: "Essential concepts for understanding the business world and developing core professional competencies." },
+  { id: "AMC_L2", title: "Applied Management & Communication L2", category: "CORE_L2", difficulty: "Intermediate", duration: "15-20 hours", type: "Standalone Course", icon: "Briefcase", description: "Enhancing skills in leadership, communication, financial understanding, problem-solving, and operational efficiency." },
+  { id: "AB_L3", title: "Agile Business Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "20-25 hours", type: "Specialization", icon: "Zap", description: "Deep dive into Agile methodologies, product ownership, and coaching for business agility." },
+  { id: "CS_L3", title: "Computer Science Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "25-30 hours", type: "Specialization", icon: "Network", description: "Core concepts in programming (Python), data structures, algorithms, operating systems, and computer networking." },
+  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", category: "AI_SPEC", difficulty: "Advanced", duration: "40-60 hours", type: "Learning Path", icon: "Brain", description: "A comprehensive program to design, build, evaluate, and deploy autonomous AI agents." },
+  { id: "PYTHON_DS", title: "Python for Data Science", category: "TECH_DEV", difficulty: "Intermediate", duration: "25 hours", type: "Standalone Course", icon: "BookCopy", description: "Learn to use Python and its powerful libraries (Pandas, NumPy, Matplotlib, Scikit-learn) for data analysis and machine learning." },
+  { id: "LEAD_FOUND", title: "Foundations of Effective Leadership", category: "LEAD_MGMT_FUND", difficulty: "Beginner", duration: "10 hours", type: "Standalone Course", icon: "Users", description: "Explores various leadership styles, motivational theories, team dynamics, and communication strategies for inspiring and guiding teams." },
+  { id: "GM_L5_CAP", title: "General Management Executive Capstone L5", category: "EXEC_L5", difficulty: "Executive", duration: "20-30 hours", type: "Capstone", icon: "Building", description: "Leading global organizations and mastering C-suite strategy, large-scale transformation, and executive-level governance." },
+  { id: "CY_L3", title: "Cybersecurity Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "20-25 hours", type: "Specialization", icon: "ShieldCheck", description: "Foundation of cybersecurity principles, common threats, network security fundamentals, and basic cryptography." },
+  { id: "OMS_L3", title: "Online Marketing & Sales Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "23-28 hours", type: "Specialization", icon: "Zap", description: "Digital marketing strategy, content marketing, SEO optimization, CRM systems, and marketing automation." },
 ];
 
 const categories = [
@@ -45,7 +47,6 @@ const courseTypes = ["All", "Standalone Course", "Learning Path", "Specializatio
 
 export default function CoursesCatalogPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [filters, setFilters] = useState({
     category: "All",
     difficulty: "All",
@@ -128,14 +129,6 @@ export default function CoursesCatalogPage() {
         <main className="lg:w-3/4 xl:w-4/5">
           <div className="flex justify-between items-center mb-6">
             <p className="text-muted-foreground">{filteredCourses.length} courses found</p>
-            <div className="flex items-center gap-2">
-              <Button variant={viewMode === 'list' ? 'secondary' : 'ghost'} size="icon" onClick={() => setViewMode('list')} aria-label="List view">
-                <List className="h-5 w-5" />
-              </Button>
-              <Button variant={viewMode === 'grid' ? 'secondary' : 'ghost'} size="icon" onClick={() => setViewMode('grid')} aria-label="Grid view">
-                <Grid className="h-5 w-5" />
-              </Button>
-            </div>
           </div>
 
           {filteredCourses.length === 0 && (
@@ -146,48 +139,35 @@ export default function CoursesCatalogPage() {
             </div>
           )}
 
-          <div className={cn(
-            "gap-6",
-            viewMode === "grid" ? "grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "space-y-4"
-          )}>
+          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
             {filteredCourses.map(course => {
-              const IconComponent = courseIcons[course.icon as keyof typeof courseIcons] || ImageIcon;
+              const IconComponent = courseIcons[course.icon as keyof typeof courseIcons] || BookOpen;
               return (
-              <Card 
-                key={course.id} 
-                className={cn(
-                  "shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-xl overflow-hidden flex flex-col",
-                  viewMode === "list" && "sm:flex-row"
-                )}
-              >
-                {viewMode === "list" && (
-                    <div className="w-full sm:w-20 flex-shrink-0 bg-muted/50 flex items-center justify-center p-4 rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none">
-                        <IconComponent className="h-10 w-10 text-primary" />
+                <Card key={course.id} className="shadow-lg hover:shadow-primary/20 transition-shadow duration-300 rounded-xl overflow-hidden flex flex-col">
+                  <CardHeader className="relative p-4 pb-2">
+                    <div className="absolute top-4 right-4 bg-primary/10 p-2 rounded-lg">
+                      <IconComponent className="h-6 w-6 text-primary" />
                     </div>
-                )}
-                <div className="flex flex-col flex-1 p-4">
-                  <CardHeader className="p-0 mb-2">
-                    <CardTitle className="font-headline text-lg leading-tight hover:text-primary transition-colors">{course.title}</CardTitle>
-                    <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs text-muted-foreground mt-1">
-                        <span>{course.type}</span>
-                        <span>&bull; {course.difficulty}</span>
-                        <span>&bull; {course.duration}</span>
+                    <CardTitle className="font-headline text-lg leading-tight pr-12">{course.title}</CardTitle>
+                    <div className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground pt-1">
+                      <span>{course.type}</span>
+                      <span className="text-muted-foreground/50">&bull;</span>
+                      <span>{course.difficulty}</span>
+                      <span className="text-muted-foreground/50">&bull;</span>
+                      <span>{course.duration}</span>
                     </div>
                   </CardHeader>
-                  <CardContent className={cn("p-0 flex-1", viewMode === "grid" ? "h-16" : "mt-2")}>
-                    <CardDescription className={cn("text-sm", viewMode === "grid" ? "line-clamp-3" : "line-clamp-2")}>
-                      Explore {course.title.toLowerCase()}, a {course.type.toLowerCase()} designed for {course.difficulty.toLowerCase()} learners.
-                    </CardDescription>
+                  <CardContent className="p-4 pt-0 flex-1">
+                    <p className="text-sm text-muted-foreground line-clamp-3">{course.description}</p>
                   </CardContent>
-                  <CardFooter className="p-0 mt-4">
+                  <CardFooter className="p-4 pt-0 mt-auto">
                     <Link href={`/courses/${course.id}`} passHref className="w-full">
                       <Button className="w-full button-animated-gradient">
                         View Details <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
                   </CardFooter>
-                </div>
-              </Card>
+                </Card>
               )})}
           </div>
         </main>
