@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { UserCircle, LogIn, LayoutDashboard, Info, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ShoppingBag, ChevronDown, Lightbulb, Zap, Link as LinkIcon, HelpCircle } from "lucide-react";
+import { UserCircle, LogIn, LayoutDashboard, Info, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ShoppingBag, ChevronDown, Lightbulb, Zap, HelpCircle } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const mainNavLinks = [
   { href: "/pricing", label: "Pricing", icon: Tag },
@@ -73,7 +74,7 @@ export default function PublicHeader() {
     } catch (error) {
        console.warn("Could not load theme preference from localStorage", error);
        document.documentElement.classList.remove("dark");
-    }
+    };
     // Auth state check placeholder
     // For demo, assume not authenticated or check a simple flag
     // const loggedIn = localStorage.getItem('lmdpro-auth-token'); // Example check
@@ -252,22 +253,3 @@ export default function PublicHeader() {
     </header>
   );
 }
-// Helper Avatar component (usually from ui/avatar)
-const Avatar: React.FC<{ className?: string; children: React.ReactNode }> = ({ className, children }) => (
-  <div className={cn("relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full", className)}>
-    {children}
-  </div>
-);
-const AvatarImage: React.FC<React.ImgHTMLAttributes<HTMLImageElement> & { "data-ai-hint"?: string }> = ({ className, ...props }) => (
-  <img className={cn("aspect-square h-full w-full", className)} {...props} />
-);
-AvatarImage.displayName = "AvatarImage";
-
-const AvatarFallback: React.FC<React.HTMLAttributes<HTMLSpanElement>> = ({ className, ...props }) => (
-  <span
-    className={cn("flex h-full w-full items-center justify-center rounded-full bg-muted", className)}
-    {...props}
-  />
-);
-AvatarFallback.displayName = "AvatarFallback";
-

@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -38,14 +39,14 @@ import {
   FileCode, 
   ShieldCheck, 
   ScrollText,
-  ClipboardList, // Added for Resume Builder
-  Settings2, // Added for Account Settings
-  BookMarked, // Added for My Learning / Favorite Courses
-  Brain, // Added for AI Agent dev
-  FileVideo, // Added for Video creation
-  Library, // Added for Academic Research
-  Network, // Added for API Management
-  Info, // Added for App Docs
+  ClipboardList,
+  Settings2,
+  BookMarked,
+  Brain,
+  FileVideo,
+  Library,
+  Network,
+  Info,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

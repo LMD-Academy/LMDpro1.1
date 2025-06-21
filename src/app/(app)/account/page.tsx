@@ -1,16 +1,18 @@
+
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Shield, CreditCard, Bell, KeyRound, Eye, EyeOff, Linkedin, PlusCircle, Trash2, Edit } from "lucide-react";
+import { User, Shield, CreditCard, Bell, KeyRound, Eye, EyeOff, Linkedin, PlusCircle, Trash2, Edit, CheckCircle } from "lucide-react";
 import { useSearchParams } from 'next/navigation';
 import Link from "next/link"; 
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "@/components/ui/textarea";
 
 interface PaymentMethod {
     id: string;

@@ -38,8 +38,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     React.AnchorHTMLAttributes<HTMLAnchorElement>, // Allow anchor props
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean; // This is for the Button's own Slot behavior
-  // Note: 'href' is part of React.AnchorHTMLAttributes
+  asChild?: boolean;
 }
 
 const Button = React.forwardRef<
