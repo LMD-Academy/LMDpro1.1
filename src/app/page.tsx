@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { getAllCourses } from "@/lib/course-data";
 
 const featureCards = [
   {
@@ -56,11 +57,8 @@ const pricingTiersHomepage = [
   { name: "Teams", price: "$196/mo", model: "Latest Pro AI Models", features: ["All Premium Features", "Team Management & Analytics", "Shared Resources & Brand Kits"], cta: "Choose Teams", href:"/register?tier=teams" },
 ];
 
-const courseHighlights = [
-  { id: "GM_L5_CAP", title: "Executive Leadership Capstone L5", icon: Building, type: "Learning Path", description: "Lead global organizations and master C-suite strategy, large-scale transformation, and executive-level governance.", category: "Leadership" },
-  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", icon: Zap, type: "Learning Path", description: "Comprehensive training from foundational AI principles to designing, building, and deploying advanced autonomous AI agents.", category: "AI & Tech" },
-  { id: "DS_L3", title: "Data Science Specialization L3", icon: BookOpen, type: "Specialization", description: "Core Python data science libraries, data analysis, visualization, and an introduction to machine learning concepts and algorithms.", category: "Data Science" },
-];
+const allCourses = getAllCourses();
+const courseHighlights = allCourses.filter(c => ["AI_AGENT_DEV", "CS_L3", "FBS_L1"].includes(c.id));
 
 const testimonials = [
     { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path in AI was a game-changer. It helped me upskill effectively and secure a promotion. The AI resume builder polished my CV perfectly!", avatarHint: "software engineer", avatarImage: "https://placehold.co/100x100.png" },
@@ -226,7 +224,7 @@ export default function HomePage() {
                     </CardHeader>
                     <CardContent className="flex-grow">
                       <p className="text-xs text-muted-foreground mb-3">Category: {course.category}</p>
-                      <p className="text-sm h-16 overflow-hidden line-clamp-3 text-muted-foreground">{course.description}</p>
+                      <p className="text-sm h-16 overflow-hidden line-clamp-3 text-muted-foreground">{course.overview}</p>
                     </CardContent>
                     <CardFooter className="mt-auto pt-4">
                       <Link href={`/courses/${course.id}`} passHref className="w-full">

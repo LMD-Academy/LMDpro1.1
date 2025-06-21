@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, Share2, ChevronLeft, ChevronRight, Lightbulb, Video, FileText, Brain, Award, Users, Type, ClockIcon, Activity, Volume2, PauseCircle } from "lucide-react"; 
+import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, ChevronLeft, ChevronRight, Lightbulb, Video, FileText, Brain, Activity, Volume2, PauseCircle } from "lucide-react"; 
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,76 +15,11 @@ import { getCourseById } from "@/lib/course-data";
 import { useToast } from "@/hooks/use-toast";
 import { useParams } from "next/navigation";
 
-// In a real app, this data would come from a database/CMS via API calls based on params.id
-const coursesDatabase: Record<string, any> = {
-  "AI_AGENT_DEV": {
-    id: "AI_AGENT_DEV",
-    title: "Autonomous AI Agent Development",
-    description: "A comprehensive program to design, build, evaluate, and deploy autonomous AI agents capable of complex reasoning, planning, and action.",
-    instructor: "Dr. Alex Turing & LMDpro AI",
-    instructorImage: "",
-    instructorTitle: "Lead AI Researcher",
-    rating: 4.9,
-    reviews: 2850,
-    students: 7500,
-    lastUpdated: "August 2024",
-    language: "English",
-    category: "AI Specialization",
-    level: "Advanced",
-    progress: 15, 
-    skills: ["Agentic Architectures", "LLM Orchestration", "Advanced Planning (ReAct, ToT)", "Tool Integration", "Agent Memory Systems"],
-    subCourses: [
-      {
-        id: "ai_module_1_foundations", title: "Module 1: Foundations of Autonomous AI Agents",
-        lessons: [
-          { id: "lesson1_1", title: "The Evolution of Automation to Autonomy", duration: "22 min read", completed: true, type: "reading", content: "This lesson explores the evolution from automation to autonomy..." },
-          { id: "lesson1_2", title: "Core Architectural Pillars", duration: "18 min read", completed: true, type: "reading", content: "We will discuss the core pillars: LLM Brain, Perception, Planning, Action, and Memory." },
-          { id: "lesson1_3", title: "The LLM as the Central Orchestrator", duration: "15 min read", completed: false, type: "reading", content: "Understanding the LLM's role is key..." },
-          { id: "quiz_mod1", title: "Module 1 Quiz", duration: "10 min quiz", completed: false, type: "quiz", content: "This is a quiz for module 1." },
-        ],
-      },
-      {
-        id: "ai_module_2_architectures", title: "Module 2: Designing Agentic Architectures",
-        lessons: [
-          { id: "lesson2_1", title: "Essential System Components", duration: "20 min video", completed: false, type: "video", content: "Video content about system components." },
-          { id: "lesson2_2", title: "Architectural Patterns and Frameworks", duration: "25 min reading", completed: false, type: "reading", content: "Learn about different agent architectures." },
-          { id: "lesson2_3", title: "Learning from Industry Examples", duration: "15 min case study", completed: false, type: "activity", content: "A case study activity." },
-          { id: "quiz_mod2", title: "Module 2 Quiz", duration: "10 min quiz", completed: false, type: "quiz", content: "This is a quiz for module 2." },
-        ],
-      },
-      // ... Add all 8 modules from course_structure.md
-    ],
-  },
-  "CS_L3": {
-    id: "CS_L3",
-    title: "Computer Science Specialization L3",
-    description: "Core concepts in programming (Python), data structures, algorithms, operating systems, and computer networking.",
-    instructor: "Prof. Ada Lovelace",
-    instructorImage: "",
-    instructorTitle: "Professor of Computer Science",
-    rating: 4.8,
-    reviews: 3200,
-    students: 9800,
-    lastUpdated: "July 2024",
-    language: "English",
-    category: "Professional Specialization",
-    level: "Professional",
-    progress: 70,
-    skills: ["Python Programming", "Data Structures", "Algorithm Analysis", "Operating Systems", "Networking Fundamentals"],
-     subCourses: [
-        { id: "cs_mod1", title: "Programming Fundamentals (Python)", lessons: [ { id: "cs1_1", title: "Core Concepts & Syntax", duration: "30 min video", completed: true, type: "video", content: "Video content about python." } ] },
-        { id: "cs_mod2", title: "Data Structures & Algorithms I", lessons: [ { id: "cs2_1", title: "Big O & Linear Structures", duration: "45 min reading", completed: true, type: "reading", content: "Reading about data structures." } ] },
-        { id: "cs_mod3", title: "OS & Networking Fundamentals", lessons: [ { id: "cs3_1", title: "Processes & Protocols", duration: "40 min video", completed: false, type: "video", content: "Video on OS and networking." } ] }
-    ]
-  },
-  // Add other courses here based on course_structure.md if needed for linking
-};
-
 
 export default function CourseViewPage() {
   const params = useParams();
   const id = params.id as string;
-  const course = getCourseById(id) || coursesDatabase["AI_AGENT_DEV"];
+  const course = getCourseById(id);
   const { toast } = useToast();
   
   const initialLesson = course?.subCourses?.[0]?.lessons?.[0] || null;
@@ -93,9 +28,10 @@ export default function CourseViewPage() {
   
   useEffect(() => {
     // If the course or initial lesson changes (e.g., due to different ID), reset the state
-    const newInitialLesson = course?.subCourses?.[0]?.lessons?.[0] || null;
+    const newCourse = getCourseById(id);
+    const newInitialLesson = newCourse?.subCourses?.[0]?.lessons?.[0] || null;
     setCurrentLesson(newInitialLesson);
-  }, [id, course]);
+  }, [id]);
 
   const currentModule = course?.subCourses?.find(m => m.lessons?.some(l => l.id === currentLesson?.id));
 

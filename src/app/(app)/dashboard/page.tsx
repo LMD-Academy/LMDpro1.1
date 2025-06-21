@@ -4,7 +4,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, Lightbulb, TrendingUp, Zap, Brain, Handshake, Activity } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, Lightbulb, TrendingUp, Zap, Activity } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
   ChartContainer,
@@ -12,23 +12,12 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { PieChart, Pie, Cell } from "recharts";
+import { getAllCourses } from "@/lib/course-data";
 
-
-const ongoingCourses = [
-  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", progress: 45, icon: Brain, type: "Learning Path" },
-  { id: "CS_L3", title: "Computer Science Specialization L3", progress: 70, icon: Handshake, type: "Course"},
-  { id: "PYTHON_DS", title: "Python for Data Science & ML", progress: 80, icon: BookOpen, type: "Course" },
-];
-
-const completedCourses = [
-  { id: "ux", title: "Introduction to UX Design Principles", date: "July 10, 2024" },
-  { id: "pm", title: "Project Management Essentials", date: "June 22, 2024" },
-];
-
-const favoriteCourses = [
-  { id: "DS_L4", title: "Data Science Advanced L4", category: "Technology" },
-  { id: "GM_L5_CAP", title: "General Management Executive Capstone L5", category: "Leadership" },
-];
+const allCourses = getAllCourses();
+const ongoingCourses = allCourses.slice(0, 3).map((c, i) => ({ ...c, progress: [45, 70, 80][i] }));
+const completedCourses = allCourses.slice(3, 5).map((c, i) => ({ ...c, completionDate: ["July 10, 2024", "June 22, 2024"][i] }));
+const favoriteCourses = allCourses.slice(5, 7);
 
 const activityFeedItems = [
   { id: "act1", text: "Completed 'Module 3: Deep Learning' in Advanced AI course.", time: "2 hours ago", icon: CheckCircle },
@@ -215,7 +204,7 @@ export default function DashboardPage() {
                     <CardContent className="space-y-2">
                         {completedCourses.length > 0 ? completedCourses.map(course => (
                             <p key={course.id} className="text-sm p-2 border rounded-md bg-muted/30">
-                                {course.title} - <span className="text-xs text-muted-foreground">Completed: {course.date}</span>
+                                {course.title} - <span className="text-xs text-muted-foreground">Completed: {course.completionDate}</span>
                             </p>
                         )) : <p className="text-sm text-muted-foreground">No courses completed yet.</p>}
                     </CardContent>

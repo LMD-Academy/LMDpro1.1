@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const mainNavLinks = [
   { href: "/pricing", label: "Pricing", icon: Tag },
-  { href: "/docs", label: "Documentation", icon: BookOpen },
+  { href: "/docs", label: "Docs", icon: BookOpen },
   { href: "/about", label: "About Us", icon: Users },
 ];
 
