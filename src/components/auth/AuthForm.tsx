@@ -23,7 +23,7 @@ interface AuthFormProps {
 export default function AuthForm({ mode }: AuthFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { toast } = useToast();
+  const { toast } = useToast(); // For showing messages
 
   const socialButtons = [
     { name: "Google", icon: Chrome, action: () => toast({title: "Social Login", description: "Continuing with Google (placeholder)..."}) },
@@ -173,4 +173,10 @@ export default function AuthForm({ mode }: AuthFormProps) {
             Already have an account?&nbsp;
             <Link href="/login" passHref>
               <Button variant="link" className="p-0 h-auto font-normal text-primary hover:text-primary/80">Sign in</Button>
-            </Link
+            </Link>
+          </>
+        )}
+      </CardFooter>
+    </Card>
+  );
+}
