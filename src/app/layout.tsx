@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import AnimatedGradientBackground from '@/components/layout/AnimatedGradientBackground';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -20,10 +19,9 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Source+Code+Pro:wght@400;500&family=Almarai:wght@400;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&family=Inter:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
       </head>
-      <body className={cn("font-body antialiased flex flex-col min-h-screen")}>
-        <AnimatedGradientBackground /> 
+      <body className={cn("font-body antialiased flex flex-col min-h-screen bg-background")}>
         <SidebarProvider defaultOpen={true}>
           <div className="relative z-10 flex flex-col flex-1">
             {children}

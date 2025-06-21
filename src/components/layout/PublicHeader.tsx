@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, Languages } from "lucide-react";
+import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, Languages, HelpCircle } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -190,7 +190,7 @@ export default function PublicHeader() {
                 <Button variant="ghost">Login</Button>
               </Link>
               <Link href="/register" passHref>
-                <Button className="button-animated-gradient">Get Started Free</Button>
+                <Button className="button-animated-gradient animate-glow">Get Started Free</Button>
               </Link>
             </>
           )}
@@ -225,6 +225,10 @@ export default function PublicHeader() {
                     {link.label}
                   </Link>
                 ))}
+                 <Link href="/support" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
+                    <HelpCircle className="h-5 w-5" />
+                    Support
+                </Link>
                 <hr className="my-2" />
                 {isAuthenticated ? (
                     <>

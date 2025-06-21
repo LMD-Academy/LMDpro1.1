@@ -36,6 +36,7 @@ import {
   Sparkles,
   Languages,
   Send,
+  FileVideo,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -271,7 +272,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                     <Avatar className="h-9 w-9">
-                        <AvatarImage src="" alt="@user" />
+                        <AvatarImage src="https://placehold.co/100x100.png" alt="@user" />
                         <AvatarFallback>U</AvatarFallback>
                     </Avatar>
                     </Button>

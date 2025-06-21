@@ -156,17 +156,18 @@ export default function HomePage() {
       <div className="flex flex-1">
         <main className="flex-1">
           {/* Hero Section */}
-          <section className="relative pt-0 text-center bg-card/50 dark:bg-card/80">
+          <section className="relative pt-0 text-center">
+            <div className="absolute inset-0 -z-10 animated-liquid-gradient"></div>
             <div className="container mx-auto px-4 pt-24 md:pt-28 lg:pt-32 pb-16 md:pb-24">
-              <h1 className="text-5xl md:text-7xl font-headline font-bold mb-6 animated-text-gradient">
+              <h1 className="text-5xl md:text-7xl font-headline font-bold mb-6 text-primary-foreground dark:text-primary-foreground">
                 Unlock Your Potential with LMDpro
               </h1>
-              <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10">
+              <p className="text-lg md:text-xl text-primary-foreground/80 max-w-3xl mx-auto mb-10">
                 Your AI-powered partner for personalized learning, skill enhancement, and career advancement. Experience the future of education, tailored to you, by an advanced AI-driven agentic system.
               </p>
               <Link href="/register" passHref>
-                <Button size="lg" className="button-animated-gradient text-lg px-10 py-6">
-                  Start Your Learning Path <ArrowRight className="ml-2 h-5 w-5" />
+                <Button size="lg" className="button-animated-gradient text-lg px-10 py-6 animate-glow">
+                  Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
             </div>

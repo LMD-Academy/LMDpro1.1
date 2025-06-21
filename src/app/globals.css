@@ -4,25 +4,24 @@
 
 @layer base {
   :root {
-    --background: 271 33% 92%; /* Light-scheme desaturated blue for overall page background */
-    --foreground: 240 10% 3.9%; /* Dark text for light background */
+    --background: 271 33% 92%;
+    --foreground: 240 10% 3.9%;
     
-    --card: 0 0% 100%; /* White cards for a clean look on the light background */
+    --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
     
-    --primary: 340 9% 16%; /* #2e2427 - A deep, near-black blue/purple */
+    --primary: 340 9% 16%; 
     --primary-foreground: 0 0% 98%;
     
-    --secondary: 240 4.8% 95.9%; /* A light gray for secondary elements */
+    --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
     
-    /* Analogous Green (#202632) -> HSL(222, 23%, 16%) */
     --accent: 222 23% 16%; 
     --accent-foreground: 0 0% 98%;
     
@@ -33,16 +32,12 @@
     --input: 240 5.9% 90%;
     --ring: 340 9% 40%;
     
-    --radius: 0.75rem; /* Slightly larger radius for a modern feel */
+    --radius: 0.75rem;
 
-    /* Main app area background for authenticated view - Desaturated blue #9f79bf -> HSL(271, 33%, 75%) */
-    --app-background-light: 271 33% 75%;
-
-    /* Light theme gradient colors for animations - Vibrant Blue (#2e2427) to Analogous Green (#202632) */
-    --gradient-color-1: 340 9% 16%;   /* primary */
-    --gradient-color-2: 295 20% 30%;  /* A purple tone between primary and accent */
-    --gradient-color-3: 222 23% 16%;  /* accent */
-    --gradient-color-4: 271 33% 50%;  /* A lighter, more vibrant purple like the app background */
+    --gradient-color-1: 340 9% 16%;
+    --gradient-color-2: 295 20% 30%;
+    --gradient-color-3: 222 23% 16%;
+    --gradient-color-4: 271 33% 50%;
 
     --font-sans: 'Inter', sans-serif;
     --font-heading: 'Space Grotesk', sans-serif;
@@ -51,16 +46,16 @@
   }
 
   .dark {
-    --background: 222 23% 8%; /* Darker version of accent */
+    --background: 222 23% 8%;
     --foreground: 0 0% 98%;
 
-    --card: 222 23% 12%; /* Slightly lighter than dark background */
+    --card: 222 23% 12%;
     --card-foreground: 0 0% 98%;
 
     --popover: 222 23% 10%;
     --popover-foreground: 0 0% 98%;
     
-    --primary: 340 9% 70%; /* Lighter version of primary for dark mode */
+    --primary: 340 9% 70%;
     --primary-foreground: 340 9% 10%;
     
     --secondary: 240 3.7% 15.9%;
@@ -69,7 +64,7 @@
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
     
-    --accent: 222 23% 50%; /* Lighter accent */
+    --accent: 222 23% 50%;
     --accent-foreground: 0 0% 98%;
     
     --destructive: 0 62.8% 30.6%;
@@ -80,10 +75,7 @@
     --ring: 340 9% 60%;
     
     --radius: 0.75rem;
-
-    --app-background-light: 222 23% 10%; /* Darker app background */
     
-    /* Dark theme gradient colors - deeper, more intense */
     --gradient-color-1: 340 15% 20%;
     --gradient-color-2: 271 33% 25%;
     --gradient-color-3: 222 25% 12%;
@@ -104,11 +96,6 @@
     font-family: var(--font-arabic);
   }
   
-  /* Specific background for the authenticated app area */
-  .app-area-background {
-     background-color: hsl(var(--app-background-light));
-  }
-
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
   }

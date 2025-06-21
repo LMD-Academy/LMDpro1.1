@@ -8,7 +8,7 @@ export default {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    container: { // Added for easy centering of page content
+    container: {
       center: true,
       padding: "2rem",
       screens: {
@@ -20,6 +20,7 @@ export default {
         body: ['Inter', 'sans-serif'],
         headline: ['Space Grotesk', 'sans-serif'],
         code: ['Source Code Pro', 'monospace'],
+        arabic: ['Almarai', 'sans-serif'],
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -110,6 +111,11 @@ export default {
           '50%': { 'background-position': '100% 50%' },
           '100%': { 'background-position': '0% 50%' },
         },
+         'glowing': {
+          '0%': { 'box-shadow': '0 0 4px hsl(var(--primary) / 0.5)' },
+          '50%': { 'box-shadow': '0 0 16px hsl(var(--primary))' },
+          '100%': { 'box-shadow': '0 0 4px hsl(var(--primary) / 0.5)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -117,6 +123,7 @@ export default {
         'text-gradient': 'text-gradient-animation 4s linear infinite', 
         'liquid-gradient': 'gradientBG 20s ease infinite', 
         'gradient-border-flow': 'animated-gradient-border-flow 3s infinite linear',
+        'glow': 'glowing 2.5s ease-in-out infinite',
       },
     },
   },
