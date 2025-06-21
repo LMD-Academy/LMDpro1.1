@@ -33,7 +33,7 @@ const coursesDatabase: Record<string, any> = {
     level: "Advanced",
     progress: 15, 
     skills: ["Agentic Architectures", "LLM Orchestration", "Advanced Planning (ReAct, ToT)", "Tool Integration", "Agent Memory Systems"],
-    modules: [
+    subCourses: [
       {
         id: "ai_module_1_foundations", title: "Module 1: Foundations of Autonomous AI Agents",
         lessons: [
@@ -71,7 +71,7 @@ const coursesDatabase: Record<string, any> = {
     level: "Professional",
     progress: 70,
     skills: ["Python Programming", "Data Structures", "Algorithm Analysis", "Operating Systems", "Networking Fundamentals"],
-     modules: [
+     subCourses: [
         { id: "cs_mod1", title: "Programming Fundamentals (Python)", lessons: [ { id: "cs1_1", title: "Core Concepts & Syntax", duration: "30 min video", completed: true, type: "video", content: "Video content about python." } ] },
         { id: "cs_mod2", title: "Data Structures & Algorithms I", lessons: [ { id: "cs2_1", title: "Big O & Linear Structures", duration: "45 min reading", completed: true, type: "reading", content: "Reading about data structures." } ] },
         { id: "cs_mod3", title: "OS & Networking Fundamentals", lessons: [ { id: "cs3_1", title: "Processes & Protocols", duration: "40 min video", completed: false, type: "video", content: "Video on OS and networking." } ] }
@@ -87,11 +87,18 @@ export default function CourseViewPage() {
   const course = getCourseById(id) || coursesDatabase["AI_AGENT_DEV"];
   const { toast } = useToast();
   
-  // Placeholder for current lesson logic
-  const [currentLesson, setCurrentLesson] = useState(course.modules[0].lessons[2]); 
+  const initialLesson = course?.subCourses?.[0]?.lessons?.[0] || null;
+  const [currentLesson, setCurrentLesson] = useState(initialLesson); 
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const currentModule = course.modules.find(m => m.lessons.some(l => l.id === currentLesson.id));
   
+  useEffect(() => {
+    // If the course or initial lesson changes (e.g., due to different ID), reset the state
+    const newInitialLesson = course?.subCourses?.[0]?.lessons?.[0] || null;
+    setCurrentLesson(newInitialLesson);
+  }, [id, course]);
+
+  const currentModule = course?.subCourses?.find(m => m.lessons.some(l => l.id === currentLesson?.id));
+
   const handleTextToSpeech = (textToSpeak: string) => {
     if ('speechSynthesis' in window) {
       if (window.speechSynthesis.speaking) {
@@ -115,7 +122,7 @@ export default function CourseViewPage() {
   useEffect(() => {
       // Cancel speech synthesis on component unmount or when lesson changes
       return () => {
-          if(window.speechSynthesis.speaking){
+          if ('speechSynthesis' in window && window.speechSynthesis.speaking){
               window.speechSynthesis.cancel();
               setIsSpeaking(false);
           }
@@ -131,6 +138,24 @@ export default function CourseViewPage() {
         case "activity": return <Activity className="h-4 w-4 mr-2 text-muted-foreground shrink-0" />;
         default: return <PlayCircle className="h-4 w-4 mr-2 text-muted-foreground shrink-0" />;
     }
+  }
+  
+  if (!course || !currentLesson) {
+    return (
+        <div className="flex items-center justify-center h-full">
+            <Card className="shadow-lg rounded-xl">
+                <CardHeader>
+                    <CardTitle className="font-headline">Course Not Found</CardTitle>
+                    <CardDescription>The course you are looking for does not exist or has no lessons.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Link href="/courses">
+                        <Button className="button-animated-gradient">Back to Course Catalog</Button>
+                    </Link>
+                </CardContent>
+            </Card>
+        </div>
+    );
   }
 
   return (
@@ -201,7 +226,7 @@ export default function CourseViewPage() {
                       <ul className="list-disc list-inside text-muted-foreground space-y-1 pl-2">
                           <li>Understand the core principles of {currentLesson.title.toLowerCase()}.</li>
                           <li>Apply techniques related to {currentLesson.title.toLowerCase()} in practical scenarios.</li>
-                          <li>Analyze the impact of {currentLesson.title.toLowerCase()} within {course.category.toLowerCase()}.</li>
+                          <li>Analyze the impact of {currentLesson.title.toLowerCase()} within {course.category?.toLowerCase() || 'this field'}.</li>
                       </ul>
                   </div>
                   <div>
@@ -284,7 +309,7 @@ export default function CourseViewPage() {
           </CardHeader>
           <CardContent className="max-h-[calc(100vh-20rem)] overflow-y-auto"> {/* Adjust max-h as needed */}
             <Accordion type="single" collapsible defaultValue={currentModule?.id} className="w-full">
-              {course.modules.map((moduleItem: any) => (
+              {course.subCourses && course.subCourses.map((moduleItem: any) => (
                 <AccordionItem value={moduleItem.id} key={moduleItem.id}>
                   <AccordionTrigger className="font-semibold hover:no-underline text-base">
                     {moduleItem.title}
