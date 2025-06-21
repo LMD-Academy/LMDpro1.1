@@ -4,7 +4,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, Zap, Users, Building, Award as StudentCapIcon, Gem, ShieldCheck as ShieldIcon } from "lucide-react"; 
+import { CheckCircle, Zap, Users, Building, GraduationCap as StudentCapIcon, Gem } from "lucide-react"; 
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
 import Link from "next/link";
@@ -307,4 +307,11 @@ export default function PricingPage() {
                   <p className="text-muted-foreground">For users on our free Community tier, exported PDF resumes will include a subtle "Made with LMDpro" watermark. Premium, Teams, Enterprise, and verified Non-Profit/Student users can export resumes without this watermark, offering a fully professional presentation.</p>
                 </CardContent>
               </Card>
-            
+            </div>
+          </section>
+        </div>
+      </main>
+      <PublicFooter />
+    </>
+  );
+}

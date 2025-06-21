@@ -87,12 +87,12 @@ export default function AccountSettingsPage() {
       </section>
 
       <Tabs defaultValue={initialTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-          <TabsTrigger value="profile"><User className="mr-2 h-4 w-4 sm:inline hidden" />Profile</TabsTrigger>
-          <TabsTrigger value="security"><Shield className="mr-2 h-4 w-4 sm:inline hidden" />Security</TabsTrigger>
-          <TabsTrigger value="subscription"><CreditCard className="mr-2 h-4 w-4 sm:inline hidden" />Subscription & Payments</TabsTrigger>
-          <TabsTrigger value="notifications"><Bell className="mr-2 h-4 w-4 sm:inline hidden" />Notifications</TabsTrigger>
-          <TabsTrigger value="apikeys"><KeyRound className="mr-2 h-4 w-4 sm:inline hidden" />API Keys</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+          <TabsTrigger value="profile"><User className="mr-2 h-4 w-4" />Profile</TabsTrigger>
+          <TabsTrigger value="security"><Shield className="mr-2 h-4 w-4" />Security</TabsTrigger>
+          <TabsTrigger value="subscription"><CreditCard className="mr-2 h-4 w-4" />Subscription</TabsTrigger>
+          <TabsTrigger value="notifications"><Bell className="mr-2 h-4 w-4" />Notifications</TabsTrigger>
+          <TabsTrigger value="apikeys"><KeyRound className="mr-2 h-4 w-4" />API Keys</TabsTrigger>
         </TabsList>
 
         <TabsContent value="profile">
@@ -188,7 +188,7 @@ export default function AccountSettingsPage() {
                 <h3 className="font-semibold mb-1">Current Plan: <span className="text-primary font-bold">Premium</span></h3>
                 <p className="text-sm text-muted-foreground">Renews on: August 20, 2024 (Example Date)</p>
                 <p className="text-sm text-muted-foreground">Price: $5.80/month (Example Price)</p>
-                <div className="mt-3 space-x-2">
+                <div className="mt-3 flex flex-wrap gap-2">
                     <Link href="/pricing" passHref>
                         <Button variant="outline">Change Plan</Button>
                     </Link>
@@ -202,7 +202,7 @@ export default function AccountSettingsPage() {
                 <h3 className="font-semibold mb-3">Payment Methods</h3>
                 {paymentMethods.length > 0 ? (
                     paymentMethods.map(pm => (
-                        <div key={pm.id} className="p-3 border rounded-lg bg-muted/30 flex justify-between items-center mb-2 shadow-sm">
+                        <div key={pm.id} className="p-3 border rounded-lg bg-muted/30 flex flex-col sm:flex-row justify-between sm:items-center mb-2 shadow-sm gap-2">
                             <div className="flex items-center gap-3">
                                 <CreditCard className="h-6 w-6 text-muted-foreground" />
                                 <div>
@@ -210,7 +210,7 @@ export default function AccountSettingsPage() {
                                     <p className="text-xs text-muted-foreground">Expires: {pm.expiry}</p>
                                 </div>
                             </div>
-                            <div className="flex gap-1">
+                            <div className="flex gap-1 self-end sm:self-center">
                                 {!pm.isDefault && <Button variant="ghost" size="sm" onClick={() => handleSetDefaultPaymentMethod(pm.id)} title="Set as Default"><CheckCircle className="h-4 w-4"/></Button>}
                                 <Button variant="ghost" size="sm" onClick={() => toast({title:"Edit Payment", description:"Edit payment method functionality placeholder."})} title="Edit"><Edit className="h-4 w-4"/></Button>
                                 <Button variant="ghost" size="sm" onClick={() => handleRemovePaymentMethod(pm.id)} title="Remove"><Trash2 className="h-4 w-4 text-destructive"/></Button>
@@ -229,12 +229,12 @@ export default function AccountSettingsPage() {
                 <h3 className="font-semibold mb-2">Billing History</h3>
                 <p className="text-sm text-muted-foreground">Your past invoices will appear here. (No invoices yet - example).</p>
                  {/* Example of an invoice item - loop through these in a real app */}
-                <div className="mt-2 p-3 border rounded-lg bg-muted/30 flex justify-between items-center text-sm shadow-sm">
+                <div className="mt-2 p-3 border rounded-lg bg-muted/30 flex flex-col sm:flex-row justify-between sm:items-center text-sm shadow-sm gap-2">
                     <div>
                         <p className="font-medium">Invoice #LMDPRO-2024-001 - July 20, 2024</p>
                         <p className="text-xs text-muted-foreground">Premium Plan - Monthly Subscription Renewal</p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-left sm:text-right mt-2 sm:mt-0">
                         <p className="font-semibold">$5.80</p>
                         <Button variant="link" size="sm" className="p-0 h-auto text-primary hover:underline" onClick={() => toast({title:"Download Invoice", description:"PDF download functionality placeholder."})}>Download PDF</Button>
                     </div>
@@ -252,22 +252,22 @@ export default function AccountSettingsPage() {
               <CardDescription>Manage how you receive updates and communications from LMDpro.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-3 border rounded-lg shadow-sm">
-                <div>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg shadow-sm gap-2">
+                <div className="flex-1">
                     <Label htmlFor="email-course-updates" className="font-medium">Course Progress & Updates</Label>
                     <p className="text-xs text-muted-foreground">Receive emails about your course progress, new lesson availability, and instructor announcements.</p>
                 </div>
                 <Switch id="email-course-updates" defaultChecked />
               </div>
-               <div className="flex items-center justify-between p-3 border rounded-lg shadow-sm">
-                <div>
+               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg shadow-sm gap-2">
+                <div className="flex-1">
                     <Label htmlFor="email-promotions" className="font-medium">Promotions & New Features</Label>
                     <p className="text-xs text-muted-foreground">Get notified about new LMDpro features, special offers, and platform news.</p>
                 </div>
                 <Switch id="email-promotions" />
               </div>
-               <div className="flex items-center justify-between p-3 border rounded-lg shadow-sm">
-                <div>
+               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 border rounded-lg shadow-sm gap-2">
+                <div className="flex-1">
                     <Label htmlFor="inapp-achievements" className="font-medium">In-App Skill Achievements</Label>
                     <p className="text-xs text-muted-foreground">See in-app notifications when you complete a module or acquire a new skill.</p>
                 </div>

@@ -7,23 +7,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Filter, List, Grid, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, ImageIcon, Video, FileText, Library, BookMarked, Lightbulb, Network, Info, Brain, FileVideo as FileVideoIcon, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText } from "lucide-react"; 
+import { ArrowRight, Filter, List, Grid, Search, GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, ImageIcon, Video, FileText as FileTextIcon, Library, BookMarked, Lightbulb, Network, Info, Brain, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText } from "lucide-react"; 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-const courseIcons = {
-    GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, Video, FileTextIcon, Library, BookMarked, Lightbulb, Network, Info, Brain, FileVideoIcon, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText
+const courseIcons: { [key: string]: React.ElementType } = {
+    GraduationCap, BookCopy, ShieldCheck, Zap, Users, Building, Video, FileTextIcon, Library, BookMarked, Lightbulb, Network, Info, Brain, Briefcase, ClipboardList, Settings2, HelpCircle, ScrollText, ImageIcon
 };
 
 const allCourses = [
-  { id: "FBS_L1", title: "Foundational Business Skills L1", category: "CORE_L1", difficulty: "Beginner", duration: "15 Weeks", type: "Standalone Course", icon: "GraduationCap", imageHint: "business foundations book" },
-  { id: "AMC_L2", title: "Applied Management & Communication L2", category: "CORE_L2", difficulty: "Intermediate", duration: "10 Weeks", type: "Standalone Course", icon: "Briefcase", imageHint: "team communication" },
-  { id: "AB_L3", title: "Agile Business Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "12 Weeks", type: "Specialization", icon: "Zap", imageHint: "agile board planning" },
-  { id: "CS_L3", title: "Computer Science Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "18 Weeks", type: "Specialization", icon: "Zap", imageHint: "computer code screen" },
-  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", category: "AI_SPEC", difficulty: "Advanced", duration: "20 Weeks", type: "Learning Path", icon: "Brain", imageHint: "ai robot brain" },
-  { id: "PYTHON_DS", title: "Python for Data Science", category: "TECH_DEV", difficulty: "Intermediate", duration: "10 Weeks", type: "Standalone Course", icon: "BookCopy", imageHint: "python data charts" },
-  { id: "LEAD_FOUND", title: "Foundations of Effective Leadership", category: "LEAD_MGMT_FUND", difficulty: "Beginner", duration: "8 Weeks", type: "Standalone Course", icon: "Users", imageHint: "leadership speech" },
-  { id: "GM_L5_CAP", title: "General Management Executive Capstone L5", category: "EXEC_L5", difficulty: "Executive", duration: "24 Weeks", type: "Capstone", icon: "Building", imageHint: "ceo office view" },
+  { id: "FBS_L1", title: "Foundational Business Skills L1", category: "CORE_L1", difficulty: "Beginner", duration: "15 Weeks", type: "Standalone Course", icon: "GraduationCap" },
+  { id: "AMC_L2", title: "Applied Management & Communication L2", category: "CORE_L2", difficulty: "Intermediate", duration: "10 Weeks", type: "Standalone Course", icon: "Briefcase" },
+  { id: "AB_L3", title: "Agile Business Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "12 Weeks", type: "Specialization", icon: "Zap" },
+  { id: "CS_L3", title: "Computer Science Specialization L3", category: "PROF_L3", difficulty: "Professional", duration: "18 Weeks", type: "Specialization", icon: "Network" },
+  { id: "AI_AGENT_DEV", title: "Autonomous AI Agent Development", category: "AI_SPEC", difficulty: "Advanced", duration: "20 Weeks", type: "Learning Path", icon: "Brain" },
+  { id: "PYTHON_DS", title: "Python for Data Science", category: "TECH_DEV", difficulty: "Intermediate", duration: "10 Weeks", type: "Standalone Course", icon: "BookCopy" },
+  { id: "LEAD_FOUND", title: "Foundations of Effective Leadership", category: "LEAD_MGMT_FUND", difficulty: "Beginner", duration: "8 Weeks", type: "Standalone Course", icon: "Users" },
+  { id: "GM_L5_CAP", title: "General Management Executive Capstone L5", category: "EXEC_L5", difficulty: "Executive", duration: "24 Weeks", type: "Capstone", icon: "Building" },
 ];
 
 const categories = [
@@ -75,7 +75,7 @@ export default function CoursesCatalogPage() {
 
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Filters Column */}
-        <aside className="lg:w-1/4 space-y-6 p-1">
+        <aside className="lg:w-1/4 xl:w-1/5 space-y-6 p-1">
           <Card className="shadow-md sticky top-20">
             <CardHeader>
               <CardTitle className="font-headline flex items-center gap-2"><Filter className="h-5 w-5"/> Filters</CardTitle>
@@ -135,7 +135,7 @@ export default function CoursesCatalogPage() {
         </aside>
 
         {/* Courses Column */}
-        <main className="lg:w-3/4">
+        <main className="lg:w-3/4 xl:w-4/5">
           <div className="flex justify-between items-center mb-6">
             <p className="text-muted-foreground">{filteredCourses.length} courses found</p>
             <div className="flex items-center gap-2">
@@ -158,7 +158,7 @@ export default function CoursesCatalogPage() {
 
           <div className={cn(
             "gap-6",
-            viewMode === "grid" ? "grid md:grid-cols-2 xl:grid-cols-3" : "space-y-4"
+            viewMode === "grid" ? "grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "space-y-4"
           )}>
             {filteredCourses.map(course => {
               const IconComponent = courseIcons[course.icon as keyof typeof courseIcons] || ImageIcon;
@@ -171,7 +171,7 @@ export default function CoursesCatalogPage() {
                 )}
               >
                 {viewMode === "list" && (
-                    <div className="w-full sm:w-20 flex-shrink-0 bg-muted/50 flex items-center justify-center p-4 rounded-l-lg">
+                    <div className="w-full sm:w-20 flex-shrink-0 bg-muted/50 flex items-center justify-center p-4 rounded-t-lg sm:rounded-l-lg sm:rounded-tr-none">
                         <IconComponent className="h-10 w-10 text-primary" />
                     </div>
                 )}

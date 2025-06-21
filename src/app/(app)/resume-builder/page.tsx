@@ -18,11 +18,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Loader2, Linkedin, Upload, Download, Sparkles, FileText, Brush, PlusCircle, Trash2, Info } from "lucide-react";
+import { Loader2, Linkedin, Download, Sparkles, FileText, PlusCircle, Trash2, Info } from "lucide-react";
 import { improveResume, type ImproveResumeOutput } from "@/ai/flows/improve-resume";
 import { useToast } from "@/hooks/use-toast";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const experienceSchema = z.object({
   id: z.string().optional(),
@@ -228,10 +228,10 @@ export default function ResumeBuilderPage() {
   };
 
   const templates = [
-    { id: "modern", name: "Modern", imageHint: "modern resume design" },
-    { id: "classic", name: "Classic", imageHint: "classic resume layout" },
-    { id: "creative", name: "Creative", imageHint: "creative resume style" },
-    { id: "technical", name: "Technical", imageHint: "technical resume format" },
+    { id: "modern", name: "Modern" },
+    { id: "classic", name: "Classic" },
+    { id: "creative", name: "Creative" },
+    { id: "technical", name: "Technical" },
   ];
 
   return (
@@ -316,9 +316,9 @@ export default function ResumeBuilderPage() {
 
                   {/* Skills Section */}
                   <Card className="p-4 border-primary/20">
-                    <div className="flex justify-between items-center mb-3">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 gap-2">
                         <h3 className="font-headline text-lg text-primary">Skills</h3>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap">
                             <Button type="button" variant="outline" size="sm" onClick={handleAddLMDproSkills}><Info className="mr-2 h-4 w-4"/>Add LMDpro Skills</Button>
                             <Button type="button" variant="outline" size="sm" onClick={() => appendSkill({ name: "", description: "" })}><PlusCircle className="mr-2 h-4 w-4"/>Add Skill</Button>
                         </div>
@@ -413,7 +413,8 @@ export default function ResumeBuilderPage() {
                   aria-pressed={selectedTemplate === template.id}
                 >
                   <div className="w-full h-full bg-muted/40 flex items-center justify-center rounded">
-                    <Image src={`https://placehold.co/150x200.png?text=${template.name}`} alt={template.name} width={100} height={133} className="rounded object-contain" data-ai-hint={template.imageHint} />
+                     {/* Using a simple div instead of Image to remove dependency */}
+                    <div className="w-24 h-32 flex items-center justify-center text-xs text-muted-foreground">{template.name}</div>
                   </div>
                   <p className="text-xs text-center mt-1.5 font-medium">{template.name}</p>
                 </button>
@@ -447,4 +448,7 @@ export default function ResumeBuilderPage() {
             </CardFooter>
           </Card>
         </div>
-      
+      </div>
+    </div>
+  );
+}
