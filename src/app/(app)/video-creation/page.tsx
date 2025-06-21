@@ -352,7 +352,7 @@ export default function VideoCreationPage() {
                      <div>
                         <Label>Voice-Over Language</Label>
                         <Input value={languages.find(l => l.value === form.getValues().language)?.label || "English (US)"} readOnly disabled className="mt-1 bg-muted/50"/>
-                        <FormDescription className="text-xs">Language is based on script settings. More voice options coming soon!</FormDescription>
+                        <p className="text-xs text-muted-foreground mt-1">Language is based on script settings. More voice options coming soon!</p>
                      </div>
 
 
