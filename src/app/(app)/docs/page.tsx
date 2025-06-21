@@ -2,7 +2,7 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, FileText, BookMarked, Search, Code, FolderTree, ChevronRight } from "lucide-react";
+import { BookOpen, FileText, BookMarked, Search, Code, FolderTree, ChevronRight, Zap, Brain, Settings2, HelpCircle } from "lucide-react";
 import Link from "next/link";
 import {
   Accordion,
@@ -176,9 +176,3 @@ export default function AppDocumentationPage() {
     </div>
   );
 }
-
-// Placeholder icons for components if not already in lucide-react, or if specific ones are needed
-const Zap = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>;
-const Brain = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.676.75.75 0 01.819.162l3.962 3.962c.407.406.407 1.06 0 1.467l-2.829 2.828a1 1 0 01-1.414 0l-4.242-4.242a.75.75 0 00-1.061 0c-1.106 1.105-2.94 1.105-4.046 0s-1.106-2.94 0-4.046a.75.75 0 000-1.06l-4.242-4.243a1 1 0 010-1.414l2.828-2.828c.408-.407 1.062-.407 1.468 0l3.962 3.962z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 6a1 1 0 011-1h1a1 1 0 110 2h-1a1 1 0 01-1-1z"></path></svg>;
-const Settings2 = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>;
-const HelpCircle = (props: React.SVGProps<SVGSVGElement>) => <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.755 4 3.92C16 12.805 14.5 14 12 14m0 0v1m0-6.953c0-1.349.912-2.14 2.218-2.14 .224 0 .66.106.865.227M8 19a4 4 0 004 4h0a4 4 0 004-4m0-4a4 4 0 00-4-4h0a4 4 0 
