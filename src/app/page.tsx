@@ -228,7 +228,7 @@ export default function HomePage() {
                   <CardContent className="pt-6">
                     <div className="flex items-center mb-4">
                       <Avatar className="h-12 w-12 mr-4">
-                        <AvatarImage src={testimonial.avatarImage} alt={testimonial.name} data-ai-hint={testimonial.avatarHint} />
+                        <AvatarImage src={testimonial.avatarImage} alt={testimonial.name} />
                         <AvatarFallback>{testimonial.name.split(' ').map(n=>n[0]).join('')}</AvatarFallback>
                       </Avatar>
                       <div>
@@ -251,7 +251,7 @@ export default function HomePage() {
             <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-10">
               Explore LMDpro and discover how our AI-driven platform can accelerate your learning and professional growth. Sign up today and take the first step towards a brighter future.
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-10">
                 {quickLinks.map(link => (
                     <Link key={link.label} href={link.href} passHref>
                         <Button variant="outline" className="w-full h-20 flex-col gap-1 text-xs sm:text-sm hover:bg-primary/5 hover:text-primary border-border hover:border-primary/30">

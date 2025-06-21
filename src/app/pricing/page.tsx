@@ -8,6 +8,7 @@ import { CheckCircle, Zap, Users, Building, GraduationCap as StudentCapIcon, Gem
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
 import Link from "next/link";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface TierFeature {
   text: string;
@@ -178,7 +179,7 @@ export default function PricingPage() {
             </p>
           </section>
 
-          <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 items-stretch mb-20">
+          <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 mb-20">
             {tiers.map((tier) => (
               <Card key={tier.id} className={`flex flex-col shadow-xl hover:scale-105 transform transition-all duration-300 rounded-xl overflow-hidden ${tier.highlight ? 'border-primary ring-2 ring-primary bg-card' : 'border-border bg-card'} ${tier.popular ? 'relative' : ''}`}>
                 {tier.popular && (
@@ -223,46 +224,45 @@ export default function PricingPage() {
 
           <section className="mb-24">
             <h2 className="text-3xl font-headline font-semibold text-center mb-12 animated-text-gradient">Detailed Feature Comparison</h2>
-            <Card className="shadow-lg overflow-x-auto rounded-xl">
-                <table className="min-w-full divide-y divide-border">
-                    <thead className="bg-muted/50 dark:bg-muted/30">
-                        <tr>
-                            <th scope="col" className="px-4 py-3.5 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider sticky left-0 bg-muted/50 dark:bg-muted/30 z-10 w-1/5 min-w-[220px] rounded-tl-xl">Feature Category</th>
-                            {tiers.map(tier => (
-                                <th key={tier.id} scope="col" className={`px-4 py-3.5 text-center text-xs font-medium uppercase tracking-wider min-w-[160px] ${tier.highlight ? "text-primary" : "text-muted-foreground"} ${tier.id === 'enterprise' ? 'rounded-tr-xl' : ''}`}>{tier.name}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody className="bg-card divide-y divide-border">
-                        {featureComparison.map((item, itemIndex) => (
-                            <React.Fragment key={item.feature}>
-                                {itemIndex === 0 || item.category !== featureComparison[itemIndex -1].category ? (
-                                    <tr>
-                                        <td colSpan={tiers.length + 1} className="px-4 py-3 bg-muted/20 dark:bg-muted/40 text-sm font-semibold text-foreground sticky left-0 z-10">{item.category}</td>
-                                    </tr>
-                                ) : null}
-                                <tr className="hover:bg-muted/20 dark:hover:bg-muted/40 transition-colors">
-                                    <td className="px-4 py-4 whitespace-normal text-sm font-medium text-foreground sticky left-0 bg-card z-10 w-1/5 min-w-[220px]">{item.feature}</td>
-                                    {tiers.map(tier => {
-                                        const featureValue = item[tier.id as keyof typeof item] as string | boolean;
-                                        return (
-                                            <td key={`${tier.id}-${item.feature}`} className="px-4 py-4 whitespace-normal text-sm text-center text-muted-foreground min-w-[160px]">
-                                                {typeof featureValue === 'boolean' ? (
-                                                    featureValue ? <CheckCircle className="h-5 w-5 text-green-500 mx-auto" /> : <span className="text-muted-foreground/50 text-lg">-</span>
-                                                ) : (
-                                                    <span className={featureValue.includes("Unlimited") || featureValue.includes("All") || featureValue.includes("Full") ? "font-semibold text-primary" : ""}>{featureValue}</span>
-                                                )}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            </React.Fragment>
-                        ))}
-                    </tbody>
-                </table>
+            <Card className="shadow-lg overflow-hidden rounded-xl">
+              <Table>
+                <TableHeader className="bg-muted/50 dark:bg-muted/30">
+                  <TableRow>
+                    <TableHead className="px-4 py-3.5 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider sticky left-0 bg-muted/50 dark:bg-muted/30 z-10 w-1/5 min-w-[220px] rounded-tl-xl">Feature</TableHead>
+                    {tiers.map(tier => (
+                      <TableHead key={tier.id} className={`px-4 py-3.5 text-center text-xs font-medium uppercase tracking-wider min-w-[160px] ${tier.highlight ? "text-primary" : "text-muted-foreground"} ${tier.id === 'enterprise' ? 'rounded-tr-xl' : ''}`}>{tier.name}</TableHead>
+                    ))}
+                  </TableRow>
+                </TableHeader>
+                <TableBody className="bg-card divide-y divide-border">
+                  {featureComparison.map((item, itemIndex) => (
+                    <React.Fragment key={item.feature}>
+                      {itemIndex === 0 || item.category !== featureComparison[itemIndex - 1].category ? (
+                        <TableRow>
+                          <TableCell colSpan={tiers.length + 1} className="px-4 py-3 bg-secondary/50 dark:bg-secondary/20 text-sm font-semibold text-foreground sticky left-0 z-10">{item.category}</TableCell>
+                        </TableRow>
+                      ) : null}
+                      <TableRow className="hover:bg-muted/20 dark:hover:bg-muted/40 transition-colors">
+                        <TableCell className="px-4 py-4 whitespace-normal text-sm font-medium text-foreground sticky left-0 bg-card hover:bg-muted/20 dark:hover:bg-muted/40 z-10 w-1/5 min-w-[220px]">{item.feature}</TableCell>
+                        {tiers.map(tier => {
+                          const featureValue = item[tier.id as keyof typeof item] as string | boolean;
+                          return (
+                            <TableCell key={`${tier.id}-${item.feature}`} className="px-4 py-4 whitespace-normal text-sm text-center text-muted-foreground min-w-[160px]">
+                              {typeof featureValue === 'boolean' ? (
+                                featureValue ? <CheckCircle className="h-5 w-5 text-green-500 mx-auto" /> : <span className="text-muted-foreground/50 text-lg">-</span>
+                              ) : (
+                                <span className={featureValue.includes("Unlimited") || featureValue.includes("All") || featureValue.includes("Full") ? "font-semibold text-primary" : ""}>{featureValue}</span>
+                              )}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    </React.Fragment>
+                  ))}
+                </TableBody>
+              </Table>
             </Card>
           </section>
-
 
           <section className="mt-24 text-center">
             <h2 className="text-3xl font-headline font-semibold mb-6 animated-text-gradient">Frequently Asked Questions</h2>
