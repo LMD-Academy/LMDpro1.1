@@ -22,9 +22,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Loader2, Film, Copy, ThumbsUp, ThumbsDown, Check, UserCircle, Upload } from "lucide-react";
 import { generateVideoScript, type GenerateVideoScriptOutput } from "@/ai/flows/generate-video-script";
 import { useToast } from "@/hooks/use-toast";
-import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
   topic: z.string().min(10, "Topic must be at least 10 characters.").max(300, "Topic too long."),
@@ -66,10 +66,10 @@ const tones = [
 ];
 
 const avatars = [
-    { id: "avatar1", name: "Alex (Professional Male)", image: "https://placehold.co/150x150.png?text=Alex", hint: "professional man" },
-    { id: "avatar2", name: "Mia (Casual Female)", image: "https://placehold.co/150x150.png?text=Mia", hint: "casual woman" },
-    { id: "avatar3", name: "Dr. K (Academic Male)", image: "https://placehold.co/150x150.png?text=DrK", hint: "academic man" },
-    { id: "avatar4", name: "Sophia (Animated Character)", image: "https://placehold.co/150x150.png?text=Sophia", hint: "animated character" },
+    { id: "avatar1", name: "Alex (Professional Male)", image: "https://placehold.co/150x150.png", hint: "professional man" },
+    { id: "avatar2", name: "Mia (Casual Female)", image: "https://placehold.co/150x150.png", hint: "casual woman" },
+    { id: "avatar3", name: "Dr. K (Academic Male)", image: "https://placehold.co/150x150.png", hint: "academic man" },
+    { id: "avatar4", name: "Sophia (Animated Character)", image: "https://placehold.co/150x150.png", hint: "animated character" },
 ];
 
 export default function VideoCreationPage() {
@@ -314,7 +314,7 @@ export default function VideoCreationPage() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div>
-                        <FormLabel>Select Avatar</FormLabel>
+                        <Label>Select Avatar</Label>
                         <ScrollArea className="h-48 mt-1">
                         <div className="grid grid-cols-2 gap-3 pr-3">
                             {avatars.map(avatar => (
@@ -326,7 +326,7 @@ export default function VideoCreationPage() {
                                         selectedAvatar === avatar.id ? "border-primary ring-2 ring-primary" : "border-border"
                                     )}
                                 >
-                                    <Image src={avatar.image} alt={avatar.name} width={100} height={100} className="rounded-md mx-auto aspect-square object-cover" data-ai-hint={avatar.hint} />
+                                    <div className="aspect-square w-full bg-muted rounded-md" data-ai-hint={avatar.hint}></div>
                                     <p className="text-xs text-center mt-1 text-muted-foreground">{avatar.name}</p>
                                 </button>
                             ))}
@@ -334,7 +334,7 @@ export default function VideoCreationPage() {
                         </ScrollArea>
                     </div>
                     <div>
-                        <FormLabel htmlFor="brandLogo">Upload Brand Logo (Optional)</FormLabel>
+                        <Label htmlFor="brandLogo">Upload Brand Logo (Optional)</Label>
                          <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-border border-dashed rounded-md hover:border-primary/50 cursor-pointer">
                             <div className="space-y-1 text-center">
                                 <Upload className="mx-auto h-10 w-10 text-muted-foreground" />
@@ -349,9 +349,8 @@ export default function VideoCreationPage() {
                             </div>
                         </div>
                     </div>
-                     {/* Placeholder for language selection for voice-over, as it's already in script generation */}
                      <div>
-                        <FormLabel>Voice-Over Language</FormLabel>
+                        <Label>Voice-Over Language</Label>
                         <Input value={languages.find(l => l.value === form.getValues().language)?.label || "English (US)"} readOnly disabled className="mt-1 bg-muted/50"/>
                         <FormDescription className="text-xs">Language is based on script settings. More voice options coming soon!</FormDescription>
                      </div>
