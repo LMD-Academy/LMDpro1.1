@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, Languages, HelpCircle } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -93,7 +93,7 @@ export default function PublicHeader() {
 
   return (
     <header className={cn(
-      "sticky top-2 md:top-4 z-50 w-[calc(100%-1rem)] md:w-full md:max-w-5xl mx-auto rounded-xl shadow-lg",
+      "sticky top-2 md:top-4 z-50 w-[calc(100%-1rem)] md:w-full md:max-w-6xl mx-auto rounded-xl shadow-lg",
       "bg-card/80 backdrop-blur-sm"
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -120,11 +120,11 @@ export default function PublicHeader() {
                       {field.name}
                     </div>
                     {field.courses.map((course) => (
-                      <Link href={course.href} key={course.title} passHref>
-                        <DropdownMenuItem asChild>
-                          <a className="text-xs text-muted-foreground hover:text-primary pl-6 cursor-pointer">{course.title}</a>
-                        </DropdownMenuItem>
-                      </Link>
+                      <DropdownMenuItem key={course.title} asChild>
+                        <Link href={course.href} className="text-xs text-muted-foreground hover:text-primary pl-6 cursor-pointer">
+                          {course.title}
+                        </Link>
+                      </DropdownMenuItem>
                     ))}
                   </DropdownMenuGroup>
                 ))}
@@ -210,6 +210,8 @@ export default function PublicHeader() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs bg-background p-6">
+                <SheetTitle className="sr-only">Main Menu</SheetTitle>
+                <SheetDescription className="sr-only">Navigation links for the LMDpro platform.</SheetDescription>
               <div className="flex flex-col gap-6">
                 <Link href="/" className="flex items-center gap-2 mb-4" onClick={() => setIsMobileMenuOpen(false)}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 text-primary"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
