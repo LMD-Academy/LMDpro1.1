@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { getCourseById } from "@/lib/course-data";
 import { useToast } from "@/hooks/use-toast";
 import { useParams } from "next/navigation";
@@ -18,6 +18,7 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext"; // Import language context
 
 
 // Define the course type based on the return of getCourseById
@@ -26,6 +27,7 @@ type CourseType = ReturnType<typeof getCourseById>;
 export default function CourseViewPage() {
   const params = useParams();
   const id = params.id as string;
+  const { language } = useLanguage(); // Use language context
   const [course, setCourse] = useState<CourseType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -42,18 +44,34 @@ export default function CourseViewPage() {
   const [playbackRate, setPlaybackRate] = useState(1);
   const [progress, setProgress] = useState(0);
 
+  // Filter subCourses based on current language
+  const filteredSubCourses = useMemo(() => {
+    if (!course) return [];
+    const languageFiltered = course.subCourses?.filter(sc => sc.language === language);
+    // Fallback to English if no courses for selected language
+    if (languageFiltered && languageFiltered.length > 0) {
+        return languageFiltered;
+    }
+    return course.subCourses?.filter(sc => sc.language === 'English');
+  }, [course, language]);
+
   // Effect to load course data
   useEffect(() => {
     setIsLoading(true);
     const courseData = getCourseById(id);
     setCourse(courseData);
-    if (courseData?.subCourses?.[0]?.lessons?.[0]) {
-        setCurrentLesson(courseData.subCourses[0].lessons[0]);
-    } else {
-        setCurrentLesson(null);
-    }
     setIsLoading(false);
   }, [id]);
+
+  // Effect to set initial lesson when filteredSubCourses changes
+  useEffect(() => {
+    if(filteredSubCourses && filteredSubCourses.length > 0 && filteredSubCourses[0].lessons && filteredSubCourses[0].lessons.length > 0){
+      setCurrentLesson(filteredSubCourses[0].lessons[0]);
+    } else {
+      setCurrentLesson(null);
+    }
+  }, [filteredSubCourses]);
+
 
   // Effect to load Speech Synthesis voices
   useEffect(() => {
@@ -61,8 +79,10 @@ export default function CourseViewPage() {
       const voices = window.speechSynthesis.getVoices();
       setAvailableVoices(voices);
       if (voices.length > 0 && !selectedVoiceURI) {
-        const defaultVoice = voices.find(v => v.lang.startsWith('en')) || voices[0];
-        setSelectedVoiceURI(defaultVoice.voiceURI);
+        const defaultVoice = voices.find(v => v.lang.startsWith(language === 'Arabic' ? 'ar' : 'en')) || voices[0];
+        if (defaultVoice) {
+            setSelectedVoiceURI(defaultVoice.voiceURI);
+        }
       }
     };
     loadVoices();
@@ -75,7 +95,7 @@ export default function CourseViewPage() {
          window.speechSynthesis.onvoiceschanged = null;
       }
     };
-  }, [selectedVoiceURI]);
+  }, [selectedVoiceURI, language]);
   
   // Cleanup effect for speech synthesis
   useEffect(() => {
@@ -131,6 +151,9 @@ export default function CourseViewPage() {
       const selectedVoice = availableVoices.find(v => v.voiceURI === selectedVoiceURI);
       if (selectedVoice) {
         newUtterance.voice = selectedVoice;
+      } else { // Fallback voice
+        const fallbackVoice = availableVoices.find(v => v.lang.startsWith(language === 'Arabic' ? 'ar' : 'en'));
+        if (fallbackVoice) newUtterance.voice = fallbackVoice;
       }
       newUtterance.rate = playbackRate;
       setUtterance(newUtterance);
@@ -173,13 +196,31 @@ export default function CourseViewPage() {
     );
   }
 
-  if (!course || !currentLesson) {
+  if (!course) {
     return (
         <div className="flex items-center justify-center h-full">
             <Card className="shadow-lg rounded-xl">
                 <CardHeader>
                     <CardTitle className="font-headline">Course Not Found</CardTitle>
-                    <CardDescription>The course you are looking for does not exist or has no lessons.</CardDescription>
+                    <CardDescription>The course you are looking for does not exist.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Link href="/courses">
+                        <Button className="button-animated-gradient">Back to Course Catalog</Button>
+                    </Link>
+                </CardContent>
+            </Card>
+        </div>
+    );
+  }
+  
+  if (!currentLesson) {
+     return (
+        <div className="flex items-center justify-center h-full">
+            <Card className="shadow-lg rounded-xl">
+                <CardHeader>
+                    <CardTitle className="font-headline">No Lessons Found</CardTitle>
+                    <CardDescription>No lessons available for the selected language. Please switch languages or check back later.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Link href="/courses">
@@ -232,7 +273,7 @@ export default function CourseViewPage() {
                                      <SelectValue placeholder="Select voice..."/>
                                  </SelectTrigger>
                                  <SelectContent>
-                                     {availableVoices.map(voice => (
+                                     {availableVoices.filter(v => v.lang.startsWith(language === 'Arabic' ? 'ar' : 'en')).map(voice => (
                                          <SelectItem key={voice.voiceURI} value={voice.voiceURI}>
                                              {voice.name} ({voice.lang})
                                          </SelectItem>
@@ -387,9 +428,9 @@ export default function CourseViewPage() {
           </CardHeader>
           <CardContent className="max-h-[calc(100vh-20rem)] overflow-y-auto"> {/* Adjust max-h as needed */}
             <Accordion type="single" collapsible defaultValue={currentModule?.id} className="w-full">
-              {course.subCourses && course.subCourses.map((moduleItem: any) => (
+              {filteredSubCourses.map((moduleItem: any) => (
                 <AccordionItem value={moduleItem.id} key={moduleItem.id}>
-                  <AccordionTrigger className="font-semibold hover:no-underline text-base">
+                  <AccordionTrigger className="text-lg font-semibold hover:no-underline">
                     {moduleItem.title}
                   </AccordionTrigger>
                   <AccordionContent>
@@ -416,6 +457,7 @@ export default function CourseViewPage() {
                   </AccordionContent>
                 </AccordionItem>
               ))}
+              {filteredSubCourses.length === 0 && <p className="text-muted-foreground text-sm p-4">No modules available for the selected language.</p>}
             </Accordion>
           </CardContent>
            <CardFooter className="pt-4 border-t">

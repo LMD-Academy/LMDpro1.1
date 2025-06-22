@@ -18,6 +18,8 @@ import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getAllCourses } from "@/lib/course-data";
+import { useLanguage } from "@/context/LanguageContext"; // Import language context
+import Image from 'next/image';
 
 const allCourses = getAllCourses();
 
@@ -49,18 +51,14 @@ export default function PublicHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("light");
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Placeholder, manage with auth context
-  const [currentLanguage, setCurrentLanguage] = React.useState("English"); // Language state
+  const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
     // Theme initialization
     try {
-      const savedTheme = localStorage.getItem('lmdpro-theme');
-      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
-        setCurrentTheme(savedTheme);
-        document.documentElement.classList.toggle("dark", savedTheme === "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+      const savedTheme = localStorage.getItem('lmdpro-theme') || 'light';
+      setCurrentTheme(savedTheme);
+      document.documentElement.classList.toggle("dark", savedTheme === "dark");
     } catch (error) {
        console.warn("Could not load theme preference from localStorage", error);
        document.documentElement.classList.remove("dark");
@@ -80,7 +78,6 @@ export default function PublicHeader() {
   
    useEffect(() => {
     // This is a placeholder for checking authentication status
-    // In a real app, you might check a token in localStorage or a context
     const loggedIn = typeof window !== 'undefined' ? localStorage.getItem('lmdpro_auth_status') === 'true' : false;
     setIsAuthenticated(loggedIn);
   }, []);
@@ -100,9 +97,9 @@ export default function PublicHeader() {
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-10 w-auto dark:hidden" />
-          <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-10 w-auto hidden dark:block" />
-          <span className="text-2xl font-headline font-bold animated-text-gradient">LMDpro</span>
+          <Image src="/LMDpro Logo Black.svg" alt="LMDpro Logo" width={40} height={40} className="dark:hidden" />
+          <Image src="/LMDpro Logo White.svg" alt="LMDpro Logo" width={40} height={40} className="hidden dark:block" />
+          <span className="text-2xl font-headline font-bold text-foreground">LMDpro</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
@@ -166,8 +163,8 @@ export default function PublicHeader() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setCurrentLanguage("English")}>English</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setCurrentLanguage("Arabic")}>العربية (Arabic)</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage("English")}>English</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage("Arabic")}>العربية (Arabic)</DropdownMenuItem>
             </DropdownMenuContent>
            </DropdownMenu>
           
@@ -221,8 +218,8 @@ export default function PublicHeader() {
                 <SheetDescription className="sr-only">Navigation links for the LMDpro platform.</SheetDescription>
               <div className="flex flex-col gap-6">
                 <Link href="/" className="flex items-center gap-2 mb-4" onClick={() => setIsMobileMenuOpen(false)}>
-                  <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-7 w-auto dark:hidden" />
-                  <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-7 w-auto hidden dark:block" />
+                  <Image src="/LMDpro Logo Black.svg" alt="LMDpro Logo" width={28} height={28} className="dark:hidden" />
+                  <Image src="/LMDpro Logo White.svg" alt="LMDpro Logo" width={28} height={28} className="hidden dark:block" />
                 </Link>
                 <Link href="/courses" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
                   <BookOpen className="h-5 w-5" />

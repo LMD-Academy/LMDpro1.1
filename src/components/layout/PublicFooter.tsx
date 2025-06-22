@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { Github, Linkedin, Twitter, BookOpen, LifeBuoy, FileText as FileTextIcon, Users } from "lucide-react"; 
+import Image from 'next/image';
 
 export default function PublicFooter() {
   const currentYear = new Date().getFullYear();
@@ -33,9 +34,9 @@ export default function PublicFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4">
-               <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-10 w-auto dark:hidden" />
-               <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-10 w-auto hidden dark:block" />
-              <span className="text-xl font-headline font-bold animated-text-gradient">LMDpro</span>
+               <Image src="/LMDpro Logo Black.svg" alt="LMDpro Logo" width={40} height={40} className="dark:hidden" />
+               <Image src="/LMDpro Logo White.svg" alt="LMDpro Logo" width={40} height={40} className="hidden dark:block" />
+              <span className="text-xl font-headline font-bold text-foreground">LMDpro</span>
             </Link>
             <p className="text-sm text-muted-foreground">
               Empowering lifelong learners and professionals with AI-driven education and career development tools. Your journey to mastery starts here.

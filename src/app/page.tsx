@@ -4,15 +4,12 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowRight, Zap, Lightbulb, ClipboardList, Library, Code2, DollarSign, HelpCircle, LayoutGrid, BookOpen, Users, Building, CheckCircle, GraduationCap, MessageSquare, StickyNote, Download, Sparkles, Send } from "lucide-react";
+import { ArrowRight, Zap, Lightbulb, ClipboardList, Library, Code2, DollarSign, HelpCircle, LayoutGrid, BookOpen, Users, Building, CheckCircle, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { getAllCourses } from "@/lib/course-data";
 
@@ -75,91 +72,15 @@ const quickLinks = [
     { href: "/support", label: "Get Support", icon: HelpCircle },
 ];
 
-interface AiMessage {
-  id: string;
-  text: string;
-  sender: 'user' | 'ai';
-}
-
 export default function HomePage() {
-  const [notepadContent, setNotepadContent] = React.useState("");
-  const [aiChatMessages, setAiChatMessages] = React.useState<AiMessage[]>([{id: 'init', text: "Hello! How can I help you learn today?", sender: 'ai'}]);
-  const [aiChatInput, setAiChatInput] = React.useState("");
   const { toast } = useToast();
-  const [isAiReplying, setIsAiReplying] = useState(false);
-
-  useEffect(() => {
-    try {
-      const savedNotepadContent = localStorage.getItem('lmdpro-notepad');
-      if (savedNotepadContent) {
-        setNotepadContent(savedNotepadContent);
-      }
-      const savedAiChat = localStorage.getItem('lmdpro-ai-chat');
-      if(savedAiChat) {
-          setAiChatMessages(JSON.parse(savedAiChat));
-      }
-    } catch (error) {
-       console.warn("Could not access localStorage:", error);
-    }
-  }, []);
-
-  const handleNotepadChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newContent = event.target.value;
-    setNotepadContent(newContent);
-    try {
-      localStorage.setItem('lmdpro-notepad', newContent);
-    } catch (error) {
-      console.warn("Could not save notepad content to localStorage", error);
-    }
-  };
-
-  const exportNotepadContent = () => {
-    if (!notepadContent.trim()) {
-      toast({title: "Notepad Empty", description: "There is no content to export.", variant: "destructive"});
-      return;
-    }
-    const blob = new Blob([notepadContent], { type: 'text/plain;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'lmdpro_notes.txt';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
-    toast({ title: "Notepad Exported", description: "Your notes have been downloaded as lmdpro_notes.txt."});
-  };
-  
-  const handleAiChatSubmit = () => {
-    if(!aiChatInput.trim()) return;
-    const newMessages: AiMessage[] = [...aiChatMessages, {id: Date.now().toString(), text: aiChatInput, sender: 'user'}];
-    setAiChatMessages(newMessages);
-    setAiChatInput("");
-    setIsAiReplying(true);
-    // Simulate AI response
-    setTimeout(() => {
-        const aiResponse: AiMessage = {id: (Date.now() + 1).toString(), text: "I'm processing your request... (This is a placeholder AI response). Please log in to access full AI capabilities.", sender: 'ai'};
-        const updatedMessages = [...newMessages, aiResponse];
-        setAiChatMessages(updatedMessages);
-        try {
-            localStorage.setItem('lmdpro-ai-chat', JSON.stringify(updatedMessages));
-        } catch (error) {
-            console.warn("Could not save AI chat history to localStorage", error);
-        }
-        setIsAiReplying(false);
-    }, 1500);
-  };
-
-  const askAiAboutNotepad = () => {
-    toast({ title: "Login Required", description: "Please log in to use AI analysis features.", variant: "destructive"});
-  };
 
   return (
     <div className="flex flex-col min-h-screen">
       <PublicHeader />
-      <div className="flex flex-1">
-        <main className="flex-1">
-          {/* Hero Section */}
-          <section className="relative pt-0 text-center">
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="relative text-center">
             <div className="absolute inset-0 -z-10 animated-liquid-gradient"></div>
             <div className="container mx-auto px-4 pt-24 md:pt-28 lg:pt-32 pb-16 md:pb-24">
               <h1 className="text-5xl md:text-7xl font-headline font-bold mb-6 animated-text-gradient">
@@ -174,10 +95,10 @@ export default function HomePage() {
                 </Button>
               </Link>
             </div>
-          </section>
+        </section>
 
-          {/* Features Section */}
-          <section className="py-16 md:py-24">
+        {/* Features Section */}
+        <section className="py-16 md:py-24">
             <div className="container mx-auto px-4">
               <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-4 animated-text-gradient">Transform Your Career with AI-Driven Learning</h2>
               <p className="text-lg text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
@@ -208,10 +129,10 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-          </section>
+        </section>
 
-          {/* Course Highlights Section */}
-          <section className="py-16 md:py-24 bg-muted/30 dark:bg-muted/50">
+        {/* Course Highlights Section */}
+        <section className="py-16 md:py-24 bg-muted/30 dark:bg-muted/50">
             <div className="container mx-auto px-4">
               <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-12 animated-text-gradient">
                 Popular Learning Paths & Courses
@@ -248,10 +169,10 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
-          </section>
+        </section>
 
-          {/* Pricing Section Block */}
-          <section className="py-16 md:py-24">
+        {/* Pricing Section Block */}
+        <section className="py-16 md:py-24">
             <div className="container mx-auto px-4">
               <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-4 animated-text-gradient">Flexible Pricing for Everyone</h2>
               <p className="text-lg text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
@@ -296,10 +217,10 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
-          </section>
+        </section>
 
-          {/* Testimonials Section */}
-          <section className="py-16 md:py-24 bg-card/50 backdrop-blur-sm dark:bg-card/80">
+        {/* Testimonials Section */}
+        <section className="py-16 md:py-24 bg-card/50 backdrop-blur-sm dark:bg-card/80">
             <div className="container mx-auto px-4">
               <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-12 animated-text-gradient">
                 Loved by Learners & Professionals
@@ -324,10 +245,10 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
-          </section>
+        </section>
 
-          {/* Quick Links / Call to Action Section */}
-          <section className="py-16 md:py-24">
+        {/* Quick Links / Call to Action Section */}
+        <section className="py-16 md:py-24">
             <div className="container mx-auto px-4 text-center">
               <h2 className="text-3xl md:text-4xl font-headline font-semibold mb-6 animated-text-gradient">Ready to Elevate Your Career?</h2>
               <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-10">
@@ -349,89 +270,8 @@ export default function HomePage() {
                   </Button>
               </Link>
             </div>
-          </section>
-        </main>
-
-        {/* Right Tools Sidebar - Public View */}
-        <aside className="hidden lg:flex flex-col w-14 border-l bg-card py-4 items-center justify-between">
-            <div className="flex flex-col items-center space-y-4">
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <Button variant="ghost" size="icon" title="AI Assistant">
-                           <Sparkles className="h-6 w-6"/>
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent side="left" align="end" className="w-96 flex flex-col h-[70vh] p-0">
-                       <CardHeader className="flex-shrink-0">
-                            <CardTitle className="text-lg font-headline flex items-center gap-2"><Sparkles className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
-                            <CardDescription>Your intelligent learning partner.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex-grow overflow-y-auto p-4 space-y-4" style={{backgroundImage: isAiReplying ? `url(/img/BG-Loading.gif)`: 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                            {aiChatMessages.map(msg => (
-                                <div key={msg.id} className={cn("flex gap-2 text-sm", msg.sender === 'user' ? 'justify-end' : 'justify-start')}>
-                                    {msg.sender === 'ai' && <Avatar className="h-7 w-7"><AvatarFallback>AI</AvatarFallback></Avatar>}
-                                    <p className={cn("max-w-[85%] rounded-lg px-3 py-2", msg.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted')}>{msg.text}</p>
-                                </div>
-                            ))}
-                        </CardContent>
-                        <CardFooter className="pt-4 border-t">
-                            <div className="flex w-full items-center gap-2">
-                                <Input placeholder="Ask anything..." value={aiChatInput} onChange={(e) => setAiChatInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleAiChatSubmit()} disabled={isAiReplying} />
-                                <Button size="icon" onClick={handleAiChatSubmit} disabled={isAiReplying}><Send className="h-4 w-4"/></Button>
-                            </div>
-                        </CardFooter>
-                    </PopoverContent>
-                </Popover>
-
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <Button variant="ghost" size="icon" title="Notepad">
-                            <StickyNote className="h-6 w-6"/>
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent side="left" align="end" className="w-96 p-0">
-                        <Card className="flex-grow flex flex-col min-h-0 shadow-md rounded-xl border-0">
-                            <CardHeader>
-                                <CardTitle className="text-lg font-headline flex items-center gap-2"><StickyNote className="h-5 w-5 text-primary" /> Notepad</CardTitle>
-                                <CardDescription>Notes are saved automatically in your browser.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="flex-1 flex flex-col min-h-0">
-                                <Textarea 
-                                    placeholder="Take notes here... they will persist across pages. Log in to save to cloud." 
-                                    className="flex-1 h-full min-h-[250px] focus-gradient-outline"
-                                    value={notepadContent}
-                                    onChange={handleNotepadChange}
-                                />
-                            </CardContent>
-                            <CardFooter className="gap-2 pt-4 border-t">
-                                <Button variant="outline" size="sm" className="flex-1" onClick={exportNotepadContent} title="Export notes as a .txt file">
-                                    <Download className="h-4 w-4 mr-1"/> Export
-                                </Button>
-                                <Button size="sm" className="flex-1 button-animated-gradient" onClick={askAiAboutNotepad}>
-                                    <Sparkles className="h-4 w-4 mr-1"/> Ask AI
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    </PopoverContent>
-                </Popover>
-            </div>
-            
-            <div className="flex flex-col items-center">
-                <Popover>
-                    <PopoverTrigger asChild>
-                         <Button variant="ghost" size="icon" title="Help & Support">
-                            <HelpCircle className="h-6 w-6"/>
-                        </Button>
-                    </PopoverTrigger>
-                     <PopoverContent side="left" align="end" className="w-96">
-                        <h4 className="font-semibold mb-2">Need Help?</h4>
-                        <p className="text-sm text-muted-foreground mb-4">Our AI can help with most platform questions, or you can visit our full support center.</p>
-                        <Link href="/support"><Button className="w-full">Go to Support Center</Button></Link>
-                     </PopoverContent>
-                </Popover>
-            </div>
-        </aside>
-      </div>
+        </section>
+      </main>
       <PublicFooter />
     </div>
   );
