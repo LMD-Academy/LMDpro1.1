@@ -15,22 +15,30 @@ import { getCourseById } from "@/lib/course-data";
 import { useToast } from "@/hooks/use-toast";
 import { useParams } from "next/navigation";
 
+// Define the course type based on the return of getCourseById
+type CourseType = ReturnType<typeof getCourseById>;
 
 export default function CourseViewPage() {
   const params = useParams();
   const id = params.id as string;
-  const course = getCourseById(id);
+  const [course, setCourse] = useState<CourseType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  
   const { toast } = useToast();
   
-  const initialLesson = course?.subCourses?.[0]?.lessons?.[0] || null;
-  const [currentLesson, setCurrentLesson] = useState(initialLesson); 
+  const [currentLesson, setCurrentLesson] = useState<any | null>(null); 
   const [isSpeaking, setIsSpeaking] = useState(false);
   
   useEffect(() => {
-    // If the course or initial lesson changes (e.g., due to different ID), reset the state
-    const newCourse = getCourseById(id);
-    const newInitialLesson = newCourse?.subCourses?.[0]?.lessons?.[0] || null;
-    setCurrentLesson(newInitialLesson);
+    setIsLoading(true);
+    const courseData = getCourseById(id);
+    setCourse(courseData);
+    if (courseData?.subCourses?.[0]?.lessons?.[0]) {
+        setCurrentLesson(courseData.subCourses[0].lessons[0]);
+    } else {
+        setCurrentLesson(null);
+    }
+    setIsLoading(false);
   }, [id]);
 
   const currentModule = course?.subCourses?.find(m => m.lessons?.some(l => l.id === currentLesson?.id));
@@ -76,6 +84,19 @@ export default function CourseViewPage() {
     }
   }
   
+  if (isLoading) {
+    return (
+        <div className="flex items-center justify-center h-full">
+             <Card className="shadow-lg rounded-xl w-full max-w-md">
+                <CardHeader>
+                    <CardTitle className="font-headline">Loading Course...</CardTitle>
+                    <CardDescription>Please wait while we fetch the course details.</CardDescription>
+                </CardHeader>
+            </Card>
+        </div>
+    );
+  }
+
   if (!course || !currentLesson) {
     return (
         <div className="flex items-center justify-center h-full">
@@ -280,5 +301,3 @@ export default function CourseViewPage() {
     </div>
   );
 }
-
-    
