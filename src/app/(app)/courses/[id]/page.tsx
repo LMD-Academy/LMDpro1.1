@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, ChevronLeft, ChevronRight, Lightbulb, Video, FileText, Brain, Activity, Volume2, Pause, Play, StopCircle, Settings2 as SettingsIcon } from "lucide-react"; 
+import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, ChevronLeft, ChevronRight, Lightbulb, Video, FileText, Brain, Activity, Volume2, Pause, Play, StopCircle, Settings2 as SettingsIcon, Bookmark } from "lucide-react"; 
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -276,7 +276,7 @@ export default function CourseViewPage() {
             </div>
             <div className="flex gap-2">
                 <Button variant="outline" size="icon" title="Download Resources" className="rounded-full"><Download className="h-5 w-5"/></Button>
-                <Button variant="outline" size="icon" title="Share Lesson" className="rounded-full"><BookMarked className="h-5 w-5"/></Button> {/* Changed to a valid icon */}
+                <Button variant="outline" size="icon" title="Bookmark Lesson" className="rounded-full"><Bookmark className="h-5 w-5"/></Button>
                 <Button variant="outline" size="icon" title="Favorite Lesson" className="rounded-full"><Star className="h-5 w-5"/></Button>
             </div>
         </div>
