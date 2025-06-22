@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, ChevronLeft, ChevronRight, Lightbulb, Video, FileText, Brain, Activity, Volume2, Pause, Play, StopCircle, Settings2 as SettingsIcon, Bookmark } from "lucide-react"; 
+import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, ChevronLeft, ChevronRight, Lightbulb, Video, FileText, Brain, Activity, Volume2, Pause, Play, StopCircle, Settings2 as SettingsIcon, Bookmark, Share2 } from "lucide-react"; 
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -66,9 +66,14 @@ export default function CourseViewPage() {
       }
     };
     loadVoices();
-    window.speechSynthesis.onvoiceschanged = loadVoices;
+    // onvoiceschanged is the correct event
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
     return () => {
-      window.speechSynthesis.onvoiceschanged = null;
+      if (window.speechSynthesis) {
+         window.speechSynthesis.onvoiceschanged = null;
+      }
     };
   }, [selectedVoiceURI]);
   
@@ -256,7 +261,7 @@ export default function CourseViewPage() {
             <CardContent className="p-0">
                  <ScrollArea className="h-[400px] lg:h-[500px]">
                     <div className="prose dark:prose-invert max-w-none p-6">
-                        <p>{currentLesson.content || "No content available for this lesson."}</p>
+                        <div className="whitespace-pre-wrap">{currentLesson.content || "No content available for this lesson."}</div>
                     </div>
                 </ScrollArea>
             </CardContent>
