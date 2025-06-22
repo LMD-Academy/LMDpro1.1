@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Github, Linkedin, Twitter, BookOpen, LifeBuoy, FileText as FileTextIcon } from "lucide-react"; 
+import { Github, Linkedin, Twitter, BookOpen, LifeBuoy, FileText as FileTextIcon, Users } from "lucide-react"; 
 
 export default function PublicFooter() {
   const currentYear = new Date().getFullYear();
@@ -13,13 +13,10 @@ export default function PublicFooter() {
       { href: "/courses", label: "Course Catalog" },
       { href: "/pricing", label: "Pricing Plans" },
       { href: "/resume-builder", label: "Resume Builder" },
-      { href: "/video-creation", label: "AI Video Creation" },
     ],
     company: [
       { href: "/about", label: "About LMDpro" },
       { href: "/contact", label: "Contact Us" },
-      // { href: "/careers", label: "Careers at LMDpro" }, // Placeholder
-      // { href: "/blog", label: "Our Blog" }, // Placeholder
     ],
     resources: [
       { href: "/api-docs", label: "Developer API Docs", icon: FileTextIcon },
@@ -36,7 +33,8 @@ export default function PublicFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-primary"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+               <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-8 w-auto dark:hidden" />
+               <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-8 w-auto hidden dark:block" />
               <span className="text-xl font-headline font-bold animated-text-gradient">LMDpro</span>
             </Link>
             <p className="text-sm text-muted-foreground">
@@ -85,4 +83,3 @@ export default function PublicFooter() {
     </footer>
   );
 }
-

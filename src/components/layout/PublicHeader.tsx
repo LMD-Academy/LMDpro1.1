@@ -17,7 +17,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getAllCourses, courseData } from "@/lib/course-data";
+import { getAllCourses } from "@/lib/course-data";
 
 const allCourses = getAllCourses();
 
@@ -72,6 +72,21 @@ export default function PublicHeader() {
       console.warn("Could not save theme preference to localStorage", error);
     }
   };
+  
+   useEffect(() => {
+    // This is a placeholder for checking authentication status
+    // In a real app, you might check a token in localStorage or a context
+    const loggedIn = typeof window !== 'undefined' ? localStorage.getItem('lmdpro_auth_status') === 'true' : false;
+    setIsAuthenticated(loggedIn);
+  }, []);
+
+  const handleLogout = () => {
+     if (typeof window !== 'undefined') {
+        localStorage.removeItem('lmdpro_auth_status');
+     }
+     setIsAuthenticated(false);
+     window.location.href = "/login";
+  }
 
   return (
     <header className={cn(
@@ -102,7 +117,7 @@ export default function PublicHeader() {
                       {field.name}
                     </div>
                     {field.courses.map((course) => (
-                      <DropdownMenuItem key={course.id} asChild>
+                       <DropdownMenuItem key={course.id} asChild>
                         <Link href={`/courses/${course.id}`} className="text-xs text-muted-foreground hover:text-primary pl-6 cursor-pointer">
                           {course.title}
                         </Link>
@@ -128,11 +143,6 @@ export default function PublicHeader() {
              <Link href="/docs" passHref>
               <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
                 Docs
-              </Button>
-            </Link>
-             <Link href="/about" passHref>
-              <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
-                About Us
               </Button>
             </Link>
         </nav>
@@ -169,7 +179,7 @@ export default function PublicHeader() {
                       <Link href="/dashboard" passHref><DropdownMenuItem>Dashboard</DropdownMenuItem></Link>
                       <Link href="/account?tab=profile" passHref><DropdownMenuItem>Settings</DropdownMenuItem></Link>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => {setIsAuthenticated(false);}}>Logout</DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                     </>
                   ) : (
                     <>
@@ -182,7 +192,7 @@ export default function PublicHeader() {
           
             {!isAuthenticated && (
                  <Link href="/register" passHref>
-                    <Button className="button-animated-gradient">Get Started Free</Button>
+                    <Button className="button-animated-gradient animate-glow">Get Started Free</Button>
                   </Link>
             )}
         </div>
@@ -220,10 +230,6 @@ export default function PublicHeader() {
                   <BookOpen className="h-5 w-5" />
                   Docs
                 </Link>
-                <Link href="/about" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Users className="h-5 w-5" />
-                  About Us
-                </Link>
                  <Link href="/support" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
                     <HelpCircle className="h-5 w-5" />
                     Support
@@ -241,7 +247,7 @@ export default function PublicHeader() {
                            Account
                         </Button>
                      </Link>
-                     <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={() => {setIsAuthenticated(false); setIsMobileMenuOpen(false);}}>
+                    <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={handleLogout}>
                         <LogOut className="h-5 w-5" /> Logout
                     </Button>
                     </>

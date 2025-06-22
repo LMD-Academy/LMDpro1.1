@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { getAllCourses, courseData } from "@/lib/course-data";
+import { getAllCourses } from "@/lib/course-data";
 
 const featureCards = [
   {
