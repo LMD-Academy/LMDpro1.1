@@ -25,10 +25,11 @@
     --ring: 262.1 83.3% 57.8%;
     --radius: 0.75rem;
 
-    --gradient-color-1: 262.1 83.3% 57.8%;
-    --gradient-color-2: 300 90% 50%; 
-    --gradient-color-3: 340 90% 55%;
-    --gradient-color-4: 20 95% 55%;
+    /* Updated for white/off-white gradient in light theme */
+    --gradient-color-1: 0 0% 100%;
+    --gradient-color-2: 210 20% 98%;
+    --gradient-color-3: 0 0% 100%;
+    --gradient-color-4: 210 40% 96.1%;
 
     --font-sans: 'Inter', sans-serif;
     --font-heading: 'Space Grotesk', sans-serif;
