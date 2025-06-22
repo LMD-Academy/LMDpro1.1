@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, ChevronLeft, ChevronRight, Lightbulb, Video, FileText, Brain, Activity, Volume2, Pause, Play, StopCircle, Settings2 as SettingsIcon, Bookmark, Share2 } from "lucide-react"; 
+import { PlayCircle, CheckCircle, BookOpen, MessageSquare, Download, Star, ChevronLeft, ChevronRight, Lightbulb, Video, FileText, Brain, Activity, Volume2, Pause, Play, StopCircle, Settings2 as SettingsIcon, Bookmark, Share2, Loader2 } from "lucide-react"; 
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,7 +18,8 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/context/LanguageContext"; // Import language context
+import { useLanguage } from "@/context/LanguageContext";
+import { courseQa } from "@/ai/flows/course-qna";
 
 
 // Define the course type based on the return of getCourseById
@@ -27,7 +28,7 @@ type CourseType = ReturnType<typeof getCourseById>;
 export default function CourseViewPage() {
   const params = useParams();
   const id = params.id as string;
-  const { language } = useLanguage(); // Use language context
+  const { language } = useLanguage();
   const [course, setCourse] = useState<CourseType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -43,6 +44,12 @@ export default function CourseViewPage() {
   const [selectedVoiceURI, setSelectedVoiceURI] = useState<string | undefined>(undefined);
   const [playbackRate, setPlaybackRate] = useState(1);
   const [progress, setProgress] = useState(0);
+
+  // Q&A State
+  const [qnaQuestion, setQnaQuestion] = useState("");
+  const [isQnaLoading, setIsQnaLoading] = useState(false);
+  const [qnaHistory, setQnaHistory] = useState<{ question: string, answer: string }[]>([]);
+
 
   // Filter subCourses based on current language
   const filteredSubCourses = useMemo(() => {
@@ -169,6 +176,30 @@ export default function CourseViewPage() {
     setIsPaused(false);
     setProgress(0);
     setUtterance(null);
+  };
+  
+  const handleAskQna = async () => {
+    if (!qnaQuestion.trim()) return;
+    if (!currentLesson?.content) {
+        toast({ title: "No Lesson Context", description: "Please select a lesson to ask questions about.", variant: "destructive" });
+        return;
+    }
+
+    setIsQnaLoading(true);
+    const currentQuestion = qnaQuestion;
+    setQnaQuestion("");
+
+    try {
+        const result = await courseQa({ question: currentQuestion, context: currentLesson.content });
+        setQnaHistory(prev => [...prev, { question: currentQuestion, answer: result.answer }]);
+    } catch(error) {
+        console.error("Q&A Error:", error);
+        const errorMessage = "Sorry, I encountered an error trying to answer that question. Please try again.";
+        setQnaHistory(prev => [...prev, { question: currentQuestion, answer: errorMessage }]);
+        toast({ title: "Q&A Failed", description: "The AI assistant could not answer the question.", variant: "destructive" });
+    } finally {
+        setIsQnaLoading(false);
+    }
   };
   
   const currentModule = course?.subCourses?.find(m => m.lessons?.some(l => l.id === currentLesson?.id));
@@ -376,14 +407,35 @@ export default function CourseViewPage() {
             <Card className="shadow-md rounded-lg">
               <CardHeader>
                 <CardTitle className="font-headline flex items-center gap-2"><MessageSquare className="h-5 w-5 text-primary"/> AI-Powered Q&A</CardTitle>
-                <CardDescription>Ask questions about the lesson content. Our AI will assist you by referencing course materials and validated web data.</CardDescription>
+                <CardDescription>Ask questions about the lesson content. Our AI will assist you by referencing course materials.</CardDescription>
               </CardHeader>
               <CardContent>
-                <Textarea placeholder="Type your question about this lesson..." className="mb-3 focus-gradient-outline" rows={3}/>
-                <Button className="button-animated-gradient">Ask AI Assistant</Button>
-                <div className="mt-4 space-y-3 text-sm text-muted-foreground">
-                    <p>Q: What is the main difference between X and Y mentioned in the video?</p>
-                    <p className="pl-4 border-l-2 border-primary">A: (AI generated answer referencing course material) The main difference is...</p>
+                 <div className="flex gap-2">
+                    <Textarea 
+                        placeholder="Type your question about this lesson..." 
+                        className="flex-1 focus-gradient-outline" 
+                        rows={2}
+                        value={qnaQuestion}
+                        onChange={(e) => setQnaQuestion(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleAskQna())}
+                    />
+                    <Button className="button-animated-gradient" onClick={handleAskQna} disabled={isQnaLoading}>
+                        {isQnaLoading ? <Loader2 className="h-4 w-4 animate-spin"/> : "Ask AI"}
+                    </Button>
+                 </div>
+                <div className="mt-4 space-y-4 text-sm max-h-60 overflow-y-auto">
+                    {qnaHistory.map((item, index) => (
+                        <div key={index} className="text-muted-foreground">
+                            <p className="font-semibold text-foreground">Q: {item.question}</p>
+                            <p className="pl-4 border-l-2 border-primary mt-1">A: {item.answer}</p>
+                        </div>
+                    ))}
+                    {isQnaLoading && (
+                         <div className="text-muted-foreground flex items-center gap-2">
+                            <Loader2 className="h-4 w-4 animate-spin"/>
+                            <span>AI is thinking...</span>
+                         </div>
+                    )}
                 </div>
               </CardContent>
             </Card>
@@ -394,7 +446,9 @@ export default function CourseViewPage() {
                 <CardDescription>AI-generated summaries, key takeaways, and related concept explorations for this lesson.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-sm text-muted-foreground">AI Insights for "{currentLesson.title}" (AI-generated key concepts summary, links to related LMDpro modules, external research links would appear here).</p>
+                    <p className="text-sm text-muted-foreground p-4 text-center border rounded-md bg-muted/30">
+                        This feature is coming soon! It will provide AI-generated key concepts, summaries, and links to related LMDpro modules.
+                    </p>
                 </CardContent>
             </Card>
           </TabsContent>
@@ -444,6 +498,7 @@ export default function CourseViewPage() {
                                 handleStop(); // Stop any current speech before changing lesson
                                 setCurrentLesson(lesson);
                                 setProgress(0);
+                                setQnaHistory([]); // Clear Q&A history for new lesson
                               }}
                           >
                             {lesson.completed ? <CheckCircle className="h-4 w-4 mr-2 text-green-500 shrink-0" /> : getLessonIcon(lesson.type)}

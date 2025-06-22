@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { ArrowRight, Zap, Lightbulb, ClipboardList, Library, Code2, DollarSign, HelpCircle, LayoutGrid, BookOpen, Users, Building, CheckCircle, GraduationCap } from "lucide-react";
@@ -10,7 +10,6 @@ import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useToast } from "@/hooks/use-toast";
 import { getAllCourses } from "@/lib/course-data";
 
 const featureCards = [
@@ -73,8 +72,6 @@ const quickLinks = [
 ];
 
 export default function HomePage() {
-  const { toast } = useToast();
-
   return (
     <div className="flex flex-col min-h-screen">
       <PublicHeader />

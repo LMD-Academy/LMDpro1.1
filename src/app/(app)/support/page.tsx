@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -15,16 +16,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { supportChat, type SupportChatOutput } from "@/ai/flows/support-chat";
+import { useToast } from "@/hooks/use-toast";
 
 interface Message {
   id: string;
-  text: string;
-  sender: "user" | "ai";
+  role: "user" | "model";
+  content: string;
   timestamp: Date;
 }
 
 const initialMessages: Message[] = [
-  { id: "1", text: "Welcome to LMDpro Support! How can I help you today regarding technical issues, billing, or course navigation?", sender: "ai", timestamp: new Date(Date.now() - 60000 * 5) },
+  { id: "1", content: "Welcome to LMDpro Support! How can I help you today regarding technical issues, billing, or course navigation?", role: "model", timestamp: new Date(Date.now() - 60000 * 5) },
 ];
 
 const faqItems = [
@@ -36,7 +39,7 @@ const faqItems = [
     {
         id: "faq2",
         question: "Where can I find my billing information and invoices?",
-        answer: "Your billing information and past invoices are available in your Account Settings page, under the 'Subscription & Payments' tab. You can view current plan details, manage payment methods, and download PDF invoices there."
+        answer: "Your billing information and past invoices are available in your Account Settings page, under the 'Subscription & Billing' tab. You can view current plan details, manage payment methods, and download PDF invoices there."
     },
     {
         id: "faq3",
@@ -70,6 +73,7 @@ export default function SupportPage() {
   const [inputValue, setInputValue] = useState("");
   const [isAiTyping, setIsAiTyping] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
@@ -84,32 +88,48 @@ export default function SupportPage() {
     scrollToBottom();
   }, [messages, isAiTyping]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
-    setIsAiTyping(true);
-
-    const newUserMessage: Message = {
-      id: Date.now().toString(),
-      text: inputValue,
-      sender: "user",
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, newUserMessage]);
+    
     const currentQuery = inputValue;
     setInputValue("");
+    
+    const newUserMessage: Message = {
+      id: Date.now().toString(),
+      content: currentQuery,
+      role: "user",
+      timestamp: new Date(),
+    };
+    
+    const updatedMessages: Message[] = [...messages, newUserMessage];
+    setMessages(updatedMessages);
+    setIsAiTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      const aiResponseText = `Thanks for reaching out about "${currentQuery.substring(0,30)}...". I'm looking into this for you. Based on common queries, if this relates to password resets, you can use the 'Forgot Password' link. For billing, check Account Settings. For specific course issues, let me know the course name!`;
+    try {
+      const chatHistory = updatedMessages.slice(1).map(m => ({ role: m.role, content: m.content }));
+      const result: SupportChatOutput = await supportChat({ query: currentQuery, history: chatHistory });
+      
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: aiResponseText,
-        sender: "ai",
+        content: result.response,
+        role: "model",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, aiResponse]);
+
+    } catch (error) {
+      console.error("Support chat error:", error);
+      const errorResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        content: "I'm sorry, I encountered an issue and can't respond right now. Please try again in a moment.",
+        role: "model",
+        timestamp: new Date(),
+      };
+       setMessages((prev) => [...prev, errorResponse]);
+       toast({ title: "AI Error", description: "Could not get a response from the support agent.", variant: "destructive" });
+    } finally {
       setIsAiTyping(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -138,12 +158,12 @@ export default function SupportPage() {
                     <div
                       key={message.id}
                       className={cn(
-                        "flex items-start gap-3 max-w-full", // Changed items-end to items-start for AI avatar alignment
-                        message.sender === "user" ? "justify-end" : "justify-start"
+                        "flex items-start gap-3 max-w-full", 
+                        message.role === "user" ? "justify-end" : "justify-start"
                       )}
                     >
-                      {message.sender === "ai" && (
-                        <Avatar className="h-9 w-9 shrink-0"> {/* Standardized avatar size */}
+                      {message.role === "model" && (
+                        <Avatar className="h-9 w-9 shrink-0">
                            <AvatarImage src="https://placehold.co/100x100.png?text=AI" alt="AI Support Avatar" data-ai-hint="support ai avatar"/>
                            <AvatarFallback>AI</AvatarFallback>
                         </Avatar>
@@ -151,15 +171,15 @@ export default function SupportPage() {
                       <div
                         className={cn(
                           "max-w-[75%] rounded-lg p-3 text-sm shadow-md",
-                          message.sender === "user"
+                          message.role === "user"
                             ? "bg-primary text-primary-foreground rounded-br-none"
                             : "bg-muted rounded-bl-none"
                         )}
                       >
-                        <p className="whitespace-pre-wrap">{message.text}</p>
-                        <div className={cn("text-xs mt-2 flex items-center gap-2", message.sender === "user" ? "text-primary-foreground/70 justify-end" : "text-muted-foreground/70 justify-start")}>
+                        <p className="whitespace-pre-wrap">{message.content}</p>
+                        <div className={cn("text-xs mt-2 flex items-center gap-2", message.role === "user" ? "text-primary-foreground/70 justify-end" : "text-muted-foreground/70 justify-start")}>
                             <span>{message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                            {message.sender === "ai" && message.id !== "1" && (
+                            {message.role === "model" && message.id !== "1" && (
                                 <>
                                 <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-black/10 dark:hover:bg-white/10"><Copy className="h-3 w-3"/></Button>
                                 <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-black/10 dark:hover:bg-white/10"><ThumbsUp className="h-3 w-3"/></Button>
@@ -168,8 +188,8 @@ export default function SupportPage() {
                             )}
                         </div>
                       </div>
-                       {message.sender === "user" && (
-                        <Avatar className="h-9 w-9 shrink-0"> {/* Standardized avatar size */}
+                       {message.role === "user" && (
+                        <Avatar className="h-9 w-9 shrink-0">
                            <AvatarImage src="https://placehold.co/100x100.png" alt="User Avatar" data-ai-hint="user learning" />
                            <AvatarFallback>{getInitials("User")}</AvatarFallback>
                         </Avatar>

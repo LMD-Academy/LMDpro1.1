@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, Languages, HelpCircle, UserCircle, LogOut, GraduationCap } from "lucide-react";
+import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, HelpCircle, UserCircle, LogOut, GraduationCap } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -18,7 +18,6 @@ import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getAllCourses } from "@/lib/course-data";
-import { useLanguage } from "@/context/LanguageContext"; // Import language context
 import Image from 'next/image';
 
 const allCourses = getAllCourses();
@@ -51,7 +50,6 @@ export default function PublicHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("light");
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Placeholder, manage with auth context
-  const { language, setLanguage } = useLanguage();
 
   useEffect(() => {
     // Theme initialization
@@ -155,18 +153,6 @@ export default function PublicHeader() {
             {currentTheme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             <span className="sr-only">Toggle Theme</span>
           </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" title="Change Language">
-                    <Languages className="h-5 w-5"/>
-                    <span className="sr-only">Change Language</span>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setLanguage("English")}>English</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLanguage("Arabic")}>العربية (Arabic)</DropdownMenuItem>
-            </DropdownMenuContent>
-           </DropdownMenu>
           
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

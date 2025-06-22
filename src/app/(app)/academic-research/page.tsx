@@ -10,6 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Send, FileCode, Mic, Paperclip, Search, ThumbsUp, ThumbsDown, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { academicResearch, type AcademicResearchOutput } from "@/ai/flows/academic-research";
+
 
 interface ResearchMessage {
   id: string;
@@ -97,47 +99,43 @@ export default function AcademicResearchPage() {
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
-    setIsTyping(true);
-
+    
+    const currentQuery = inputValue;
+    setInputValue("");
+    
     const newUserMessage: ResearchMessage = {
       id: Date.now().toString(),
-      text: inputValue,
+      text: currentQuery,
       sender: "user",
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, newUserMessage]);
-    const currentQuery = inputValue;
-    setInputValue("");
+    
+    setIsTyping(true);
 
-    // Simulate AI research and response
-    // In a real app, this would call a Genkit flow
-    setTimeout(() => {
+    try {
+      const result: AcademicResearchOutput = await academicResearch({ query: currentQuery });
       const aiResponse: ResearchMessage = {
         id: (Date.now() + 1).toString(),
-        text: `Okay, I'm researching "${currentQuery.substring(0, 50)}...". This might take a moment. I'll provide a summary and key sources.`,
+        text: result.summary,
+        sender: "ai",
+        timestamp: new Date(),
+        sources: result.sources,
+      };
+      setMessages((prev) => [...prev, aiResponse]);
+    } catch(error) {
+       console.error("AI research failed:", error);
+       const errorResponse: ResearchMessage = {
+        id: (Date.now() + 1).toString(),
+        text: "I'm sorry, but I encountered an error while researching that topic. Please try rephrasing your query or try again later.",
         sender: "ai",
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, aiResponse]);
-      
-      // Simulate longer research time and then a detailed response
-      setTimeout(() => {
-        const detailedResponse: ResearchMessage = {
-            id: (Date.now() + 2).toString(),
-            text: `Based on my research for "${currentQuery.substring(0,50)}...", here's a summary: [AI-generated summary would go here, discussing key findings, different perspectives, and relevant data. This would be a few paragraphs long.] I've also identified a few key sources that might be helpful for further reading.`,
-            sender: "ai",
-            timestamp: new Date(),
-            sources: [
-                { title: "Example Source 1: A Comprehensive Overview", url: "#" },
-                { title: "Example Source 2: Recent Developments in the Field", url: "#" },
-                { title: "Example Source 3: Critical Analysis and Future Directions", url: "#" },
-            ]
-        }
-        setMessages((prev) => [...prev, detailedResponse]);
-        setIsTyping(false);
-      }, 3000);
-
-    }, 1000);
+      setMessages((prev) => [...prev, errorResponse]);
+      toast({ title: "Research Failed", description: "The AI agent could not complete the request.", variant: "destructive" });
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -226,7 +224,7 @@ export default function AcademicResearchPage() {
                        <AvatarFallback>AI</AvatarFallback>
                     </Avatar>
                     <div className="max-w-[75%] rounded-lg p-3 shadow-sm bg-muted rounded-bl-none">
-                        <p className="text-sm italic">AI is typing...</p>
+                        <p className="text-sm italic text-muted-foreground">AI is researching...</p>
                     </div>
                 </div>
               )}

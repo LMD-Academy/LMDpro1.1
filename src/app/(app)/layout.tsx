@@ -32,7 +32,8 @@ import {
   Network,
   Info,
   LogOut,
-  Languages
+  Languages,
+  Film
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -49,19 +50,20 @@ import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import RightToolBar from "@/components/layout/RightToolBar";
-import { useLanguage } from "@/context/LanguageContext"; // Import language context
+import { useLanguage } from "@/context/LanguageContext"; 
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, ar: "لوحة التحكم" },
-  { href: "/my-learning", label: "My Learning", icon: BookMarked, ar: "مساري التعليمي" },
-  { href: "/learning-paths", label: "Learning Paths", icon: Lightbulb, ar: "مسارات التعلم" },
-  { href: "/courses", label: "Course Catalog", icon: GraduationCap, ar: "فهرس الدورات" },
-  { href: "/resume-builder", label: "Resume Builder", icon: ClipboardList, ar: "منشئ السيرة الذاتية" },
-  { href: "/academic-research", label: "Academic Research", icon: Library, ar: "البحث الأكاديمي" },
-  { href: "/api-management", label: "API Management", icon: Network, ar: "إدارة API" },
-  { href: "/docs", label: "App Documentation", icon: Info, ar: "توثيق التطبيق" }, 
-  { href: "/account", label: "Account Settings", icon: Settings2, ar: "إعدادات الحساب" },
-  { href: "/support", label: "Help & Support", icon: HelpCircle, ar: "المساعدة والدعم" },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/my-learning", label: "My Learning", icon: BookMarked },
+  { href: "/learning-paths", label: "Learning Paths", icon: Lightbulb },
+  { href: "/courses", label: "Course Catalog", icon: GraduationCap },
+  { href: "/video-creation", label: "Video Creation", icon: Film },
+  { href: "/resume-builder", label: "Resume Builder", icon: ClipboardList },
+  { href: "/academic-research", label: "Academic Research", icon: Library },
+  { href: "/api-management", label: "API Management", icon: Network },
+  { href: "/docs", label: "App Documentation", icon: Info }, 
+  { href: "/account", label: "Account Settings", icon: Settings2 },
+  { href: "/support", label: "Help & Support", icon: HelpCircle },
 ];
 
 export default function AppLayout({ children: layoutChildren }: { children: React.ReactNode }) {
@@ -69,7 +71,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
   const { isMobile } = useSidebar();
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
   const [currentTheme, setCurrentTheme] = React.useState("light");
-  const { language, setLanguage } = useLanguage(); // Use language context
+  const { language, setLanguage } = useLanguage(); 
 
   React.useEffect(() => {
     try {
@@ -95,7 +97,9 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
   };
 
   const handleLogout = () => {
-    // In a real app, clear auth tokens, etc.
+    if (typeof window !== 'undefined') {
+        localStorage.removeItem('lmdpro_auth_status');
+    }
     window.location.href = "/"; 
   };
 
@@ -121,10 +125,10 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 <Link href={item.href} passHref>
                   <SidebarMenuButton
                     isActive={pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))}
-                    tooltip={language === 'Arabic' ? item.ar : item.label}
+                    tooltip={item.label}
                   >
                       <item.icon />
-                      <span className="group-data-[collapsible=icon]:hidden">{language === 'Arabic' ? item.ar : item.label}</span>
+                      <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
                   </SidebarMenuButton>
                 </Link>
               </SidebarMenuItem>
@@ -134,9 +138,9 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
          <SidebarFooter className="p-2">
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton onClick={handleLogout} tooltip={language === 'Arabic' ? 'تسجيل الخروج' : 'Logout'}>
+                    <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
                         <LogOut />
-                        <span className="group-data-[collapsible=icon]:hidden">{language === 'Arabic' ? 'تسجيل الخروج' : 'Logout'}</span>
+                        <span className="group-data-[collapsible=icon]:hidden">Logout</span>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
@@ -181,18 +185,6 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                     {currentTheme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
                     <span className="sr-only">Toggle Theme</span>
                   </Button>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" title="Change Language">
-                            <Languages className="h-5 w-5"/>
-                            <span className="sr-only">Change Language</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => setLanguage("English")}>English</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => setLanguage("Arabic")}>العربية (Arabic)</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
                 <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-9 w-9 rounded-full">
