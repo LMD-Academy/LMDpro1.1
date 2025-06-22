@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'LMDpro - AI-Powered Learning & Career Growth',
   description: 'Personalized learning paths, AI video creation, intelligent resume building, and 24/7 AI support to supercharge your career.',
   icons: {
-    icon: '/img/LMDpro Favi White.png',
+    icon: '/LMDpro Favi White.png',
   },
 };
 
