@@ -4,40 +4,31 @@
 
 @layer base {
   :root {
-    --background: 271 33% 92%;
-    --foreground: 240 10% 3.9%;
-    
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-
+    --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    
-    --primary: 340 9% 16%; 
-    --primary-foreground: 0 0% 98%;
-    
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    
-    --accent: 222 23% 16%; 
-    --accent-foreground: 0 0% 98%;
-    
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 98%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 340 9% 40%;
-    
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 262.1 83.3% 57.8%;
     --radius: 0.75rem;
 
-    --gradient-color-1: 340 9% 16%;
-    --gradient-color-2: 295 20% 30%;
-    --gradient-color-3: 222 23% 16%;
-    --gradient-color-4: 271 33% 50%;
+    --gradient-color-1: 262.1 83.3% 57.8%;
+    --gradient-color-2: 300 90% 50%; 
+    --gradient-color-3: 340 90% 55%;
+    --gradient-color-4: 20 95% 55%;
 
     --font-sans: 'Inter', sans-serif;
     --font-heading: 'Space Grotesk', sans-serif;
@@ -55,31 +46,31 @@
     --popover: 222 23% 10%;
     --popover-foreground: 0 0% 98%;
     
-    --primary: 340 9% 70%;
-    --primary-foreground: 340 9% 10%;
+    --primary: 262.1 83.3% 67.8%;
+    --primary-foreground: 0 0% 100%;
     
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     
     --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted-foreground: 240 5% 75%; /* Lighter muted foreground for dark mode */
     
-    --accent: 222 23% 50%;
+    --accent: 262.1 83.3% 67.8%;
     --accent-foreground: 0 0% 98%;
     
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 3.7% 15.9%;
+    --border: 240 3.7% 20%;
     --input: 240 3.7% 15.9%;
-    --ring: 340 9% 60%;
+    --ring: 262.1 83.3% 67.8%;
     
     --radius: 0.75rem;
-    
-    --gradient-color-1: 340 15% 20%;
-    --gradient-color-2: 271 33% 25%;
-    --gradient-color-3: 222 25% 12%;
-    --gradient-color-4: 300 40% 30%;
+
+    --gradient-color-1: 262.1 83.3% 57.8%;
+    --gradient-color-2: 300 90% 50%;
+    --gradient-color-3: 340 90% 55%;
+    --gradient-color-4: 20 95% 55%;
   }
 }
 
@@ -109,6 +100,7 @@
   }
 }
 
+
 @layer utilities {
   .animated-liquid-gradient {
     background: linear-gradient(-45deg, hsl(var(--gradient-color-1)), hsl(var(--gradient-color-2)), hsl(var(--gradient-color-3)), hsl(var(--gradient-color-4)));
@@ -128,10 +120,6 @@
     background-size: 200% auto;
     animation: text-gradient-animation 4s linear infinite;
   }
-  
-  .dark .animated-text-gradient {
-    background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)));
-  }
 
   @keyframes text-gradient-animation {
     to {
@@ -144,10 +132,6 @@
     background-image: linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary)) 100%);
     background-size: 200% auto;
     transition: background-position 0.5s ease;
-  }
-  
-  .dark .button-animated-gradient {
-      background-image: linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary)) 100%);
   }
 
   .button-animated-gradient:hover {
@@ -184,15 +168,5 @@
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
-  }
-
-  @keyframes glowing {
-    0% { box-shadow: 0 0 4px hsl(var(--primary) / 0.5); }
-    50% { box-shadow: 0 0 16px hsl(var(--primary)); }
-    100% { box-shadow: 0 0 4px hsl(var(--primary) / 0.5); }
-  }
-  .animate-glow {
-    animation: glowing 2.5s ease-in-out infinite;
-    border-radius: 9999px; /* To make shadow circular */
   }
 }

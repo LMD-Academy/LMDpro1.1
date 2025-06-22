@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { getAllCourses } from "@/lib/course-data";
+import { getAllCourses, courseData } from "@/lib/course-data";
 
 const featureCards = [
   {
@@ -86,6 +86,7 @@ export default function HomePage() {
   const [aiChatMessages, setAiChatMessages] = React.useState<AiMessage[]>([{id: 'init', text: "Hello! How can I help you learn today?", sender: 'ai'}]);
   const [aiChatInput, setAiChatInput] = React.useState("");
   const { toast } = useToast();
+  const [isAiReplying, setIsAiReplying] = useState(false);
 
   useEffect(() => {
     try {
@@ -133,6 +134,7 @@ export default function HomePage() {
     const newMessages: AiMessage[] = [...aiChatMessages, {id: Date.now().toString(), text: aiChatInput, sender: 'user'}];
     setAiChatMessages(newMessages);
     setAiChatInput("");
+    setIsAiReplying(true);
     // Simulate AI response
     setTimeout(() => {
         const aiResponse: AiMessage = {id: (Date.now() + 1).toString(), text: "I'm processing your request... (This is a placeholder AI response). Please log in to access full AI capabilities.", sender: 'ai'};
@@ -143,7 +145,8 @@ export default function HomePage() {
         } catch (error) {
             console.warn("Could not save AI chat history to localStorage", error);
         }
-    }, 1000);
+        setIsAiReplying(false);
+    }, 1500);
   };
 
   const askAiAboutNotepad = () => {
@@ -159,14 +162,14 @@ export default function HomePage() {
           <section className="relative pt-0 text-center">
             <div className="absolute inset-0 -z-10 animated-liquid-gradient"></div>
             <div className="container mx-auto px-4 pt-24 md:pt-28 lg:pt-32 pb-16 md:pb-24">
-              <h1 className="text-5xl md:text-7xl font-headline font-bold mb-6 text-primary-foreground dark:text-primary-foreground">
+              <h1 className="text-5xl md:text-7xl font-headline font-bold mb-6 text-primary-foreground">
                 Unlock Your Potential with LMDpro
               </h1>
-              <p className="text-lg md:text-xl text-primary-foreground/80 max-w-3xl mx-auto mb-10">
+              <p className="text-lg md:text-xl text-primary-foreground/90 max-w-3xl mx-auto mb-10">
                 Your AI-powered partner for personalized learning, skill enhancement, and career advancement. Experience the future of education, tailored to you, by an advanced AI-driven agentic system.
               </p>
               <Link href="/register" passHref>
-                <Button size="lg" className="button-animated-gradient text-lg px-10 py-6 animate-glow">
+                <Button size="lg" className="button-animated-gradient text-lg px-10 py-6">
                   Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -354,7 +357,7 @@ export default function HomePage() {
             <div className="flex flex-col items-center space-y-4">
                 <Popover>
                     <PopoverTrigger asChild>
-                        <Button variant="ghost" size="icon" title="AI Assistant" className="animate-glow">
+                        <Button variant="ghost" size="icon" title="AI Assistant">
                            <Sparkles className="h-6 w-6"/>
                         </Button>
                     </PopoverTrigger>
@@ -363,7 +366,7 @@ export default function HomePage() {
                             <CardTitle className="text-lg font-headline flex items-center gap-2"><Sparkles className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
                             <CardDescription>Your intelligent learning partner.</CardDescription>
                         </CardHeader>
-                        <CardContent className="flex-grow overflow-y-auto p-4 space-y-4">
+                        <CardContent className="flex-grow overflow-y-auto p-4 space-y-4" style={{backgroundImage: isAiReplying ? `url(/BG-Loading.gif)`: 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             {aiChatMessages.map(msg => (
                                 <div key={msg.id} className={cn("flex gap-2 text-sm", msg.sender === 'user' ? 'justify-end' : 'justify-start')}>
                                     {msg.sender === 'ai' && <Avatar className="h-7 w-7"><AvatarFallback>AI</AvatarFallback></Avatar>}
@@ -373,8 +376,8 @@ export default function HomePage() {
                         </CardContent>
                         <CardFooter className="pt-4 border-t">
                             <div className="flex w-full items-center gap-2">
-                                <Input placeholder="Ask anything..." value={aiChatInput} onChange={(e) => setAiChatInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleAiChatSubmit()} />
-                                <Button size="icon" onClick={handleAiChatSubmit}><Send className="h-4 w-4"/></Button>
+                                <Input placeholder="Ask anything..." value={aiChatInput} onChange={(e) => setAiChatInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleAiChatSubmit()} disabled={isAiReplying} />
+                                <Button size="icon" onClick={handleAiChatSubmit} disabled={isAiReplying}><Send className="h-4 w-4"/></Button>
                             </div>
                         </CardFooter>
                     </PopoverContent>

@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, Languages, HelpCircle } from "lucide-react";
+import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, Languages, HelpCircle, UserCircle, LogOut } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -17,40 +17,25 @@ import {
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getAllCourses, courseData } from "@/lib/course-data";
 
-const mainNavLinks = [
-  { href: "/pricing", label: "Pricing", icon: Tag },
-  { href: "/docs", label: "Docs", icon: BookOpen },
-  { href: "/about", label: "About Us", icon: Users },
-];
+const allCourses = getAllCourses();
 
 const courseFields = [
   {
     name: "Technology Development",
     icon: Zap, 
-    courses: [
-      { title: "Python for Data Science", href: "/courses?category=TECH_DEV&course=PYTHON_DS" },
-      { title: "Autonomous AI Agent Development", href: "/courses?category=AI_SPEC&course=AI_AGENT_DEV" },
-      { title: "Cybersecurity Specialization L3", href: "/courses?category=PROF_L3&course=CY_L3" },
-    ]
+    courses: allCourses.filter(c => ['PYTHON_DS', 'AI_AGENT_DEV', 'CS_L3', 'CY_L3'].includes(c.id)).slice(0, 4)
   },
   {
     name: "Business & Management",
     icon: Briefcase,
-    courses: [
-      { title: "Executive Leadership Capstone L5", href: "/courses?category=EXEC_L5&course=GM_L5_CAP" },
-      { title: "Agile Business Specialization L3", href: "/courses?category=PROF_L3&course=AB_L3" },
-      { title: "Foundational Business Skills L1", href: "/courses?category=CORE_L1&course=FBS_L1" },
-    ]
+    courses: allCourses.filter(c => ['AB_L3', 'GM_L3', 'FA_L3', 'ENT_L3'].includes(c.id)).slice(0, 4)
   },
   {
-    name: "Leadership Fundamentals",
+    name: "Leadership & HR",
     icon: Lightbulb,
-    courses: [
-      { title: "Foundations of Effective Leadership", href: "/courses?category=LEAD_MGMT_FUND&course=LEAD_FOUND" },
-      { title: "Applied Management & Communication L2", href: "/courses?category=CORE_L2&course=AMC_L2" },
-      { title: "General Management Advanced L4", href: "/courses?category=SENIOR_L4&course=GM_L4" },
-    ]
+    courses: allCourses.filter(c => ['GM_L5_CAP', 'LEAD_FOUND', 'HR_L3', 'GM_L4'].includes(c.id)).slice(0, 4)
   }
 ];
 
@@ -75,9 +60,6 @@ export default function PublicHeader() {
        console.warn("Could not load theme preference from localStorage", error);
        document.documentElement.classList.remove("dark");
     };
-    // Auth state check placeholder
-    // const loggedIn = localStorage.getItem('lmdpro-auth-token'); // Example check
-    // setIsAuthenticated(!!loggedIn);
   }, []);
 
   const toggleTheme = () => {
@@ -93,13 +75,13 @@ export default function PublicHeader() {
 
   return (
     <header className={cn(
-      "sticky top-2 md:top-4 z-50 w-[calc(100%-1rem)] md:w-full md:max-w-6xl mx-auto rounded-xl shadow-lg",
+      "sticky top-2 md:top-4 z-50 w-[calc(100%-1rem)] md:w-full md:max-w-7xl mx-auto rounded-xl shadow-lg", // Widened with max-w-7xl
       "bg-card/80 backdrop-blur-sm"
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-primary"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
-          <span className="text-2xl font-headline font-bold animated-text-gradient">LMDpro</span>
+          <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-8 w-auto dark:hidden" />
+          <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-8 w-auto hidden dark:block" />
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
@@ -109,7 +91,7 @@ export default function PublicHeader() {
                 Explore Courses <ChevronDown className="ml-1 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[550px] p-4" align="start">
+            <DropdownMenuContent className="w-[650px] p-4" align="start">
               <DropdownMenuLabel className="font-headline text-lg mb-2">Courses by Field</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -120,8 +102,8 @@ export default function PublicHeader() {
                       {field.name}
                     </div>
                     {field.courses.map((course) => (
-                      <DropdownMenuItem key={course.title} asChild>
-                        <Link href={course.href} className="text-xs text-muted-foreground hover:text-primary pl-6 cursor-pointer">
+                      <DropdownMenuItem key={course.id} asChild>
+                        <Link href={`/courses/${course.id}`} className="text-xs text-muted-foreground hover:text-primary pl-6 cursor-pointer">
                           {course.title}
                         </Link>
                       </DropdownMenuItem>
@@ -130,21 +112,29 @@ export default function PublicHeader() {
                 ))}
               </div>
                <DropdownMenuSeparator className="my-3" />
-               <DropdownMenuItem asChild>
-                <Link href="/courses" className="font-semibold text-primary hover:underline cursor-pointer">
-                    View All Courses & Learning Paths &rarr;
-                </Link>
-              </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/courses" className="font-semibold text-primary hover:underline cursor-pointer">
+                      View All Courses & Learning Paths &rarr;
+                  </Link>
+                </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {mainNavLinks.map(link => (
-            <Link key={link.label} href={link.href} passHref>
+           <Link href="/pricing" passHref>
               <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
-                {link.label}
+                Pricing
               </Button>
             </Link>
-          ))}
+             <Link href="/docs" passHref>
+              <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
+                Docs
+              </Button>
+            </Link>
+             <Link href="/about" passHref>
+              <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
+                About Us
+              </Button>
+            </Link>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
@@ -164,36 +154,37 @@ export default function PublicHeader() {
                 <DropdownMenuItem onClick={() => setCurrentLanguage("Arabic")}>العربية (Arabic)</DropdownMenuItem>
             </DropdownMenuContent>
            </DropdownMenu>
-          {isAuthenticated ? (
+          
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src="https://placehold.co/100x100.png" alt="@user" data-ai-hint="user avatar"/>
-                    <AvatarFallback>U</AvatarFallback>
-                  </Avatar>
+                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
+                  <UserCircle className="h-6 w-6 text-muted-foreground"/>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <Link href="/dashboard" passHref><DropdownMenuItem>Dashboard</DropdownMenuItem></Link>
-                <Link href="/account?tab=profile" passHref><DropdownMenuItem>Profile</DropdownMenuItem></Link>
-                <Link href="/account" passHref><DropdownMenuItem>Settings</DropdownMenuItem></Link>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => {setIsAuthenticated(false);}}>Logout</DropdownMenuItem>
+              <DropdownMenuContent align="end" className="w-48">
+                {isAuthenticated ? (
+                    <>
+                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <Link href="/dashboard" passHref><DropdownMenuItem>Dashboard</DropdownMenuItem></Link>
+                      <Link href="/account?tab=profile" passHref><DropdownMenuItem>Settings</DropdownMenuItem></Link>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => {setIsAuthenticated(false);}}>Logout</DropdownMenuItem>
+                    </>
+                  ) : (
+                    <>
+                      <Link href="/login" passHref><DropdownMenuItem>Login</DropdownMenuItem></Link>
+                      <Link href="/register" passHref><DropdownMenuItem>Sign Up</DropdownMenuItem></Link>
+                    </>
+                  )}
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <>
-              <Link href="/login" passHref>
-                <Button variant="ghost">Login</Button>
-              </Link>
-              <Link href="/register" passHref>
-                <Button className="button-animated-gradient animate-glow">Get Started Free</Button>
-              </Link>
-            </>
-          )}
+          
+            {!isAuthenticated && (
+                 <Link href="/register" passHref>
+                    <Button className="button-animated-gradient">Get Started Free</Button>
+                  </Link>
+            )}
         </div>
 
         {/* Mobile Menu */}
@@ -214,19 +205,25 @@ export default function PublicHeader() {
                 <SheetDescription className="sr-only">Navigation links for the LMDpro platform.</SheetDescription>
               <div className="flex flex-col gap-6">
                 <Link href="/" className="flex items-center gap-2 mb-4" onClick={() => setIsMobileMenuOpen(false)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 text-primary"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
-                  <span className="text-xl font-headline font-bold animated-text-gradient">LMDpro</span>
+                  <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-7 w-auto dark:hidden" />
+                  <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-7 w-auto hidden dark:block" />
                 </Link>
                 <Link href="/courses" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
                   <BookOpen className="h-5 w-5" />
                   Explore Courses
                 </Link>
-                {mainNavLinks.map(link => (
-                  <Link key={link.label} href={link.href} className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
-                    <link.icon className="h-5 w-5" />
-                    {link.label}
-                  </Link>
-                ))}
+                <Link href="/pricing" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Tag className="h-5 w-5" />
+                  Pricing
+                </Link>
+                <Link href="/docs" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
+                  <BookOpen className="h-5 w-5" />
+                  Docs
+                </Link>
+                <Link href="/about" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Users className="h-5 w-5" />
+                  About Us
+                </Link>
                  <Link href="/support" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
                     <HelpCircle className="h-5 w-5" />
                     Support
@@ -245,7 +242,7 @@ export default function PublicHeader() {
                         </Button>
                      </Link>
                      <Button variant="ghost" className="w-full justify-start text-lg gap-3" onClick={() => {setIsAuthenticated(false); setIsMobileMenuOpen(false);}}>
-                        Logout
+                        <LogOut className="h-5 w-5" /> Logout
                     </Button>
                     </>
                 ) : (

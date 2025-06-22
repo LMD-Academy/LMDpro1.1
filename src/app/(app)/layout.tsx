@@ -37,6 +37,7 @@ import {
   Languages,
   Send,
   FileVideo,
+  LogOut,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -85,6 +86,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
   const [aiChatInput, setAiChatInput] = React.useState("");
   const { toast } = useToast();
   const [currentLanguage, setCurrentLanguage] = React.useState("English");
+  const [isAiReplying, setIsAiReplying] = React.useState(false);
 
   React.useEffect(() => {
     // Set language on the HTML element for CSS targeting
@@ -157,6 +159,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
     const newMessages: AiMessage[] = [...aiChatMessages, {id: Date.now().toString(), text: aiChatInput, sender: 'user'}];
     setAiChatMessages(newMessages);
     setAiChatInput("");
+    setIsAiReplying(true);
     // Simulate AI response
     setTimeout(() => {
         const aiResponse: AiMessage = {id: (Date.now() + 1).toString(), text: "I'm processing your request... (This is a placeholder AI response).", sender: 'ai'};
@@ -167,7 +170,8 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
         } catch (error) {
             console.warn("Could not save AI chat history to localStorage", error);
         }
-    }, 1000);
+        setIsAiReplying(false);
+    }, 1500);
   };
 
   const askAiAboutNotepad = () => {
@@ -179,7 +183,8 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
   };
 
   const handleLogout = () => {
-    window.location.href = "/login"; 
+    // In a real app, clear auth tokens, etc.
+    window.location.href = "/"; 
   };
 
 
@@ -193,10 +198,8 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
       >
         <SidebarHeader className="p-4 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-2 group">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-primary"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
-            <h1 className="text-2xl font-headline font-bold animated-text-gradient group-data-[collapsible=icon]:hidden">
-              LMDpro
-            </h1>
+              <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-8 w-auto dark:hidden" />
+              <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-8 w-auto hidden dark:block" />
           </Link>
         </SidebarHeader>
         <SidebarContent className="p-2">
@@ -216,6 +219,16 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
             ))}
           </SidebarMenu>
         </SidebarContent>
+         <SidebarFooter className="p-2">
+            <SidebarMenu>
+                <SidebarMenuItem>
+                    <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
+                        <LogOut />
+                        <span className="group-data-[collapsible=icon]:hidden">Logout</span>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+            </SidebarMenu>
+        </SidebarFooter>
       </Sidebar>
 
       <div className="flex-1 flex flex-col min-w-0">
@@ -287,7 +300,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                           <DropdownMenuItem><Settings className="mr-2"/>Account Settings</DropdownMenuItem>
                     </Link>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem> 
+                    <DropdownMenuItem onClick={handleLogout}><LogOut className="mr-2"/>Logout</DropdownMenuItem> 
                 </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -304,7 +317,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
           <div className="flex flex-col items-center space-y-4">
               <Popover>
                   <PopoverTrigger asChild>
-                      <Button variant="ghost" size="icon" title="AI Assistant" className="animate-glow">
+                      <Button variant="ghost" size="icon" title="AI Assistant">
                           <Sparkles className="h-6 w-6"/>
                       </Button>
                   </PopoverTrigger>
@@ -313,7 +326,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                           <CardTitle className="text-lg font-headline flex items-center gap-2"><Sparkles className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
                           <CardDescription>Your intelligent learning partner.</CardDescription>
                       </CardHeader>
-                      <CardContent className="flex-grow overflow-y-auto p-4 space-y-4">
+                      <CardContent className="flex-grow overflow-y-auto p-4 space-y-4" style={{backgroundImage: isAiReplying ? `url(/BG-Loading.gif)`: 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                           {aiChatMessages.map(msg => (
                               <div key={msg.id} className={cn("flex gap-2 text-sm", msg.sender === 'user' ? 'justify-end' : 'justify-start')}>
                                   {msg.sender === 'ai' && <Avatar className="h-7 w-7"><AvatarFallback>AI</AvatarFallback></Avatar>}
@@ -323,8 +336,8 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                       </CardContent>
                       <CardFooter className="pt-4 border-t">
                           <div className="flex w-full items-center gap-2">
-                              <Input placeholder="Ask anything..." value={aiChatInput} onChange={(e) => setAiChatInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleAiChatSubmit()} />
-                              <Button size="icon" onClick={handleAiChatSubmit}><Send className="h-4 w-4"/></Button>
+                              <Input placeholder="Ask anything..." value={aiChatInput} onChange={(e) => setAiChatInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleAiChatSubmit()} disabled={isAiReplying}/>
+                              <Button size="icon" onClick={handleAiChatSubmit} disabled={isAiReplying}><Send className="h-4 w-4"/></Button>
                           </div>
                       </CardFooter>
                   </PopoverContent>
