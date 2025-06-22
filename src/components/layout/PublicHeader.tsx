@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, Languages, HelpCircle, UserCircle, LogOut } from "lucide-react";
+import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, Languages, HelpCircle, UserCircle, LogOut, GraduationCap } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -23,19 +23,24 @@ const allCourses = getAllCourses();
 
 const courseFields = [
   {
-    name: "Technology Development",
-    icon: Zap, 
-    courses: allCourses.filter(c => ['PYTHON_DS', 'AI_AGENT_DEV', 'CS_L3', 'CY_L3'].includes(c.id)).slice(0, 4)
+    name: "Core Foundations",
+    icon: GraduationCap,
+    courses: allCourses.filter(c => ['FBS_L1', 'AMC_L2', 'MGMT_INTRO', 'LEAD_FOUND'].includes(c.id)).slice(0, 4)
   },
   {
-    name: "Business & Management",
+    name: "Technology & AI",
+    icon: Zap,
+    courses: allCourses.filter(c => ['AI_AGENT_DEV', 'CS_L3', 'DS_L3', 'PYTHON_DS'].includes(c.id)).slice(0, 4)
+  },
+  {
+    name: "Business & Strategy",
     icon: Briefcase,
-    courses: allCourses.filter(c => ['AB_L3', 'GM_L3', 'FA_L3', 'ENT_L3'].includes(c.id)).slice(0, 4)
+    courses: allCourses.filter(c => ['AB_L3', 'ENT_L3', 'FA_L3', 'OMS_L3'].includes(c.id)).slice(0, 4)
   },
   {
-    name: "Leadership & HR",
-    icon: Lightbulb,
-    courses: allCourses.filter(c => ['GM_L5_CAP', 'LEAD_FOUND', 'HR_L3', 'GM_L4'].includes(c.id)).slice(0, 4)
+    name: "Executive Leadership",
+    icon: Users,
+    courses: allCourses.filter(c => ['GM_L5_CAP', 'HR_L5_CAP', 'CY_L5_CAP', 'FA_L5_CAP'].includes(c.id)).slice(0, 4)
   }
 ];
 
@@ -90,7 +95,7 @@ export default function PublicHeader() {
 
   return (
     <header className={cn(
-      "sticky top-2 md:top-4 z-50 w-[calc(100%-1rem)] md:w-full md:max-w-7xl mx-auto rounded-xl shadow-lg", // Widened with max-w-7xl
+      "sticky top-2 md:top-4 z-50 w-[calc(100%-1rem)] md:w-full md:max-w-7xl mx-auto rounded-xl shadow-lg",
       "bg-card/80 backdrop-blur-sm"
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -106,10 +111,10 @@ export default function PublicHeader() {
                 Explore Courses <ChevronDown className="ml-1 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[650px] p-4" align="start">
+            <DropdownMenuContent className="w-[850px] p-4" align="start">
               <DropdownMenuLabel className="font-headline text-lg mb-2">Courses by Field</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {courseFields.map((field) => (
                   <DropdownMenuGroup key={field.name}>
                     <div className="flex items-center gap-2 text-sm font-semibold text-foreground mb-1">
@@ -192,7 +197,7 @@ export default function PublicHeader() {
           
             {!isAuthenticated && (
                  <Link href="/register" passHref>
-                    <Button className="button-animated-gradient animate-glow">Get Started Free</Button>
+                    <Button className="button-animated-gradient">Get Started Free</Button>
                   </Link>
             )}
         </div>
