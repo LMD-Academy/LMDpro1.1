@@ -162,10 +162,10 @@ export default function HomePage() {
           <section className="relative pt-0 text-center">
             <div className="absolute inset-0 -z-10 animated-liquid-gradient"></div>
             <div className="container mx-auto px-4 pt-24 md:pt-28 lg:pt-32 pb-16 md:pb-24">
-              <h1 className="text-5xl md:text-7xl font-headline font-bold mb-6 text-primary-foreground">
+              <h1 className="text-5xl md:text-7xl font-headline font-bold mb-6 animated-text-gradient">
                 Unlock Your Potential with LMDpro
               </h1>
-              <p className="text-lg md:text-xl text-primary-foreground/90 max-w-3xl mx-auto mb-10">
+              <p className="text-lg md:text-xl text-foreground max-w-3xl mx-auto mb-10">
                 Your AI-powered partner for personalized learning, skill enhancement, and career advancement. Experience the future of education, tailored to you, by an advanced AI-driven agentic system.
               </p>
               <Link href="/register" passHref>
