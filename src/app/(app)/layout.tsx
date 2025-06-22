@@ -10,7 +10,8 @@ import {
   SidebarMenu,
   useSidebar,
   SidebarTrigger,
-  SidebarMenuButton
+  SidebarMenuButton,
+  SidebarFooter
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import {
@@ -286,7 +287,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                     <Avatar className="h-9 w-9">
-                        <AvatarImage src="https://placehold.co/100x100.png" alt="@user" />
+                        <AvatarImage src="/img/user-avatar.png" alt="@user" data-ai-hint="user avatar" />
                         <AvatarFallback>U</AvatarFallback>
                     </Avatar>
                     </Button>
