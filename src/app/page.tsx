@@ -366,7 +366,7 @@ export default function HomePage() {
                             <CardTitle className="text-lg font-headline flex items-center gap-2"><Sparkles className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
                             <CardDescription>Your intelligent learning partner.</CardDescription>
                         </CardHeader>
-                        <CardContent className="flex-grow overflow-y-auto p-4 space-y-4" style={{backgroundImage: isAiReplying ? `url(/BG-Loading.gif)`: 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                        <CardContent className="flex-grow overflow-y-auto p-4 space-y-4" style={{backgroundImage: isAiReplying ? `url(/Assets/BG-Loading.gif)`: 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             {aiChatMessages.map(msg => (
                                 <div key={msg.id} className={cn("flex gap-2 text-sm", msg.sender === 'user' ? 'justify-end' : 'justify-start')}>
                                     {msg.sender === 'ai' && <Avatar className="h-7 w-7"><AvatarFallback>AI</AvatarFallback></Avatar>}

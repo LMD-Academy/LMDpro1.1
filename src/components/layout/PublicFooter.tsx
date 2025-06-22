@@ -33,8 +33,8 @@ export default function PublicFooter() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4">
-               <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-8 w-auto dark:hidden" />
-               <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-8 w-auto hidden dark:block" />
+               <img src="/Assets/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-8 w-auto dark:hidden" />
+               <img src="/Assets/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-8 w-auto hidden dark:block" />
               <span className="text-xl font-headline font-bold animated-text-gradient">LMDpro</span>
             </Link>
             <p className="text-sm text-muted-foreground">
