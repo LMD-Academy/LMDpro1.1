@@ -49,7 +49,7 @@ export default function PublicHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("light");
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Placeholder, manage with auth context
-  const [currentLanguage, setCurrentLanguage] = useState("English"); // Language state
+  const [currentLanguage, setCurrentLanguage] = React.useState("English"); // Language state
 
   useEffect(() => {
     // Theme initialization
@@ -100,8 +100,8 @@ export default function PublicHeader() {
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <img src="/img/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-10 w-auto dark:hidden" />
-          <img src="/img/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-10 w-auto hidden dark:block" />
+          <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-10 w-auto dark:hidden" />
+          <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-10 w-auto hidden dark:block" />
           <span className="text-2xl font-headline font-bold animated-text-gradient">LMDpro</span>
         </Link>
 
@@ -221,8 +221,8 @@ export default function PublicHeader() {
                 <SheetDescription className="sr-only">Navigation links for the LMDpro platform.</SheetDescription>
               <div className="flex flex-col gap-6">
                 <Link href="/" className="flex items-center gap-2 mb-4" onClick={() => setIsMobileMenuOpen(false)}>
-                  <img src="/img/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-7 w-auto dark:hidden" />
-                  <img src="/img/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-7 w-auto hidden dark:block" />
+                  <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-7 w-auto dark:hidden" />
+                  <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-7 w-auto hidden dark:block" />
                 </Link>
                 <Link href="/courses" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
                   <BookOpen className="h-5 w-5" />

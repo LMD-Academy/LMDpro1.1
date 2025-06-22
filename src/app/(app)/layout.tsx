@@ -198,8 +198,8 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
       >
         <SidebarHeader className="p-4 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-2 group">
-              <img src="/img/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-10 w-auto dark:hidden" />
-              <img src="/img/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-10 w-auto hidden dark:block" />
+              <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-10 w-auto dark:hidden" />
+              <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-10 w-auto hidden dark:block" />
               <span className="text-xl font-headline font-bold animated-text-gradient group-data-[collapsible=icon]:hidden">LMDpro</span>
           </Link>
         </SidebarHeader>
@@ -327,7 +327,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                           <CardTitle className="text-lg font-headline flex items-center gap-2"><Sparkles className="h-5 w-5 text-primary" /> AI Assistant</CardTitle>
                           <CardDescription>Your intelligent learning partner.</CardDescription>
                       </CardHeader>
-                      <CardContent className="flex-grow overflow-y-auto p-4 space-y-4" style={{backgroundImage: isAiReplying ? `url(/img/BG-Loading.gif)`: 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                      <CardContent className="flex-grow overflow-y-auto p-4 space-y-4" style={{backgroundImage: isAiReplying ? `url(/BG-Loading.gif)`: 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                           {aiChatMessages.map(msg => (
                               <div key={msg.id} className={cn("flex gap-2 text-sm", msg.sender === 'user' ? 'justify-end' : 'justify-start')}>
                                   {msg.sender === 'ai' && <Avatar className="h-7 w-7"><AvatarFallback>AI</AvatarFallback></Avatar>}
