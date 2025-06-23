@@ -36,7 +36,8 @@ import {
   LogOut,
   Languages,
   Film,
-  Repeat
+  Repeat,
+  Bot
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -68,6 +69,7 @@ const navItems = [
 
 const adminNavItems = [
     { href: "/iam", label: "IAM Dashboard", icon: Shield, adminOnly: true },
+    { href: "/iam/course-creator", label: "Course Creator AI", icon: Bot, adminOnly: true },
 ]
 
 export default function AppLayout({ children: layoutChildren }: { children: React.ReactNode }) {
@@ -76,7 +78,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
   const [currentTheme, setCurrentTheme] = React.useState("light");
   const { language, setLanguage } = useLanguage(); 
-  const [isAdmin, setIsAdmin] = React.useState(false); // Placeholder for admin role
+  const [isAdmin, setIsAdmin] = React.useState(false);
 
   React.useEffect(() => {
     // Check for admin status from localStorage (for demo purposes)
@@ -112,6 +114,8 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
     }
     window.location.href = "/"; 
   };
+
+  const currentView = pathname.startsWith('/iam') ? 'admin' : 'learner';
 
   return (
     <div className="flex flex-1 overflow-hidden relative">
@@ -230,8 +234,8 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                           <DropdownMenuItem><Settings className="mr-2"/>Account Settings</DropdownMenuItem>
                     </Link>
                     {isAdmin && (
-                        <Link href={pathname === '/iam' ? '/dashboard' : '/iam'} passHref>
-                            <DropdownMenuItem><Repeat className="mr-2 h-4 w-4"/>Switch to {pathname === '/iam' ? 'Learner View' : 'Admin View'}</DropdownMenuItem>
+                        <Link href={currentView === 'admin' ? '/dashboard' : '/iam'} passHref>
+                            <DropdownMenuItem><Repeat className="mr-2 h-4 w-4"/>Switch to {currentView === 'admin' ? 'Learner View' : 'Admin View'}</DropdownMenuItem>
                         </Link>
                     )}
                     <DropdownMenuSeparator />
@@ -241,7 +245,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
             </div>
         </header>
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8">
-          <div className="min-w-0 mr-16">
+          <div className="min-w-0">
             {layoutChildren}
           </div>
         </main>

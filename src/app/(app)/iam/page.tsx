@@ -128,11 +128,6 @@ export default function IamPage() {
               </TableBody>
             </Table>
           </CardContent>
-           <CardFooter>
-            <p className="text-xs text-muted-foreground">
-              For more detailed analytics and reporting, visit the Reporting & Analytics section.
-            </p>
-          </CardFooter>
         </Card>
       </section>
     </div>

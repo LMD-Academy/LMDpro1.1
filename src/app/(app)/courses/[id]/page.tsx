@@ -510,7 +510,7 @@ export default function CourseViewPage() {
                           >
                             {lesson.completed ? <CheckCircle className="h-4 w-4 mr-2 text-green-500 shrink-0" /> : getLessonIcon(lesson.type)}
                             <span className="flex-1">{lesson.title}</span>
-                            <span className="text-xs text-muted-foreground/80 ml-2 shrink-0">{lesson.duration}</span>
+                            <span className="text-xs text-muted-foreground/80 ml-2 shrink-0">{lesson.length}</span>
                           </Button>
                         </li>
                       ))}

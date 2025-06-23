@@ -6,7 +6,7 @@ import React from 'react';
 export interface Lesson {
     id: string;
     title: string;
-    duration: string;
+    length: string; // Changed from duration to length
     completed: boolean;
     type: 'reading' | 'video' | 'quiz' | 'activity';
     content: string;
