@@ -12,6 +12,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { MessageSquare, Book, Sparkles, HelpCircle, Send, Loader2, Save } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
 import { supportChat, SupportChatOutput } from "@/ai/flows/support-chat";
 import { analyzeNotes } from "@/ai/flows/analyze-notes";
 
@@ -194,12 +195,12 @@ export default function RightToolBar() {
         content: (
             <Card className="w-full">
               <CardHeader>
-                <CardTitle className="font-headline text-base">AI Support</CardTitle>
-                <CardContent className="p-2">
-                  <p className="text-sm text-muted-foreground">Having trouble? Ask our AI Support chatbot for help with your account, billing, or navigating the platform.</p>
-                  <Link href="/support"><Button size="sm" className="w-full mt-3">Go to Full Support Page</Button></Link>
-                </CardContent>
+                <CardTitle className="font-headline text-base">Help Center</CardTitle>
               </CardHeader>
+              <CardContent>
+                  <p className="text-sm text-muted-foreground">Need assistance? Our AI can help, or you can access our full support page for more options.</p>
+                  <Link href="/support"><Button size="sm" className="w-full mt-3 button-animated-gradient">Go to Support Page</Button></Link>
+                </CardContent>
             </Card>
         )
     }
@@ -222,7 +223,7 @@ export default function RightToolBar() {
                         <p>{item.tooltip}</p>
                     </TooltipContent>
                 </Tooltip>
-                <PopoverContent side="left" align="end" className="w-80 h-[calc(100vh-5rem)] flex flex-col p-0 mr-2">
+                <PopoverContent side="left" align="end" className="w-80 h-[calc(100vh-5rem)] flex flex-col p-0 mr-2 rounded-xl border-border shadow-2xl">
                     {item.content}
                 </PopoverContent>
             </Popover>

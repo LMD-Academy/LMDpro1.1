@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, HelpCircle, UserCircle, LogOut, GraduationCap } from "lucide-react";
+import { LogIn, Tag, Menu, BookOpen, Users, Briefcase, Moon, Sun, ChevronDown, Lightbulb, Zap, HelpCircle, UserCircle, LogOut, GraduationCap, Info, About } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -146,6 +146,11 @@ export default function PublicHeader() {
                 Docs
               </Button>
             </Link>
+             <Link href="/about" passHref>
+              <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
+                About Us
+              </Button>
+            </Link>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
@@ -216,12 +221,16 @@ export default function PublicHeader() {
                   Pricing
                 </Link>
                 <Link href="/docs" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
-                  <BookOpen className="h-5 w-5" />
+                  <Info className="h-5 w-5" />
                   Docs
                 </Link>
                  <Link href="/support" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
                     <HelpCircle className="h-5 w-5" />
                     Support
+                </Link>
+                 <Link href="/about" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Users className="h-5 w-5" />
+                    About Us
                 </Link>
                 <hr className="my-2" />
                 {isAuthenticated ? (

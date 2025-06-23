@@ -36,23 +36,21 @@ export default function AccountSettingsPage() {
   ]);
 
   const handleAddPaymentMethod = () => {
-    // Placeholder for adding a new payment method flow (e.g., Stripe Elements)
-    toast({ title: "Add Payment Method", description: "This would typically open a modal to securely add card details via Stripe Elements or similar. (Feature placeholder)" });
-    // Example of adding a new card for demo:
+    toast({ title: "Add Payment Method", description: "This would typically open a modal to securely add card details. (Feature placeholder)" });
     const newId = `pm${paymentMethods.length + 1}`;
     setPaymentMethods(prev => [...prev, { id: newId, type: "Visa", last4: (Math.floor(Math.random() * 9000) + 1000).toString(), expiry:"01/2028", isDefault: false }]);
   };
 
   const handleRemovePaymentMethod = (id: string) => {
     setPaymentMethods(prev => prev.filter(pm => pm.id !== id));
-    toast({ title: "Payment Method Removed", description: `Payment method ending in ${paymentMethods.find(pm => pm.id === id)?.last4} has been removed (simulated).`, variant: "destructive" });
+    toast({ title: "Payment Method Removed", description: `Payment method removed (simulated).`, variant: "destructive" });
   };
 
   const handleSetDefaultPaymentMethod = (id: string) => {
     setPaymentMethods(prev => 
         prev.map(pm => ({ ...pm, isDefault: pm.id === id }))
     );
-    toast({title: "Default Payment Method Updated", description: `Card ending in ${paymentMethods.find(pm => pm.id === id)?.last4} is now default.`});
+    toast({title: "Default Payment Method Updated"});
   };
   
   const handleProfileSave = (event: React.FormEvent) => {
@@ -72,8 +70,6 @@ export default function AccountSettingsPage() {
 
   const handleImportLinkedIn = () => {
     toast({ title: "LinkedIn Import", description: "Simulating LinkedIn data import... (Feature coming soon)" });
-    // In a real app, you would fetch data and populate fields.
-    // For now, just a toast.
   };
 
 
@@ -82,17 +78,16 @@ export default function AccountSettingsPage() {
       <section>
         <h1 className="text-4xl font-headline font-bold mb-2 animated-text-gradient">Account Settings</h1>
         <p className="text-lg text-muted-foreground">
-          Manage your profile, security, subscription, payment methods, notifications, and API keys.
+          Manage your profile, security, subscription, payment methods, and notifications.
         </p>
       </section>
 
       <Tabs defaultValue={initialTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
           <TabsTrigger value="profile"><User className="mr-2 h-4 w-4" />Profile</TabsTrigger>
           <TabsTrigger value="security"><Shield className="mr-2 h-4 w-4" />Security</TabsTrigger>
           <TabsTrigger value="subscription"><CreditCard className="mr-2 h-4 w-4" />Subscription</TabsTrigger>
           <TabsTrigger value="notifications"><Bell className="mr-2 h-4 w-4" />Notifications</TabsTrigger>
-          <TabsTrigger value="apikeys"><KeyRound className="mr-2 h-4 w-4" />API Keys</TabsTrigger>
         </TabsList>
 
         <TabsContent value="profile">
@@ -228,7 +223,7 @@ export default function AccountSettingsPage() {
                <div>
                 <h3 className="font-semibold mb-2">Billing History</h3>
                 <p className="text-sm text-muted-foreground">Your past invoices will appear here. (No invoices yet - example).</p>
-                 {/* Example of an invoice item - loop through these in a real app */}
+                {/* Example of an invoice item - loop through these in a real app */}
                 <div className="mt-2 p-3 border rounded-lg bg-muted/30 flex flex-col sm:flex-row justify-between sm:items-center text-sm shadow-sm gap-2">
                     <div>
                         <p className="font-medium">Invoice #LMDPRO-2024-001 - July 20, 2024</p>
@@ -281,24 +276,6 @@ export default function AccountSettingsPage() {
            </form>
           </Card>
         </TabsContent>
-        
-        <TabsContent value="apikeys">
-          <Card className="shadow-lg">
-             <CardHeader>
-              <CardTitle className="font-headline text-2xl animated-text-gradient">API Key Management</CardTitle>
-              <CardDescription>Generate and manage your API keys for LMDpro services. API access is available on Premium, Teams, and Enterprise plans.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <p className="text-muted-foreground mb-4">
-                    Access LMDpro's powerful AI capabilities programmatically. Integrate personalized learning path generation, video script creation, and resume optimization into your own applications.
-                </p>
-                <Link href="/api-management" passHref>
-                    <Button className="button-animated-gradient">Go to API Management & Pricing</Button>
-                </Link>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
       </Tabs>
     </div>
   );
