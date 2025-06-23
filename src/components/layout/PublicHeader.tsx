@@ -90,8 +90,8 @@ export default function PublicHeader() {
 
   return (
     <header className={cn(
-      "sticky top-2 md:top-4 z-50 w-[calc(100%-1rem)] md:w-full md:max-w-7xl mx-auto rounded-xl shadow-lg",
-      "bg-card/80 backdrop-blur-sm"
+      "fixed top-0 left-0 right-0 z-50",
+      "bg-transparent"
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">

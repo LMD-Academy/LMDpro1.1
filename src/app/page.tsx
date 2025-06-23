@@ -81,7 +81,7 @@ export default function HomePage() {
       <PublicHeader />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative text-center h-screen min-h-[700px] flex flex-col items-center justify-center">
+        <section className="relative text-center h-screen min-h-[700px] flex flex-col items-center justify-center pt-20">
             <div className="absolute inset-0 -z-10 animated-liquid-gradient"></div>
             <div className="container mx-auto px-4">
               <h1 className="text-5xl md:text-7xl font-headline font-bold mb-6 animated-text-gradient">
