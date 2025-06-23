@@ -55,7 +55,7 @@ const tiers: SubscriptionTier[] = [
   {
     id: "premium",
     name: "Premium",
-    price: "$5.80",
+    price: "$19",
     priceFrequency: "/month",
     annualBilling: "or $58 annually (Save ~16%!)",
     audience: "For dedicated individual learners & professionals",
@@ -76,8 +76,8 @@ const tiers: SubscriptionTier[] = [
   {
     id: "teams",
     name: "Teams",
-    price: "$196",
-    priceFrequency: "/month (up to 5 users)",
+    price: "$49",
+    priceFrequency: "/user/month",
     audience: "For businesses & educational institutions",
     description: "Empower your team with collaborative tools, centralized IAM, shared resources, and enhanced analytics.",
     modelInfo: "Latest Pro AI Models",
@@ -94,13 +94,13 @@ const tiers: SubscriptionTier[] = [
   {
     id: "enterprise",
     name: "Enterprise",
-    price: "Custom",
-    priceFrequency: "",
+    price: "$580",
+    priceFrequency: "/month",
     audience: "For large organizations requiring scale & bespoke solutions",
     description: "Tailored solutions, dedicated support, advanced security, custom AI model integration, and enterprise-grade features.",
     modelInfo: "Latest Pro AI Models / Custom Multi-Model Options",
     icon: Building,
-    cta: "Contact Sales for Enterprise",
+    cta: "Choose Enterprise Plan",
     features: [
       { text: "All Teams Features, scaled for enterprise needs", included: true, highlight: true },
       { text: "Custom AI Model Tuning & Private Integrations", included: true },
