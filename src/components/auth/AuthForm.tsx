@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Chrome, Eye, EyeOff } from "lucide-react"; 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Chrome, Eye, EyeOff, Shield, GraduationCap } from "lucide-react"; 
 import Link from "next/link";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -20,6 +21,7 @@ interface AuthFormProps {
 export default function AuthForm({ mode }: AuthFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [activeTab, setActiveTab] = useState("learner");
   const { toast } = useToast();
 
   const socialButtons = [
@@ -29,89 +31,99 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    toast({
-        title: mode === "login" ? "Login Successful!" : "Registration Complete!",
-        description: "Redirecting to your dashboard...",
-    });
+    const email = (event.target as HTMLFormElement).email.value;
+    const isAdminAttempt = activeTab === 'admin';
+    const isActuallyAdmin = email.toLowerCase().includes('admin'); // Simulated admin check
+
+    if (isAdminAttempt && !isActuallyAdmin) {
+        toast({
+            title: "Admin Access Only",
+            description: "Please use an authorized admin email to log in via the IAM portal.",
+            variant: "destructive",
+        });
+        return;
+    }
     
-    // Simulate successful login/registration by setting a flag in localStorage
+    if (!isAdminAttempt && isActuallyAdmin && mode === "login") {
+        toast({
+            title: "Admin Account Detected",
+            description: "You have logged in as a learner. To access admin features, please use the 'Admin / IAM' tab or the view switcher in your profile menu.",
+            duration: 7000,
+        });
+    } else {
+        toast({
+            title: mode === "login" ? "Login Successful!" : "Registration Complete!",
+            description: "Redirecting to your dashboard...",
+        });
+    }
+    
+    // Simulate successful login/registration by setting flags in localStorage
     if (typeof window !== 'undefined') {
       localStorage.setItem('lmdpro_auth_status', 'true');
+      localStorage.setItem('lmdpro_user_is_admin', isActuallyAdmin.toString());
     }
 
     setTimeout(() => {
-      window.location.href = "/dashboard";
-    }, 1500);
+      window.location.href = isActuallyAdmin && isAdminAttempt ? "/iam" : "/dashboard";
+    }, 2000);
   };
 
-
-  return (
-    <Card className="w-full max-w-md shadow-xl">
-      <CardHeader className="text-center">
-        <CardTitle className="text-3xl font-headline animated-text-gradient">
-          {mode === "login" ? "Welcome Back!" : "Create Your LMDpro Account"}
-        </CardTitle>
-        <CardDescription>
-          {mode === "login" ? "Sign in to continue your learning journey." : "Join LMDpro and start enhancing your skills today."}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {mode === "register" && (
+  const AuthFormContent = ({ formType }: { formType: "login" | "register" }) => (
+     <form onSubmit={handleSubmit} className="space-y-4">
+        {formType === "register" && (
             <div>
-                <Label htmlFor="fullName">Full Name</Label>
-                <Input id="fullName" type="text" placeholder="Your Full Name" required className="mt-1 focus-gradient-outline" />
+                <Label htmlFor={`fullName-${formType}`}>Full Name</Label>
+                <Input id={`fullName-${formType}`} type="text" placeholder="Your Full Name" required className="mt-1 focus-gradient-outline" />
             </div>
-          )}
-          <div>
-            <Label htmlFor="email">Email address</Label>
-            <Input id="email" type="email" placeholder="you@example.com" required className="mt-1 focus-gradient-outline" />
-          </div>
-          <div className="relative">
-            <Label htmlFor="password">Password</Label>
+        )}
+        <div>
+            <Label htmlFor={`email-${formType}`}>Email address</Label>
+            <Input id={`email-${formType}`} name="email" type="email" placeholder="you@example.com" required className="mt-1 focus-gradient-outline" />
+        </div>
+        <div className="relative">
+            <Label htmlFor={`password-${formType}`}>Password</Label>
             <Input 
-              id="password" 
-              type={showPassword ? "text" : "password"} 
-              placeholder="••••••••" 
-              required 
-              className="mt-1 pr-10 focus-gradient-outline"
-            />
-            <Button 
-              type="button"
-              variant="ghost" 
-              size="icon" 
-              className="absolute right-1 top-7 h-7 w-7" 
-              onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </Button>
-          </div>
-          {mode === "register" && (
-            <div className="relative">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
-              <Input 
-                id="confirm-password" 
-                type={showConfirmPassword ? "text" : "password"} 
+                id={`password-${formType}`} 
+                type={showPassword ? "text" : "password"} 
                 placeholder="••••••••" 
                 required 
-                className="mt-1 pr-10 focus-gradient-outline" 
-              />
-               <Button 
+                className="mt-1 pr-10 focus-gradient-outline"
+            />
+            <Button 
                 type="button"
                 variant="ghost" 
                 size="icon" 
                 className="absolute right-1 top-7 h-7 w-7" 
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </Button>
+        </div>
+        {formType === "register" && (
+            <div className="relative">
+                <Label htmlFor={`confirm-password-${formType}`}>Confirm Password</Label>
+                <Input 
+                    id={`confirm-password-${formType}`} 
+                    type={showConfirmPassword ? "text" : "password"} 
+                    placeholder="••••••••" 
+                    required 
+                    className="mt-1 pr-10 focus-gradient-outline" 
+                />
+                <Button 
+                    type="button"
+                    variant="ghost" 
+                    size="icon" 
+                    className="absolute right-1 top-7 h-7 w-7" 
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                 >
-                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
             </div>
-          )}
-        
+        )}
 
-            {mode === "login" && (
+        {formType === "login" && (
             <div className="text-sm text-right">
                 <Link href="/forgot-password" passHref>
                 <Button variant="link" className="p-0 h-auto font-normal text-primary hover:text-primary/80">
@@ -119,12 +131,39 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 </Button>
                 </Link>
             </div>
-            )}
+        )}
 
-            <Button type="submit" className="w-full button-animated-gradient">
-            {mode === "login" ? "Sign In" : "Create Account"}
-            </Button>
-        </form>
+        <Button type="submit" className="w-full button-animated-gradient">
+            {formType === "login" ? "Sign In" : "Create Account"}
+        </Button>
+    </form>
+  );
+
+
+  return (
+    <Card className="w-full max-w-md shadow-xl">
+      <CardHeader className="text-center">
+        <CardTitle className="text-3xl font-headline animated-text-gradient">
+          {mode === "login" ? "Welcome to LMDpro" : "Join LMDpro"}
+        </CardTitle>
+        <CardDescription>
+          {mode === "login" ? "Sign in to your Learner or Admin account." : "Create your Learner or Admin account."}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        
+        <Tabs defaultValue="learner" value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="learner"><GraduationCap className="mr-2 h-4 w-4"/>Learner</TabsTrigger>
+                <TabsTrigger value="admin"><Shield className="mr-2 h-4 w-4"/>Admin / IAM</TabsTrigger>
+            </TabsList>
+            <TabsContent value="learner" className="pt-4">
+                <AuthFormContent formType={mode} />
+            </TabsContent>
+            <TabsContent value="admin" className="pt-4">
+                <AuthFormContent formType={mode} />
+            </TabsContent>
+        </Tabs>
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">

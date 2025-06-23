@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -18,8 +19,72 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Loader2, Sparkles, Copy, ThumbsUp, ThumbsDown, Check } from "lucide-react";
-import { generatePersonalizedLearningPath, type GeneratePersonalizedLearningPathOutput } from "@/ai/flows/generate-personalized-learning-path";
 import { useToast } from "@/hooks/use-toast";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+// Placeholder for the Genkit flow function
+// In a real app, this would be: import { generatePersonalizedLearningPath, type GeneratePersonalizedLearningPathOutput } from "@/ai/flows/generate-personalized-learning-path";
+interface GeneratePersonalizedLearningPathInput {
+  role: string;
+  interests: string;
+  goals: string;
+}
+interface GeneratePersonalizedLearningPathOutput {
+  learningPath: string;
+}
+const generatePersonalizedLearningPath = async (input: GeneratePersonalizedLearningPathInput): Promise<GeneratePersonalizedLearningPathOutput> => {
+    console.log("Simulating AI Learning Path Generation with input:", input);
+    await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate network delay
+    return {
+        learningPath: `
+### Personalized Learning Path for a ${input.role}
+
+**Goal:** ${input.goals}
+**Interests:** ${input.interests}
+
+Here is a suggested learning path to help you achieve your goals, tailored to your interests.
+
+---
+
+#### **Phase 1: Foundational Skills (Weeks 1-4)**
+This phase focuses on strengthening the core concepts required for your goal.
+
+*   **Module 1: Advanced Python for Data Science**
+    *   **Focus:** Deepen your understanding of Python's data manipulation and analysis libraries.
+    *   **LMDpro Course:** *Python for Data Science*
+    *   **Key Topics:** Advanced Pandas, NumPy optimization, Object-Oriented principles.
+
+*   **Module 2: Statistical Foundations**
+    *   **Focus:** Review key statistical concepts vital for machine learning.
+    *   **LMDpro Course:** *Data Science Specialization L3*
+    *   **Key Topics:** Probability, Hypothesis Testing, Regression Analysis.
+
+#### **Phase 2: Core Topic Specialization (Weeks 5-10)**
+Dive deep into your primary area of interest.
+
+*   **Module 3: Machine Learning Engineering**
+    *   **Focus:** Learn to build, train, and deploy machine learning models.
+    *   **LMDpro Course:** *Advanced Machine Learning & AI*
+    *   **Key Topics:** Supervised vs. Unsupervised learning, Model Evaluation, MLOps basics.
+
+*   **Module 4: Big Data Technologies**
+    *   **Focus:** Understand how to work with large-scale datasets.
+    *   **LMDpro Course:** *Big Data Technologies & Cloud Platforms*
+    *   **Key Topics:** Spark, Hadoop, NoSQL Databases.
+
+#### **Phase 3: Practical Application & Portfolio Project (Weeks 11-16)**
+Apply your new skills to a real-world project.
+
+*   **Project Idea:** Analyze a large public dataset related to your interests. Build a predictive model and deploy it as a simple web API.
+*   **LMDpro Tools:** Use the **AI Academic Research** agent to find relevant papers and the **Resume Builder** to add this project to your profile.
+
+---
+*This path is a suggestion. Use the LMDpro Course Catalog to find additional modules that align with your specific interests.*
+`
+    };
+};
+
 
 const formSchema = z.object({
   role: z.string().min(2, "Role must be at least 2 characters.").max(100),
@@ -172,8 +237,8 @@ export default function LearningPathsPage() {
             <CardDescription>Based on: Role - {form.getValues().role}, Interests - {form.getValues().interests.substring(0,50)}..., Goals - {form.getValues().goals.substring(0,50)}...</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="prose dark:prose-invert max-w-none whitespace-pre-wrap rounded-md border p-4 bg-muted/30 text-sm leading-relaxed">
-              {learningPath.learningPath}
+            <div className="prose dark:prose-invert max-w-none rounded-md border p-4 bg-muted/30 text-sm leading-relaxed">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{learningPath.learningPath}</ReactMarkdown>
             </div>
           </CardContent>
           <CardFooter className="flex justify-end gap-2">

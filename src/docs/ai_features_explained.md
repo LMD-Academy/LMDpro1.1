@@ -1,3 +1,4 @@
+
 # AI Features in LMDpro
 
 LMDpro leverages advanced Artificial Intelligence, powered by Google's Gemini API family, to enhance your learning experience and provide dynamic content generation capabilities. This document explains some of the key AI-driven features you'll encounter.

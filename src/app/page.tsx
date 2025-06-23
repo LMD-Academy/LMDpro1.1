@@ -66,7 +66,7 @@ const quickLinks = [
     { href: "/dashboard", label: "My Dashboard", icon: LayoutGrid },
     { href: "/courses", label: "Explore Courses", icon: GraduationCap },
     { href: "/resume-builder", label: "Build My Resume", icon: ClipboardList },
-    { href: "/api-management", label: "Developer APIs", icon: Code2 },
+    { href: "/iam", label: "IAM Portal", icon: Users },
     { href: "/pricing", label: "View Plans", icon: DollarSign },
     { href: "/support", label: "Get Support", icon: HelpCircle },
 ];

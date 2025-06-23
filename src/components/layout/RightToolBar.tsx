@@ -197,7 +197,7 @@ export default function RightToolBar() {
                 <CardTitle className="font-headline text-base">AI Support</CardTitle>
                 <CardContent className="p-2">
                   <p className="text-sm text-muted-foreground">Having trouble? Ask our AI Support chatbot for help with your account, billing, or navigating the platform.</p>
-                  <a href="/support"><Button size="sm" className="w-full mt-3">Go to Full Support Page</Button></a>
+                  <Link href="/support"><Button size="sm" className="w-full mt-3">Go to Full Support Page</Button></Link>
                 </CardContent>
               </CardHeader>
             </Card>
@@ -206,7 +206,7 @@ export default function RightToolBar() {
   ];
 
   return (
-    <div className="hidden lg:flex flex-col w-16 items-center border-l bg-card/60 p-2 gap-2 fixed top-16 right-0 h-[calc(100vh-4rem)]">
+    <div className="hidden lg:flex flex-col w-16 items-center border-l bg-card/60 p-2 gap-2 fixed top-16 right-0 h-[calc(100vh-4rem)] z-30">
       <TooltipProvider delayDuration={0}>
         {toolbarItems.map(item => (
             <Popover key={item.id}>

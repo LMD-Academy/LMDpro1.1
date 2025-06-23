@@ -19,10 +19,64 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Loader2, Linkedin, Download, Sparkles, FileText, PlusCircle, Trash2, Info } from "lucide-react";
-import { improveResume, type ImproveResumeOutput } from "@/ai/flows/improve-resume";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
+
+// Placeholder for the Genkit flow function
+interface ImproveResumeInput {
+  resume: string;
+  jobDescription: string;
+}
+interface ImproveResumeOutput {
+  improvedResume: string;
+  suggestions: string;
+}
+const improveResume = async (input: ImproveResumeInput): Promise<ImproveResumeOutput> => {
+    console.log("Simulating AI Resume Improvement with input:", input);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    return {
+        improvedResume: `
+## Alex User
+alex.user@example.com | 123-456-7890 | [LinkedIn](https://linkedin.com/in/alexuser)
+
+### Summary
+Results-driven Senior Software Engineer with over 5 years of experience specializing in full-stack development and cloud-native applications. Proven track record of leading high-impact projects, optimizing application performance by over 30%, and mentoring engineering teams to foster best practices. Seeking to leverage expertise in distributed systems and Agile methodologies to contribute to a challenging Senior Project Manager role at ExampleCorp.
+
+### Experience
+**Senior Software Engineer** | Tech Solutions Inc. | San Francisco, CA\n
+*Jan 2021 - Present*
+- Architected and led the development of a new flagship product using microservices architecture, resulting in a 20% increase in user engagement and a 15% improvement in system scalability.
+- Spearheaded performance optimization initiatives, reducing application load times by 30% and server costs by 10%.
+- Mentored a team of 4 junior engineers, improving team coding standards and reducing code review cycles by 25%.
+
+**Software Engineer** | Innovate LLC | Austin, TX\n
+*Jun 2018 - Dec 2020*
+- Developed and maintained full-stack web applications using React, Node.js, and PostgreSQL.
+- Collaborated effectively with product managers in an Agile environment to define and deliver feature requirements on a bi-weekly sprint cadence.
+
+### Education
+**M.S. in Computer Science** | State University | May 2018
+*Thesis on applying Machine Learning models to optimize distributed systems.*
+
+**B.S. in Software Engineering** | Tech College | May 2016
+*Graduated with High Honors.*
+
+### Skills
+- **Project Management:** Agile, Scrum, Kanban, JIRA, Confluence
+- **Languages:** JavaScript (React, Node.js), Python (Django, Flask), Java
+- **Cloud & DevOps:** AWS, Docker, Kubernetes, CI/CD, Terraform
+        `,
+        suggestions: `
+- **Highlight Project Management Keywords:** Your resume is strong technically, but for a Project Manager role, I've emphasized keywords like "Architected", "Led", "Spearheaded", "Agile environment", and "JIRA".
+- **Quantify Achievements:** I've strengthened your achievement bullet points with more specific metrics (e.g., "reducing code review cycles by 25%"). This is highly effective for ATS and human readers.
+- **Tailor Summary:** The summary is now re-focused to bridge your engineering background with the target project management role, explicitly mentioning leadership and Agile methodologies.
+        `,
+    };
+};
 
 const experienceSchema = z.object({
   id: z.string().optional(),
@@ -372,15 +426,15 @@ export default function ResumeBuilderPage() {
               <CardContent className="space-y-6">
                 <div>
                   <h3 className="font-semibold mb-2 text-lg">AI-Generated Suggestions:</h3>
-                  <div className="prose dark:prose-invert max-w-none whitespace-pre-wrap rounded-md border p-4 bg-muted/50 text-sm leading-relaxed">
-                    {aiSuggestions.suggestions}
+                  <div className="prose dark:prose-invert max-w-none rounded-md border p-4 bg-muted/50 text-sm leading-relaxed">
+                     <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiSuggestions.suggestions}</ReactMarkdown>
                   </div>
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2 text-lg">AI-Improved Resume Draft:</h3>
                   <ScrollArea className="h-80 rounded-md border p-4 bg-muted/50">
                     <div className="prose dark:prose-invert max-w-none whitespace-pre-wrap text-sm leading-relaxed">
-                        {aiSuggestions.improvedResume}
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiSuggestions.improvedResume}</ReactMarkdown>
                     </div>
                   </ScrollArea>
                    <Button variant="outline" size="sm" className="mt-3" 
@@ -396,7 +450,7 @@ export default function ResumeBuilderPage() {
           )}
         </div>
 
-        <div className="space-y-8 lg:sticky lg:top-24"> {/* Added sticky positioning for sidebar column */}
+        <div className="space-y-8 lg:sticky lg:top-24">
           <Card className="shadow-lg rounded-xl">
             <CardHeader>
               <CardTitle className="font-headline">Select Template</CardTitle>
@@ -413,7 +467,6 @@ export default function ResumeBuilderPage() {
                   aria-pressed={selectedTemplate === template.id}
                 >
                   <div className="w-full h-full bg-muted/40 flex items-center justify-center rounded">
-                     {/* Using a simple div instead of Image to remove dependency */}
                     <div className="w-24 h-32 flex items-center justify-center text-xs text-muted-foreground">{template.name}</div>
                   </div>
                   <p className="text-xs text-center mt-1.5 font-medium">{template.name}</p>

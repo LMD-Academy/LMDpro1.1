@@ -49,7 +49,7 @@ const courseFields = [
 export default function PublicHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("light");
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Placeholder, manage with auth context
+  const [isAuthenticated, setIsAuthenticated] = useState(false); 
 
   useEffect(() => {
     // Theme initialization
@@ -75,7 +75,6 @@ export default function PublicHeader() {
   };
   
    useEffect(() => {
-    // This is a placeholder for checking authentication status
     const loggedIn = typeof window !== 'undefined' ? localStorage.getItem('lmdpro_auth_status') === 'true' : false;
     setIsAuthenticated(loggedIn);
   }, []);
@@ -83,6 +82,7 @@ export default function PublicHeader() {
   const handleLogout = () => {
      if (typeof window !== 'undefined') {
         localStorage.removeItem('lmdpro_auth_status');
+        localStorage.removeItem('lmdpro_user_is_admin');
      }
      setIsAuthenticated(false);
      window.location.href = "/login";

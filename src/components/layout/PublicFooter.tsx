@@ -13,14 +13,12 @@ export default function PublicFooter() {
       { href: "/#features", label: "Features Overview" },
       { href: "/courses", label: "Course Catalog" },
       { href: "/pricing", label: "Pricing Plans" },
-      { href: "/resume-builder", label: "Resume Builder" },
     ],
     company: [
       { href: "/about", label: "About LMDpro" },
       { href: "/contact", label: "Contact Us" },
     ],
     resources: [
-      { href: "/api-docs", label: "Developer API Docs", icon: FileTextIcon },
       { href: "/docs", label: "Application Docs", icon: BookOpen }, 
       { href: "/support", label: "Help Center & Support", icon: LifeBuoy },
       { href: "/terms", label: "Terms of Service" },

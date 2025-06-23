@@ -31,11 +31,12 @@ import {
   Settings2,
   BookMarked,
   Library,
-  Network,
+  Shield,
   Info,
   LogOut,
   Languages,
-  Film
+  Film,
+  Repeat
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -57,16 +58,17 @@ import Image from "next/image";
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/my-learning", label: "My Learning", icon: BookMarked },
-  { href: "/learning-paths", label: "Learning Paths", icon: Lightbulb },
   { href: "/courses", label: "Course Catalog", icon: GraduationCap },
-  { href: "/video-creation", label: "Video Creation", icon: Film },
   { href: "/resume-builder", label: "Resume Builder", icon: ClipboardList },
   { href: "/academic-research", label: "Academic Research", icon: Library },
-  { href: "/api-management", label: "API Management", icon: Network },
   { href: "/docs", label: "App Documentation", icon: Info }, 
   { href: "/account", label: "Account Settings", icon: Settings2 },
   { href: "/support", label: "Help & Support", icon: HelpCircle },
 ];
+
+const adminNavItems = [
+    { href: "/iam", label: "IAM Dashboard", icon: Shield, adminOnly: true },
+]
 
 export default function AppLayout({ children: layoutChildren }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -74,8 +76,13 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
   const [currentTheme, setCurrentTheme] = React.useState("light");
   const { language, setLanguage } = useLanguage(); 
+  const [isAdmin, setIsAdmin] = React.useState(false); // Placeholder for admin role
 
   React.useEffect(() => {
+    // Check for admin status from localStorage (for demo purposes)
+    const adminStatus = localStorage.getItem('lmdpro_user_is_admin') === 'true';
+    setIsAdmin(adminStatus);
+    
     try {
       const savedTheme = localStorage.getItem('lmdpro-theme');
       if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
@@ -101,6 +108,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
         localStorage.removeItem('lmdpro_auth_status');
+        localStorage.removeItem('lmdpro_user_is_admin');
     }
     window.location.href = "/"; 
   };
@@ -137,6 +145,19 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                   </SidebarMenuButton>
                 </Link>
               </SidebarMenuItem>
+            ))}
+             {isAdmin && adminNavItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                    <Link href={item.href} passHref>
+                    <SidebarMenuButton
+                        isActive={pathname.startsWith(item.href)}
+                        tooltip={item.label}
+                    >
+                        <item.icon />
+                        <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
+                    </SidebarMenuButton>
+                    </Link>
+                </SidebarMenuItem>
             ))}
           </SidebarMenu>
         </SidebarContent>
@@ -208,6 +229,11 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                     <Link href="/account" passHref>
                           <DropdownMenuItem><Settings className="mr-2"/>Account Settings</DropdownMenuItem>
                     </Link>
+                    {isAdmin && (
+                        <Link href={pathname === '/iam' ? '/dashboard' : '/iam'} passHref>
+                            <DropdownMenuItem><Repeat className="mr-2 h-4 w-4"/>Switch to {pathname === '/iam' ? 'Learner View' : 'Admin View'}</DropdownMenuItem>
+                        </Link>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout}><LogOut className="mr-2"/>Logout</DropdownMenuItem> 
                 </DropdownMenuContent>
@@ -215,7 +241,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
             </div>
         </header>
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8">
-          <div className="min-w-0 mr-16"> {/* Added margin to avoid overlap with fixed right toolbar */}
+          <div className="min-w-0 mr-16">
             {layoutChildren}
           </div>
         </main>
