@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { MessageSquare, Book, Sparkles, HelpCircle, Send, Loader2, Save } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -33,7 +33,6 @@ export default function RightToolBar() {
   const { toast } = useToast();
   const chatScrollAreaRef = useRef<HTMLDivElement>(null);
 
-  // Load notes from localStorage on initial render
   useEffect(() => {
     try {
       const savedNotes = localStorage.getItem("lmdpro-notepad");
@@ -45,7 +44,6 @@ export default function RightToolBar() {
     }
   }, []);
 
-  // Save notes to localStorage whenever they change
   const handleSaveNotes = () => {
     try {
         localStorage.setItem("lmdpro-notepad", notes);
@@ -57,7 +55,7 @@ export default function RightToolBar() {
   
   const scrollToBottom = () => {
     if (chatScrollAreaRef.current) {
-        const scrollViewport = chatScrollAreaRef.current.querySelector('div[style*="overflow: scroll hidden;"]');
+        const scrollViewport = chatScrollAreaRef.current.querySelector('div');
         if (scrollViewport) {
           scrollViewport.scrollTop = scrollViewport.scrollHeight;
         }
@@ -108,20 +106,18 @@ export default function RightToolBar() {
       }
   }
 
-  return (
-    <div className="hidden lg:flex flex-col w-80 border-l bg-card/60 p-3 gap-4 h-screen sticky top-0 right-0">
-      <Tabs defaultValue="assistant" className="flex flex-col h-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="assistant"><MessageSquare className="mr-2 h-4 w-4"/>Assistant</TabsTrigger>
-          <TabsTrigger value="notepad"><Book className="mr-2 h-4 w-4"/>Notepad</TabsTrigger>
-        </TabsList>
-        <TabsContent value="assistant" className="flex-1 flex flex-col mt-2 overflow-hidden">
-           <Card className="flex-1 flex flex-col h-full shadow-md">
+  const toolbarItems = [
+    {
+        id: 'assistant',
+        icon: MessageSquare,
+        tooltip: 'AI Assistant',
+        content: (
+            <Card className="flex-1 flex flex-col h-full shadow-md w-full">
              <CardHeader className="p-3 border-b">
                 <CardTitle className="font-headline text-base">AI Assistant</CardTitle>
              </CardHeader>
-             <CardContent className="flex-1 p-3 overflow-hidden">
-                <ScrollArea className="h-full" ref={chatScrollAreaRef}>
+             <CardContent className="flex-1 p-0 overflow-hidden">
+                <ScrollArea className="h-full p-3" ref={chatScrollAreaRef}>
                     <div className="space-y-4 pr-3">
                     {chatMessages.map((msg, index) => (
                       <div key={index} className={cn("flex items-start gap-2", msg.role === 'user' ? 'justify-end' : 'justify-start')}>
@@ -154,9 +150,14 @@ export default function RightToolBar() {
                 </div>
              </CardFooter>
            </Card>
-        </TabsContent>
-        <TabsContent value="notepad" className="flex-1 flex flex-col mt-2 overflow-hidden">
-           <Card className="flex-1 flex flex-col h-full shadow-md">
+        )
+    },
+    {
+        id: 'notepad',
+        icon: Book,
+        tooltip: 'Notepad',
+        content: (
+            <Card className="flex-1 flex flex-col h-full shadow-md w-full">
                 <CardHeader className="p-3 border-b">
                     <CardTitle className="font-headline text-base">Notepad</CardTitle>
                 </CardHeader>
@@ -184,21 +185,49 @@ export default function RightToolBar() {
                     </Button>
                 </CardFooter>
            </Card>
-        </TabsContent>
-      </Tabs>
-      
-      <Popover>
-        <PopoverTrigger asChild>
-            <Button variant="outline" size="icon" className="rounded-full w-12 h-12 absolute bottom-4 right-4 shadow-lg button-animated-gradient text-primary-foreground">
-                <HelpCircle className="h-6 w-6"/>
-            </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-80 mr-4 mb-2">
-            <h4 className="font-medium leading-none mb-2">AI Support</h4>
-            <p className="text-sm text-muted-foreground">Having trouble? Ask our AI Support chatbot for help with your account, billing, or navigating the platform.</p>
-             <a href="/support"><Button size="sm" className="w-full mt-3">Go to Support</Button></a>
-        </PopoverContent>
-      </Popover>
+        )
+    },
+    {
+        id: 'support',
+        icon: HelpCircle,
+        tooltip: 'Help & Support',
+        content: (
+            <Card className="w-full">
+              <CardHeader>
+                <CardTitle className="font-headline text-base">AI Support</CardTitle>
+                <CardContent className="p-2">
+                  <p className="text-sm text-muted-foreground">Having trouble? Ask our AI Support chatbot for help with your account, billing, or navigating the platform.</p>
+                  <a href="/support"><Button size="sm" className="w-full mt-3">Go to Full Support Page</Button></a>
+                </CardContent>
+              </CardHeader>
+            </Card>
+        )
+    }
+  ];
+
+  return (
+    <div className="hidden lg:flex flex-col w-16 items-center border-l bg-card/60 p-2 gap-2 fixed top-16 right-0 h-[calc(100vh-4rem)]">
+      <TooltipProvider delayDuration={0}>
+        {toolbarItems.map(item => (
+            <Popover key={item.id}>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <PopoverTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-lg">
+                                <item.icon className="h-5 w-5" />
+                            </Button>
+                        </PopoverTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent side="left">
+                        <p>{item.tooltip}</p>
+                    </TooltipContent>
+                </Tooltip>
+                <PopoverContent side="left" align="end" className="w-80 h-[calc(100vh-5rem)] flex flex-col p-0 mr-2">
+                    {item.content}
+                </PopoverContent>
+            </Popover>
+        ))}
+      </TooltipProvider>
     </div>
   );
 }

@@ -17,9 +17,11 @@ import { useParams } from "next/navigation";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
+import { cn, stripMarkdown } from "@/lib/utils";
 import { useLanguage } from "@/context/LanguageContext";
 import { courseQa } from "@/ai/flows/course-qna";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 
 // Define the course type based on the return of getCourseById
@@ -154,7 +156,8 @@ export default function CourseViewPage() {
       window.speechSynthesis.resume();
       setIsPaused(false);
     } else { // Is not speaking, so start
-      const newUtterance = new SpeechSynthesisUtterance(currentLesson.content);
+      const textToSpeak = stripMarkdown(currentLesson.content);
+      const newUtterance = new SpeechSynthesisUtterance(textToSpeak);
       const selectedVoice = availableVoices.find(v => v.voiceURI === selectedVoiceURI);
       if (selectedVoice) {
         newUtterance.voice = selectedVoice;
@@ -333,7 +336,9 @@ export default function CourseViewPage() {
             <CardContent className="p-0">
                  <ScrollArea className="h-[400px] lg:h-[500px]">
                     <div className="prose dark:prose-invert max-w-none p-6">
-                        <div className="whitespace-pre-wrap">{currentLesson.content || "No content available for this lesson."}</div>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {currentLesson.content || "No content available for this lesson."}
+                        </ReactMarkdown>
                     </div>
                 </ScrollArea>
             </CardContent>
@@ -395,11 +400,13 @@ export default function CourseViewPage() {
             <Card className="shadow-md rounded-lg">
                 <CardHeader><CardTitle className="font-headline">Interactive Transcript</CardTitle></CardHeader>
                 <CardContent>
-                    <div className="h-64 border rounded-md p-3 bg-muted/30 overflow-y-auto">
-                        <p className="text-sm text-muted-foreground whitespace-pre-line">
-                            {currentLesson.content || "Transcript is not available for this lesson."}
-                        </p>
-                    </div>
+                    <ScrollArea className="h-64 border rounded-md p-3 bg-muted/30">
+                       <div className="prose dark:prose-invert max-w-none text-sm">
+                           <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {currentLesson.content || "Transcript is not available for this lesson."}
+                           </ReactMarkdown>
+                       </div>
+                    </ScrollArea>
                 </CardContent>
             </Card>
           </TabsContent>

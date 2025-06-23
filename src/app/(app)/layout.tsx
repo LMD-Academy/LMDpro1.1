@@ -11,7 +11,9 @@ import {
   useSidebar,
   SidebarTrigger,
   SidebarMenuButton,
-  SidebarFooter
+  SidebarFooter,
+  SidebarRail,
+  SidebarInset,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import {
@@ -45,12 +47,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { usePathname } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import RightToolBar from "@/components/layout/RightToolBar";
 import { useLanguage } from "@/context/LanguageContext"; 
+import Image from "next/image";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -68,7 +70,7 @@ const navItems = [
 
 export default function AppLayout({ children: layoutChildren }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { isMobile } = useSidebar();
+  const { isMobile, state: sidebarState } = useSidebar();
   const [isSearchExpanded, setIsSearchExpanded] = React.useState(false);
   const [currentTheme, setCurrentTheme] = React.useState("light");
   const { language, setLanguage } = useLanguage(); 
@@ -111,10 +113,13 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
         collapsible="icon" 
         className="border-r"
       >
-        <SidebarHeader className="p-4 flex items-center justify-between">
+        <SidebarHeader className={cn(
+          "p-2 flex items-center",
+          sidebarState === 'collapsed' ? 'justify-center' : 'p-4 justify-between'
+        )}>
           <Link href="/dashboard" className="flex items-center gap-2 group">
-              <img src="/LMDpro Logo Black.svg" alt="LMDpro Logo" className="h-10 w-auto dark:hidden" />
-              <img src="/LMDpro Logo White.svg" alt="LMDpro Logo" className="h-10 w-auto hidden dark:block" />
+              <Image src="/LMDpro Logo Black.svg" alt="LMDpro Logo" width={40} height={40} className="h-10 w-auto dark:hidden" />
+              <Image src="/LMDpro Logo White.svg" alt="LMDpro Logo" width={40} height={40} className="h-10 w-auto hidden dark:block" />
               <span className="text-xl font-headline font-bold text-foreground group-data-[collapsible=icon]:hidden">LMDpro</span>
           </Link>
         </SidebarHeader>
@@ -145,9 +150,9 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                 </SidebarMenuItem>
             </SidebarMenu>
         </SidebarFooter>
+        <SidebarRail />
       </Sidebar>
-
-      <div className="flex-1 flex flex-col min-w-0">
+      <SidebarInset>
         <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-card/80 backdrop-blur-sm px-4 md:px-6">
             <div className="flex items-center gap-2">
                 <SidebarTrigger />
@@ -210,11 +215,11 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
             </div>
         </header>
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8">
-          <div className="min-w-0">
+          <div className="min-w-0 mr-16"> {/* Added margin to avoid overlap with fixed right toolbar */}
             {layoutChildren}
           </div>
         </main>
-      </div>
+      </SidebarInset>
       <RightToolBar />
     </div>
   );
