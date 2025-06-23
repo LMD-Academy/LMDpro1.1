@@ -226,7 +226,7 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                     <Link href="/dashboard" passHref>
                         <DropdownMenuItem><UserCircle className="mr-2"/>Profile</DropdownMenuItem>
                     </Link>
-                    <Link href="/account" passHref>
+                    <Link href="/account?tab=profile" passHref>
                           <DropdownMenuItem><Settings className="mr-2"/>Account Settings</DropdownMenuItem>
                     </Link>
                     {isAdmin && (
