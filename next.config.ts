@@ -25,6 +25,16 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
+  experimental: {
+    turbo: {
+      rules: {
+        '**/*.md': {
+          loaders: ['raw-loader'],
+          as: '*.js',
+        },
+      },
+    },
+  },
 };
 
 export default nextConfig;
