@@ -148,11 +148,30 @@ export default function PublicHeader() {
                     Docs
                   </Button>
                 </Link>
-                <Link href="/about" passHref>
-                  <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-foreground/5 dark:hover:bg-background/20 rounded-full h-9 px-4">
-                    About Us
-                  </Button>
-                </Link>
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
+                        <UserCircle className="h-6 w-6 text-muted-foreground"/>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="center" className="w-48 rounded-xl">
+                        {isAuthenticated ? (
+                            <>
+                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <Link href="/dashboard" passHref><DropdownMenuItem>Dashboard</DropdownMenuItem></Link>
+                            <Link href="/account?tab=profile" passHref><DropdownMenuItem>Settings</DropdownMenuItem></Link>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+                            </>
+                        ) : (
+                            <>
+                            <Link href="/login" passHref><DropdownMenuItem>Login</DropdownMenuItem></Link>
+                            <Link href="/register" passHref><DropdownMenuItem>Sign Up</DropdownMenuItem></Link>
+                            </>
+                        )}
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </nav>
           </div>
         </div>
@@ -163,31 +182,6 @@ export default function PublicHeader() {
             {currentTheme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             <span className="sr-only">Toggle Theme</span>
           </Button>
-          
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
-                  <UserCircle className="h-6 w-6 text-muted-foreground"/>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 rounded-xl">
-                {isAuthenticated ? (
-                    <>
-                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <Link href="/dashboard" passHref><DropdownMenuItem>Dashboard</DropdownMenuItem></Link>
-                      <Link href="/account?tab=profile" passHref><DropdownMenuItem>Settings</DropdownMenuItem></Link>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
-                    </>
-                  ) : (
-                    <>
-                      <Link href="/login" passHref><DropdownMenuItem>Login</DropdownMenuItem></Link>
-                      <Link href="/register" passHref><DropdownMenuItem>Sign Up</DropdownMenuItem></Link>
-                    </>
-                  )}
-              </DropdownMenuContent>
-            </DropdownMenu>
           
             {!isAuthenticated && (
                  <Link href="/register" passHref>
@@ -232,10 +226,6 @@ export default function PublicHeader() {
                  <Link href="/support" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
                     <HelpCircle className="h-5 w-5" />
                     Support
-                </Link>
-                 <Link href="/about" className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-foreground text-lg" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Users className="h-5 w-5" />
-                    About Us
                 </Link>
                 <hr className="my-2" />
                 {isAuthenticated ? (

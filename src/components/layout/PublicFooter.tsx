@@ -15,7 +15,6 @@ export default function PublicFooter() {
       { href: "/pricing", label: "Pricing Plans" },
     ],
     company: [
-      { href: "/about", label: "About LMDpro" },
       { href: "/contact", label: "Contact Us" },
     ],
     resources: [
