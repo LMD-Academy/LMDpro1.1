@@ -1,8 +1,10 @@
+
+// src/lib/course_structure_data.ts
 // This file contains the static structure of the courses, which is then hydrated with content by course-data.ts
 // It is separated to keep the main data file cleaner and focused on logic.
 
 import { BookCopy, Brain, Briefcase, Building, GraduationCap, Users as UsersIcon, Zap } from "lucide-react";
-import type { Field } from './course-data';
+import type { Field } from './types';
 
 export const course_data_structure: Omit<Field, 'standaloneCourses'> & { standaloneCourses: Omit<Field['standaloneCourses'][0], 'subCourses'> & { subCourses: Omit<Field['standaloneCourses'][0]['subCourses'][0], 'lessons'>[] }[] }[] = [
   {
