@@ -19,11 +19,6 @@ LMDpro's search functionality is designed to help you find exactly what you're l
 
 **Example:** If you search for "Ethical Considerations in Quantum Machine Learning," and no such course exists, the AI will attempt to create a course structure with relevant modules, guided by LMDpro's educational framework.
 
-**Benefits:**
-*   **Relevant Learning:** Get access to learning material outlines on virtually any topic you search for.
-*   **Structured Content:** AI-generated course outlines follow LMDpro's pedagogical structure.
-*   **Immediate Exploration:** New course outlines become available quickly, expanding your learning horizons.
-
 ## 2. AI Assistant (Chat)
 
 Our AI Assistant, available in the right sidebar of the authenticated application view, is powered by Gemini models. It's designed to:
@@ -38,7 +33,7 @@ The AI Assistant leverages chat history to maintain context during your conversa
 ## 3. AI-Enhanced Module View (Course Player)
 
 Within the "Module View" where you engage with course content:
-*   **Paragraph Audio (Text-to-Speech):** LMDpro provides a button that utilizes the browser's built-in speech synthesis capabilities to read the current paragraph aloud. The voice and language can often be configured in your browser or OS settings.
+*   **Paragraph Audio (Text-to-Speech):** LMDpro provides a button that utilizes the browser's built-in speech synthesis capabilities to read the current paragraph aloud.
 *   **AI Q&A:** Ask questions about the current module content, answered by AI.
 *   **AI Insights:** Get AI-generated summaries, key takeaways, and related concept explorations for the current lesson.
 
@@ -54,7 +49,11 @@ In the "Library & Research" section, when you load a sub-course or conduct resea
 *   **AI Suggestions:** After you input your resume details and a target job description, you can request AI-powered suggestions. A Gemini model will review your content and provide actionable tips to improve clarity, impact, and ATS (Applicant Tracking System) compatibility.
 *   **Automatic Skill Integration:** Skills learned from completed LMDpro courses are identified. The system can add these to your resume and provide AI-generated, concise descriptions for each skill.
 
-## 6. AI Customer Service Assistant
+## 6. AI Agentic Course Creator (IAM Portal)
+*   For administrators, located in the `/iam/course-creator` page.
+*   This autonomous agent allows admins to instruct it to design new course structures, including modules and lesson outlines, by providing a high-level objective in a chat interface.
+
+## 7. AI Customer Service Assistant
 *   Located in the "Help & Support" page and as a FAB in the right sidebar.
 *   This AI assistant is trained on LMDpro's FAQ, documentation, and common support issues to provide instant answers to technical, billing, or platform-related questions.
 

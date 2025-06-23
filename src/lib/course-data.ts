@@ -1,3 +1,4 @@
+
 // src/lib/course-data.ts
 import { course_data_structure } from './course_structure_data';
 import type { Field, SubCourse, Lesson } from './types';

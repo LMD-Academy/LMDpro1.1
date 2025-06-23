@@ -13,7 +13,6 @@ import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-// Placeholder for Genkit flow
 import { createCourseOutline, type CreateCourseOutlineOutput } from "@/ai/flows/course-creator";
 
 interface CreatorMessage {

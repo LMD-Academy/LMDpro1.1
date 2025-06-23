@@ -1,6 +1,7 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, Zap, Users, Building, GraduationCap as StudentCapIcon, Gem } from "lucide-react"; // Renamed GraduationCap to avoid conflict
+import { CheckCircle, Zap, Users, Building, GraduationCap as StudentCapIcon, Gem } from "lucide-react";
 
 interface TierFeature {
   text: string;
@@ -34,7 +35,6 @@ const tiers: SubscriptionTier[] = [
       { text: "1 Resume Template", included: true },
       { text: "Community Support", included: true },
       { text: "Limited AI Suggestions", included: false },
-      { text: "API Access", included: false },
     ],
   },
   {
@@ -52,7 +52,6 @@ const tiers: SubscriptionTier[] = [
       { text: "All Resume Templates & ATS Scoring", included: true },
       { text: "Priority AI Support", included: true },
       { text: "Full AI Suggestions & Optimization", included: true },
-      { text: "Developer API Access (basic tier)", included: true },
     ],
   },
   {
@@ -69,7 +68,6 @@ const tiers: SubscriptionTier[] = [
       { text: "Shared Learning Paths & Resources", included: true },
       { text: "Collaborative Video Projects", included: true },
       { text: "Volume Discounts", included: true },
-      { text: "Teams API Access (enhanced tier)", included: true },
     ],
   },
   {
@@ -86,7 +84,6 @@ const tiers: SubscriptionTier[] = [
       { text: "Dedicated Account Manager", included: true },
       { text: "Advanced Security & Compliance", included: true },
       { text: "Custom Branding & Content", included: true },
-      { text: "Enterprise API Access (full)", included: true },
     ],
   },
    {
@@ -101,7 +98,6 @@ const tiers: SubscriptionTier[] = [
       { text: "Most Premium Features (with verification)", included: true },
       { text: "Access to Educational Resources", included: true },
       { text: "Community Forum Access", included: true },
-      { text: "Limited API Access", included: true },
     ],
   },
 ];
