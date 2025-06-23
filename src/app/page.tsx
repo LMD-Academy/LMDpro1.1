@@ -27,7 +27,7 @@ type CourseDisplayInfo = {
 
 const pricingTiersHomepage = [
   { name: "Community", price: "Free", model: "Latest Free Gemma Model", features: ["Limited Personalized Learning Paths", "Basic Resume Builder (watermarked)", "Selection of Free Courses"], cta: "Join for Free", href:"/register?tier=community" },
-  { name: "Premium", price: "$5.80/mo", model: "Latest Flash AI Models", features: ["Unlimited Learning Paths & AI Generation", "Full Resume Optimization", "Full Course Catalog Access"], cta: "Go Premium", href:"/register?tier=premium", popular: true },
+  { name: "Premium", price: "$5.80/mo", model: "Latest Flash AI Models", features: ["Unlimited Learning Paths & AI Generation", "Full Resume Optimization", "Full Course Catalog Access"], cta: "Go Premium", href:"/register?tier=premium" },
   { name: "Teams", price: "$196/mo", model: "Latest Pro AI Models", features: ["All Premium Features", "Team Management & Analytics", "Shared Resources & Brand Kits"], cta: "Choose Teams", href:"/register?tier=teams" },
 ];
 
@@ -91,7 +91,7 @@ export default function HomePage() {
                 Your AI-powered partner for personalized learning, skill enhancement, and career advancement. Experience the future of education, tailored to you.
               </p>
               <Link href="/register" passHref>
-                <Button size="lg" className="button-animated-gradient text-lg px-10 py-6">
+                <Button size="lg" className="button-animated-gradient text-lg px-10 py-6 rounded-full">
                   Get Started Free <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -163,7 +163,7 @@ export default function HomePage() {
               </div>
               <div className="text-center mt-16">
                 <Link href="/courses" passHref>
-                  <Button size="lg" className="button-animated-gradient">
+                  <Button size="lg" className="button-animated-gradient rounded-full">
                     Explore All Courses
                   </Button>
                 </Link>
@@ -209,12 +209,7 @@ export default function HomePage() {
               </p>
               <div className="grid md:grid-cols-3 gap-8 items-stretch">
                 {pricingTiersHomepage.map((tier) => (
-                  <Card key={tier.name} className={`flex flex-col rounded-xl shadow-2xl transition-transform duration-300 hover:-translate-y-2 paper-cut-style ${tier.popular ? 'border-primary ring-2 ring-primary' : ''}`}>
-                    {tier.popular && (
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-full shadow-lg button-animated-gradient border-2 border-background z-10">
-                        Most Popular
-                      </div>
-                    )}
+                  <Card key={tier.name} className={`flex flex-col rounded-xl shadow-2xl transition-transform duration-300 hover:-translate-y-2 paper-cut-style ${tier.name === 'Premium' ? 'border-primary ring-2 ring-primary' : ''}`}>
                     <CardHeader className="text-center pt-8 pb-4">
                       <CardTitle className="font-headline text-2xl mb-2">{tier.name}</CardTitle>
                       <p className="text-3xl font-bold mb-1">{tier.price}</p>
@@ -232,7 +227,7 @@ export default function HomePage() {
                     </CardContent>
                     <CardFooter className="mt-auto pt-4">
                       <Link href={tier.href} passHref className="w-full">
-                        <Button className="w-full button-animated-gradient">{tier.cta}</Button>
+                        <Button className="w-full button-animated-gradient rounded-full">{tier.cta}</Button>
                       </Link>
                     </CardFooter>
                   </Card>

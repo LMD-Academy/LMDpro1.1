@@ -90,8 +90,7 @@ export default function PublicHeader() {
 
   return (
     <header className={cn(
-      "fixed top-0 left-0 right-0 z-50",
-      "bg-transparent"
+      "fixed top-0 left-0 right-0 z-50"
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
@@ -99,59 +98,65 @@ export default function PublicHeader() {
           <Image src="/LMDpro Logo White.svg" alt="LMDpro Logo" width={40} height={40} className="hidden dark:block" />
           <span className="text-2xl font-headline font-bold text-foreground">LMDpro</span>
         </Link>
-
-        <nav className="hidden md:flex items-center gap-1">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
-                Explore Courses <ChevronDown className="ml-1 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[850px] p-4" align="start">
-              <DropdownMenuLabel className="font-headline text-lg mb-2">Courses by Field</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {courseFields.map((field) => (
-                  <DropdownMenuGroup key={field.name}>
-                    <div className="flex items-center gap-2 text-sm font-semibold text-foreground mb-1">
-                      <field.icon className="h-4 w-4 text-primary" />
-                      {field.name}
-                    </div>
-                    {field.courses.map((course) => (
-                      <DropdownMenuItem key={course.id} asChild>
-                        <Link href={`/courses/${course.id}`} className="text-xs text-muted-foreground hover:text-primary pl-6 cursor-pointer">
-                          {course.title}
-                        </Link>
-                      </DropdownMenuItem>
+        
+        {/* Floating Nav for Desktop */}
+        <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="bg-background/50 backdrop-blur-sm rounded-full border shadow-lg p-1">
+            <nav className="flex items-center gap-1">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-foreground/5 dark:hover:bg-background/20 rounded-full h-9 px-4">
+                    Explore Courses <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-[850px] p-4 rounded-xl" align="center">
+                  <DropdownMenuLabel className="font-headline text-lg mb-2">Courses by Field</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    {courseFields.map((field) => (
+                      <DropdownMenuGroup key={field.name}>
+                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground mb-1">
+                          <field.icon className="h-4 w-4 text-primary" />
+                          {field.name}
+                        </div>
+                        {field.courses.map((course) => (
+                          <DropdownMenuItem key={course.id} asChild>
+                            <Link href={`/courses/${course.id}`} className="text-xs text-muted-foreground hover:text-primary pl-6 cursor-pointer">
+                              {course.title}
+                            </Link>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuGroup>
                     ))}
-                  </DropdownMenuGroup>
-                ))}
-              </div>
-               <DropdownMenuSeparator className="my-3" />
-                <DropdownMenuItem asChild>
-                  <Link href="/courses" className="font-semibold text-primary hover:underline cursor-pointer">
-                      View All Courses & Learning Paths &rarr;
-                  </Link>
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  </div>
+                   <DropdownMenuSeparator className="my-3" />
+                    <DropdownMenuItem asChild>
+                      <Link href="/courses" className="font-semibold text-primary hover:underline cursor-pointer">
+                          View All Courses & Learning Paths &rarr;
+                      </Link>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-           <Link href="/pricing" passHref>
-              <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
-                Pricing
-              </Button>
-            </Link>
-             <Link href="/docs" passHref>
-              <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
-                Docs
-              </Button>
-            </Link>
-             <Link href="/about" passHref>
-              <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0">
-                About Us
-              </Button>
-            </Link>
-        </nav>
+              <Link href="/pricing" passHref>
+                  <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-foreground/5 dark:hover:bg-background/20 rounded-full h-9 px-4">
+                    Pricing
+                  </Button>
+                </Link>
+                <Link href="/docs" passHref>
+                  <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-foreground/5 dark:hover:bg-background/20 rounded-full h-9 px-4">
+                    Docs
+                  </Button>
+                </Link>
+                <Link href="/about" passHref>
+                  <Button variant="ghost" className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-foreground/5 dark:hover:bg-background/20 rounded-full h-9 px-4">
+                    About Us
+                  </Button>
+                </Link>
+            </nav>
+          </div>
+        </div>
+
 
         <div className="hidden md:flex items-center gap-3">
            <Button variant="ghost" size="icon" onClick={toggleTheme} title="Toggle Theme">
@@ -165,7 +170,7 @@ export default function PublicHeader() {
                   <UserCircle className="h-6 w-6 text-muted-foreground"/>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-48 rounded-xl">
                 {isAuthenticated ? (
                     <>
                       <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -186,7 +191,7 @@ export default function PublicHeader() {
           
             {!isAuthenticated && (
                  <Link href="/register" passHref>
-                    <Button className="button-animated-gradient">Get Started Free</Button>
+                    <Button className="button-animated-gradient rounded-full">Get Started Free</Button>
                   </Link>
             )}
         </div>

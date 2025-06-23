@@ -29,7 +29,6 @@ interface SubscriptionTier {
   features: TierFeature[];
   highlight?: boolean;
   annualBilling?: string;
-  popular?: boolean;
 }
 
 const tiers: SubscriptionTier[] = [
@@ -65,7 +64,6 @@ const tiers: SubscriptionTier[] = [
     icon: Gem,
     cta: "Go Premium",
     highlight: true,
-    popular: true,
     features: [
       { text: "Unlimited Personalized Learning Paths", included: true, highlight: true },
       { text: "AI-Powered Learning Path Generation & Adaptation", included: true },
@@ -158,12 +156,7 @@ export default function PricingPage() {
 
           <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 mb-20">
             {tiers.map((tier) => (
-              <Card key={tier.id} className={`flex flex-col shadow-xl hover:scale-105 transform transition-all duration-300 rounded-xl overflow-hidden ${tier.highlight ? 'border-primary ring-2 ring-primary bg-card' : 'border-border bg-card'} ${tier.popular ? 'relative' : ''}`}>
-                {tier.popular && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold rounded-full shadow-lg button-animated-gradient border-2 border-background z-10">
-                    Most Popular
-                  </div>
-                )}
+              <Card key={tier.id} className={`flex flex-col shadow-xl hover:scale-105 transform transition-all duration-300 rounded-xl overflow-hidden ${tier.highlight ? 'border-primary ring-2 ring-primary bg-card' : 'border-border bg-card'}`}>
                 <CardHeader className="text-center pb-4 pt-8">
                   <tier.icon className={`h-10 w-10 mx-auto mb-3 ${tier.highlight ? 'text-primary' : 'text-muted-foreground'}`} />
                   <CardTitle className="font-headline text-2xl">{tier.name}</CardTitle>
@@ -190,7 +183,7 @@ export default function PricingPage() {
                 </CardContent>
                 <CardFooter className="mt-auto pt-4">
                    <Link href={tier.id === 'enterprise' ? '/contact-sales' : `/register?tier=${tier.id}`} passHref className="w-full">
-                    <Button className={`w-full ${tier.highlight || tier.id === 'community' || tier.id === 'nonprofit-student' ? 'button-animated-gradient' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}>
+                    <Button className={`w-full rounded-full ${tier.highlight ? 'button-animated-gradient' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`}>
                       {tier.cta}
                     </Button>
                   </Link>
@@ -208,7 +201,7 @@ export default function PricingPage() {
                     <TableRow>
                       <TableHead className="px-4 py-3.5 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider sticky left-0 bg-muted/50 dark:bg-muted/30 z-10 w-1/5 min-w-[220px] rounded-tl-xl">Feature</TableHead>
                       {tiers.map(tier => (
-                        <TableHead key={tier.id} className={`px-4 py-3.5 text-center text-xs font-medium uppercase tracking-wider min-w-[160px] ${tier.highlight ? "text-primary" : "text-muted-foreground"} ${tier.id === 'enterprise' ? 'rounded-tr-xl' : ''}`}>{tier.name}</TableHead>
+                        <TableHead key={tier.id} className={`px-4 py-3.5 text-center text-xs font-medium uppercase tracking-wider min-w-[160px] ${tier.highlight ? "text-primary" : "text-muted-foreground"} ${tier.id === 'nonprofit-student' ? 'rounded-tr-xl' : ''}`}>{tier.name}</TableHead>
                       ))}
                     </TableRow>
                   </TableHeader>
