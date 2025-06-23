@@ -148,6 +148,10 @@ export default function PublicHeader() {
                     Docs
                   </Button>
                 </Link>
+                <Button variant="ghost" size="icon" onClick={toggleTheme} title="Toggle Theme" className="h-9 w-9 rounded-full">
+                    {currentTheme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+                    <span className="sr-only">Toggle Theme</span>
+                </Button>
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
@@ -178,11 +182,6 @@ export default function PublicHeader() {
 
 
         <div className="hidden md:flex items-center gap-3">
-           <Button variant="ghost" size="icon" onClick={toggleTheme} title="Toggle Theme">
-            {currentTheme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-            <span className="sr-only">Toggle Theme</span>
-          </Button>
-          
             {!isAuthenticated && (
                  <Link href="/register" passHref>
                     <Button className="button-animated-gradient rounded-full">Get Started Free</Button>
