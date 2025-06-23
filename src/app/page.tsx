@@ -1,43 +1,29 @@
 
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowRight, Lightbulb, ClipboardList, Library, BookOpen, Users } from "lucide-react";
+import { ArrowRight, Lightbulb, ClipboardList, Library, BookOpen, Users, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getAllCourses } from "@/lib/course-data";
+import { getAllCourses, courseData as allCourseData } from "@/lib/course-data";
+import { Loader2 } from "lucide-react";
+import { createCourseOutline } from "@/ai/flows/course-creator";
 
-const featureCards = [
-  {
-    title: "AI-Powered Learning Paths",
-    description: "Dynamically creates personalized learning journeys based on your profile and goals, leveraging real-time internet research for up-to-date content and comprehensive skill gap analysis.",
-    icon: Lightbulb,
-    href: "/learning-paths",
-  },
-  {
-    title: "Intelligent Resume Builder",
-    description: "Import data from LinkedIn, design with customizable templates, and optimize content with AI suggestions tailored to specific job descriptions and ATS scoring.",
-    icon: ClipboardList,
-    href: "/resume-builder",
-  },
-  {
-    title: "AI Academic Research Agent",
-    description: "Leverage our AI research assistant for in-depth topic exploration, literature reviews, and synthesizing complex information from validated web data and LMDpro's knowledge base.",
-    icon: Library,
-    href: "/academic-research",
-  },
-   {
-    title: "Comprehensive Course Catalog",
-    description: "Explore a vast library of courses across Technology, Business, Leadership, and more. Our content is structured for deep learning, from foundational skills to executive-level strategy.",
-    icon: BookOpen,
-    href: "/courses",
-  },
-];
+// We define a type for a simplified course object for the frontend
+type CourseDisplayInfo = {
+  id: string;
+  title: string;
+  type?: string;
+  difficulty?: string;
+  overview?: string;
+  icon?: React.ElementType;
+  category?: string;
+};
 
 const pricingTiersHomepage = [
   { name: "Community", price: "Free", model: "Latest Free Gemma Model", features: ["Limited Personalized Learning Paths", "Basic Resume Builder (watermarked)", "Selection of Free Courses"], cta: "Join for Free", href:"/register?tier=community" },
@@ -45,17 +31,51 @@ const pricingTiersHomepage = [
   { name: "Teams", price: "$196/mo", model: "Latest Pro AI Models", features: ["All Premium Features", "Team Management & Analytics", "Shared Resources & Brand Kits"], cta: "Choose Teams", href:"/register?tier=teams" },
 ];
 
-const allCourses = getAllCourses();
-const courseHighlights = allCourses.filter(c => ["AI_AGENT_DEV", "CS_L3", "FBS_L1"].includes(c.id));
-
 const testimonials = [
     { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path in AI was a game-changer. It helped me upskill effectively and secure a promotion. The AI resume builder polished my CV perfectly!", avatarHint: "software engineer", avatarImage: "https://placehold.co/100x100.png" },
     { name: "Maria S.", role: "Marketing Manager", quote: "The AI features for content strategy and market research are top-notch. It feels like having a dedicated research assistant on my team. Highly recommended for professionals looking to stay ahead.", avatarHint: "marketing manager", avatarImage: "https://placehold.co/100x100.png" },
     { name: "Dr. David K.", role: "University Professor", quote: "LMDpro is an invaluable resource for my students. The Non-Profit/Student tier offers exceptional value, providing access to cutting-edge AI tools and courses that prepare them for future careers. The AI research agent is fantastic.", avatarHint: "university professor", avatarImage: "https://placehold.co/100x100.png" },
 ];
 
-
 export default function HomePage() {
+  const [courseHighlights, setCourseHighlights] = useState<CourseDisplayInfo[]>([]);
+  const [featureCards, setFeatureCards] = useState<any[]>([]);
+
+  useEffect(() => {
+    // This logic runs on the client-side
+    const allCourses = getAllCourses();
+    const highlights = allCourses.filter(c => ["AI_AGENT_DEV", "CS_L3", "FBS_L1"].includes(c.id));
+    setCourseHighlights(highlights);
+    
+    const features = [
+        {
+            title: "AI-Powered Learning Paths",
+            description: "Dynamically creates personalized learning journeys based on your profile and goals, leveraging real-time internet research for up-to-date content and comprehensive skill gap analysis.",
+            icon: Lightbulb,
+            href: "/learning-paths",
+        },
+        {
+            title: "Intelligent Resume Builder",
+            description: "Import data from LinkedIn, design with customizable templates, and optimize content with AI suggestions tailored to specific job descriptions and ATS scoring.",
+            icon: ClipboardList,
+            href: "/resume-builder",
+        },
+        {
+            title: "AI Academic Research Agent",
+            description: "Leverage our AI research assistant for in-depth topic exploration, literature reviews, and synthesizing complex information from validated web data and LMDpro's knowledge base.",
+            icon: Library,
+            href: "/academic-research",
+        },
+        {
+            title: "Comprehensive Course Catalog",
+            description: "Explore a vast library of courses across Technology, Business, Leadership, and more. Our content is structured for deep learning, from foundational skills to executive-level strategy.",
+            icon: BookOpen,
+            href: "/courses",
+        },
+    ];
+    setFeatureCards(features);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       <PublicHeader />
@@ -88,19 +108,22 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="grid md:grid-cols-2 gap-8">
-                {featureCards.map((feature, index) => (
-                  <Card key={index} className="bg-card/50 backdrop-blur-sm shadow-2xl rounded-xl transition-transform duration-300 hover:-translate-y-2 paper-cut-style">
-                    <CardHeader className="flex-row items-center gap-4">
-                      <div className={cn("p-3 rounded-lg w-fit", feature.bgColor)}>
-                        <feature.icon className={cn("h-6 w-6", feature.textColor)} />
-                      </div>
-                      <CardTitle className="font-headline text-xl">{feature.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
+                {featureCards.map((feature, index) => {
+                   const Icon = feature.icon || Lightbulb;
+                   return (
+                      <Card key={index} className="bg-card/50 backdrop-blur-sm shadow-2xl rounded-xl transition-transform duration-300 hover:-translate-y-2 paper-cut-style">
+                        <CardHeader className="flex-row items-center gap-4">
+                          <div className="p-3 rounded-lg w-fit bg-primary/10">
+                            <Icon className="h-6 w-6 text-primary" />
+                          </div>
+                          <CardTitle className="font-headline text-xl">{feature.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
+                        </CardContent>
+                      </Card>
+                   )
+                })}
               </div>
             </div>
         </section>
@@ -112,28 +135,31 @@ export default function HomePage() {
                 Popular Learning Paths & Courses
               </h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {courseHighlights.map((course, index) => (
-                  <Card key={index} className="flex flex-col shadow-2xl rounded-xl transition-transform duration-300 hover:-translate-y-2 paper-cut-style">
-                    <CardHeader className="pt-6">
-                      <div className="mb-3">
-                         <course.icon className="h-10 w-10 text-primary/80 shrink-0" />
-                      </div>
-                      <CardTitle className="font-headline text-xl text-foreground">{course.title}</CardTitle>
-                      <CardDescription className="text-sm">{course.type}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow">
-                      <p className="text-xs text-muted-foreground mb-3">Category: {course.category}</p>
-                      <p className="text-sm h-16 overflow-hidden line-clamp-3 text-muted-foreground">{course.overview}</p>
-                    </CardContent>
-                    <CardFooter className="mt-auto pt-4">
-                      <Link href={`/courses/${course.id}`} passHref className="w-full">
-                          <Button variant="outline" className="w-full">
-                            View Details <ArrowRight className="ml-2 h-4 w-4" />
-                          </Button>
-                      </Link>
-                    </CardFooter>
-                  </Card>
-                ))}
+                {courseHighlights.map((course, index) => {
+                   const Icon = course.icon || BookOpen;
+                   return (
+                      <Card key={index} className="flex flex-col shadow-2xl rounded-xl transition-transform duration-300 hover:-translate-y-2 paper-cut-style">
+                        <CardHeader className="pt-6">
+                          <div className="mb-3">
+                            <Icon className="h-10 w-10 text-primary/80 shrink-0" />
+                          </div>
+                          <CardTitle className="font-headline text-xl text-foreground">{course.title}</CardTitle>
+                          <CardDescription className="text-sm">{course.type}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex-grow">
+                          <p className="text-xs text-muted-foreground mb-3">Category: {course.category}</p>
+                          <p className="text-sm h-16 overflow-hidden line-clamp-3 text-muted-foreground">{course.overview}</p>
+                        </CardContent>
+                        <CardFooter className="mt-auto pt-4">
+                          <Link href={`/courses/${course.id}`} passHref className="w-full">
+                              <Button variant="outline" className="w-full">
+                                View Details <ArrowRight className="ml-2 h-4 w-4" />
+                              </Button>
+                          </Link>
+                        </CardFooter>
+                      </Card>
+                   );
+                })}
               </div>
               <div className="text-center mt-16">
                 <Link href="/courses" passHref>
@@ -158,7 +184,7 @@ export default function HomePage() {
                        <p className="text-muted-foreground italic leading-relaxed mb-6">&ldquo;{testimonial.quote}&rdquo;</p>
                       <div className="flex items-center">
                         <Avatar className="h-12 w-12 mr-4">
-                          <AvatarImage src={testimonial.avatarImage} alt={testimonial.name} />
+                          <AvatarImage src={testimonial.avatarImage} alt={testimonial.name} data-ai-hint={testimonial.avatarHint} />
                           <AvatarFallback>{testimonial.name.split(' ').map(n=>n[0]).join('')}</AvatarFallback>
                         </Avatar>
                         <div>
