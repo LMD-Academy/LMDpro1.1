@@ -90,7 +90,7 @@ export default function PublicHeader() {
 
   return (
     <header className={cn(
-      "fixed top-0 left-0 right-0 z-50"
+      "absolute top-0 left-0 right-0 z-50"
     )}>
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
