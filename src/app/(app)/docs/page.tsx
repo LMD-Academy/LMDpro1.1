@@ -9,7 +9,9 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 // Sample documentation structure (in a real app, this might be fetched or generated)
 const docSections = [
