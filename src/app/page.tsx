@@ -31,12 +31,6 @@ const pricingTiersHomepage = [
   { name: "Teams", price: "$196/mo", model: "Latest Pro AI Models", features: ["All Premium Features", "Team Management & Analytics", "Shared Resources & Brand Kits"], cta: "Choose Teams", href:"/register?tier=teams" },
 ];
 
-const testimonials = [
-    { name: "Alex R.", role: "Software Engineer", quote: "LMDpro's personalized learning path in AI was a game-changer. It helped me upskill effectively and secure a promotion. The AI resume builder polished my CV perfectly!", avatarHint: "software engineer", avatarImage: "https://placehold.co/100x100.png" },
-    { name: "Maria S.", role: "Marketing Manager", quote: "The AI features for content strategy and market research are top-notch. It feels like having a dedicated research assistant on my team. Highly recommended for professionals looking to stay ahead.", avatarHint: "marketing manager", avatarImage: "https://placehold.co/100x100.png" },
-    { name: "Dr. David K.", role: "University Professor", quote: "LMDpro is an invaluable resource for my students. The Non-Profit/Student tier offers exceptional value, providing access to cutting-edge AI tools and courses that prepare them for future careers. The AI research agent is fantastic.", avatarHint: "university professor", avatarImage: "https://placehold.co/100x100.png" },
-];
-
 export default function HomePage() {
   const [courseHighlights, setCourseHighlights] = useState<CourseDisplayInfo[]>([]);
   const [featureCards, setFeatureCards] = useState<any[]>([]);
@@ -111,7 +105,7 @@ export default function HomePage() {
                 {featureCards.map((feature, index) => {
                    const Icon = feature.icon || Lightbulb;
                    return (
-                      <Card key={index} className="bg-card/50 backdrop-blur-sm shadow-2xl rounded-xl transition-transform duration-300 hover:-translate-y-2 paper-cut-style">
+                      <Card key={index} className="bg-card/50 backdrop-blur-sm shadow-2xl rounded-xl transition-transform duration-300 hover:-translate-y-2">
                         <CardHeader className="flex-row items-center gap-4">
                           <div className="p-3 rounded-lg w-fit bg-primary/10">
                             <Icon className="h-6 w-6 text-primary" />
@@ -138,7 +132,7 @@ export default function HomePage() {
                 {courseHighlights.map((course, index) => {
                    const Icon = course.icon || BookOpen;
                    return (
-                      <Card key={index} className="flex flex-col shadow-2xl rounded-xl transition-transform duration-300 hover:-translate-y-2 paper-cut-style">
+                      <Card key={index} className="flex flex-col shadow-2xl rounded-xl transition-transform duration-300 hover:-translate-y-2">
                         <CardHeader className="pt-6">
                           <div className="mb-3">
                             <Icon className="h-10 w-10 text-primary/80 shrink-0" />
@@ -170,38 +164,9 @@ export default function HomePage() {
               </div>
             </div>
         </section>
-        
-        {/* Testimonials Section */}
-        <section className="py-16 md:py-24 bg-background">
-            <div className="container mx-auto px-4">
-              <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-12 animated-text-gradient">
-                Loved by Learners & Professionals
-              </h2>
-              <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
-                {testimonials.map((testimonial, index) => (
-                  <Card key={index} className="rounded-xl shadow-2xl paper-cut-style">
-                    <CardContent className="pt-8">
-                       <p className="text-muted-foreground italic leading-relaxed mb-6">&ldquo;{testimonial.quote}&rdquo;</p>
-                      <div className="flex items-center">
-                        <Avatar className="h-12 w-12 mr-4">
-                          <AvatarImage src={testimonial.avatarImage} alt={testimonial.name} data-ai-hint={testimonial.avatarHint} />
-                          <AvatarFallback>{testimonial.name.split(' ').map(n=>n[0]).join('')}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="font-semibold text-foreground">{testimonial.name}</p>
-                          <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-        </section>
-
 
         {/* Pricing Section Block */}
-        <section className="py-16 md:py-24 bg-muted/30 dark:bg-muted/50">
+        <section className="py-16 md:py-24 bg-background">
             <div className="container mx-auto px-4">
               <h2 className="text-3xl md:text-4xl font-headline font-semibold text-center mb-4 animated-text-gradient">Flexible Pricing for Everyone</h2>
               <p className="text-lg text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
@@ -209,7 +174,7 @@ export default function HomePage() {
               </p>
               <div className="grid md:grid-cols-3 gap-8 items-stretch">
                 {pricingTiersHomepage.map((tier) => (
-                  <Card key={tier.name} className={`flex flex-col rounded-xl shadow-2xl transition-transform duration-300 hover:-translate-y-2 paper-cut-style ${tier.name === 'Premium' ? 'border-primary ring-2 ring-primary' : ''}`}>
+                  <Card key={tier.name} className={`flex flex-col rounded-xl shadow-2xl transition-transform duration-300 hover:-translate-y-2 ${tier.name === 'Premium' ? 'border-primary ring-2 ring-primary' : ''}`}>
                     <CardHeader className="text-center pt-8 pb-4">
                       <CardTitle className="font-headline text-2xl mb-2">{tier.name}</CardTitle>
                       <p className="text-3xl font-bold mb-1">{tier.price}</p>

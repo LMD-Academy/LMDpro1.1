@@ -55,10 +55,10 @@ import { cn } from "@/lib/utils";
 import RightToolBar from "@/components/layout/RightToolBar";
 import { useLanguage } from "@/context/LanguageContext"; 
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/my-learning", label: "My Learning", icon: BookMarked },
   { href: "/courses", label: "Course Catalog", icon: GraduationCap },
   { href: "/resume-builder", label: "Resume Builder", icon: ClipboardList },
   { href: "/academic-research", label: "Academic Research", icon: Library },
@@ -79,11 +79,15 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
   const [currentTheme, setCurrentTheme] = React.useState("light");
   const { language, setLanguage } = useLanguage(); 
   const [isAdmin, setIsAdmin] = React.useState(false);
+  const [tier, setTier] = React.useState('Premium');
 
   React.useEffect(() => {
-    // Check for admin status from localStorage (for demo purposes)
+    // Check for auth status and admin status from localStorage (for demo purposes)
     const adminStatus = localStorage.getItem('lmdpro_user_is_admin') === 'true';
     setIsAdmin(adminStatus);
+    // You might fetch the user's actual tier from a context or API call here.
+    // For now, we'll just set it.
+    if(adminStatus) setTier('Admin');
     
     try {
       const savedTheme = localStorage.getItem('lmdpro-theme');
@@ -217,11 +221,12 @@ export default function AppLayout({ children: layoutChildren }: { children: Reac
                   </Button>
                 <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                    <Avatar className="h-9 w-9">
-                        <AvatarImage src="/img/user-avatar.png" alt="@user" data-ai-hint="user avatar" />
-                        <AvatarFallback>U</AvatarFallback>
-                    </Avatar>
+                    <Button variant="ghost" className="relative h-9 px-2 rounded-full flex items-center gap-2">
+                      <Badge variant={tier === 'Admin' ? 'destructive' : 'secondary'}>{tier}</Badge>
+                      <Avatar className="h-9 w-9">
+                          <AvatarImage src="/img/user-avatar.png" alt="@user" data-ai-hint="user avatar"/>
+                          <AvatarFallback>U</AvatarFallback>
+                      </Avatar>
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">

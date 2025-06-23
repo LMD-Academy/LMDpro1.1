@@ -19,8 +19,8 @@ LMDpro is an advanced AI-driven agentic system. Our mission is to revolutionize 
 
 #### Public View (Before Login):
 - **Homepage (`/`):** Provides an overview of LMDpro's offerings, featured courses, and subscription tiers.
-- **Header (Public):** Contains links for "Explore Courses", "Pricing", "Docs", and "About Us".
-- **Footer (Public):** Contains links to important pages like About, Contact, Terms, Privacy, and Help Center.
+- **Header (Public):** Contains links for "Explore Courses", "Pricing", "Docs".
+- **Footer (Public):** Contains links to important pages like Contact, Terms, Privacy, and Help Center.
 
 #### Authenticated View (After Login - The App Shell):
 The interface is structured into three main columns:
@@ -74,6 +74,7 @@ The **Header Bar** (top of the main content area) is fixed and contains:
 - **AI Assistant (Right Sidebar):** General learning support.
 - **Notepad AI Analysis (Right Sidebar):** Get insights on your notes.
 - **AI Course Generation (Course Catalog):** Dynamically creates course outlines.
+- **AI Agentic Course Creator (IAM Portal):** An autonomous agent that helps admins design course structures.
 - **AI Q&A (Course View):** Answers questions about lesson content.
 - **AI Support Chatbot (Support Page):** Answers platform-related questions.
 

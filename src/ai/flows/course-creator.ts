@@ -10,7 +10,7 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {z} from 'zod';
 
 export const CreateCourseOutlineInput = z.object({
   objective: z.string().describe('The high-level objective or description of the course to be created.'),

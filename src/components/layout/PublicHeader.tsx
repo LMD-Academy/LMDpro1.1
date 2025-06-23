@@ -100,7 +100,7 @@ export default function PublicHeader() {
         </Link>
         
         {/* Floating Nav for Desktop */}
-        <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="hidden md:flex absolute top-4 left-1/2 -translate-x-1/2">
           <div className="bg-background/50 backdrop-blur-sm rounded-full border shadow-lg p-1">
             <nav className="flex items-center gap-1">
               <DropdownMenu>
