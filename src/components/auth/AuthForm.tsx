@@ -6,13 +6,25 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Chrome, Eye, EyeOff, Shield, GraduationCap } from "lucide-react"; 
+import { Eye, EyeOff, Shield, GraduationCap } from "lucide-react"; 
 import Link from "next/link";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-// Placeholder icon for Apple
-const AppleIcon = () => <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.36,14.71a5.29,5.29,0,0,0-1.91,4.09,5.1,5.1,0,0,0,2,4,4.77,4.77,0,0,0,3.39,1.2,4.84,4.84,0,0,0,3.4-1.25,1.25,1.25,0,0,0,.12-1.79,1.23,1.23,0,0,0-1.8-.12,2.35,2.35,0,0,1-1.66.62,2.28,2.28,0,0,1-1.66-.62,2.59,2.59,0,0,1-.77-1.91,2.5,2.5,0,0,1,.78-1.87,2.31,2.31,0,0,1,1.65-.65h.1A1.24,1.24,0,0,0,20,14.59a1.23,1.23,0,0,0-1.64-.09Zm-7.12-1.66a2.32,2.32,0,0,0-2.52,1.66c-1.45,3.33-3.69,4.79-5.73,4.82a2.87,2.87,0,0,1-2.38-1.38c-1.3-2-1.06-5,.79-7.62a7.84,7.84,0,0,1,3.62-3.32A3.34,3.34,0,0,1,9.25,4.1a2.28,2.28,0,0,0,2.38-1.78,1,1,0,0,0-1-1.11,1,1,0,0,0-1.12,1,4.33,4.33,0,0,1-4.53,3.41,4.48,4.48,0,0,1-2.72-1.11A6.63,6.63,0,0,0,1,12.09c0,4.3,2.38,7.36,4.71,7.39,2,0,3.21-1.39,5.62-1.39s3.4,1.39,5.62,1.39c2.33,0,4.71-3.09,4.71-7.42a6.38,6.38,0,0,0-3.17-5.46,6.74,6.74,0,0,0-5.44-1.13A2.25,2.25,0,0,0,11.24,13.05Z"/></svg>;
+// Google Icon SVG
+const GoogleIcon = () => (
+  <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5">
+    <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.85 3.18-1.73 4.1-1.05 1.05-2.36 1.67-4.05 1.67-4.67 0-8.53-3.8-8.53-8.53s3.8-8.53 8.53-8.53c2.45 0 4.15.93 5.4 2.1l2.6-2.6C18.96 1.43 16.14 0 12.48 0 5.6 0 0 5.6 0 12.48s5.6 12.48 12.48 12.48c7.33 0 12.14-4.82 12.14-12.36 0-.8-.08-1.57-.2-2.32H12.48z" />
+  </svg>
+);
+
+// Apple Icon SVG
+const AppleIcon = () => (
+  <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 fill-current">
+    <path d="M12.016 16.136c-.43 0-.84-.04-1.228-.112-1.11-.21-2.22-.63-3.33-1.25-.453-.254-1.22-.675-2.094-1.25-.973-.642-1.92-1.5-2.48-2.61-.555-1.12-.66-2.396-.333-3.665.37-1.428 1.14-2.66 2.3-3.69 1.154-1.033 2.51-1.66 4.053-1.77.41-.03.82-.04 1.22-.04.98 0 2.016.32 2.87.97.43.32.74.52 1.02.52.28 0 .68-.22 1.02-.53.884-.66 1.94-.97 2.87-.97.41 0 .82.01 1.22.04 1.54.11 2.906.737 4.058 1.77 1.16 1.03 1.93 2.262 2.3 3.69.325 1.27.22 2.545-.335 3.666-.56 1.11-1.507 1.968-2.48 2.61-.875.575-1.64.996-2.095 1.25-1.11.62-2.22 1.04-3.33 1.25-.4.072-.81.112-1.228.112zM15.42 2.36a5.13 5.13 0 00-3.414 1.83c-.93 1.074-1.63 2.62-1.88 4.38h6.82a6.382 6.382 0 00-1.526-6.21zm-8.834 1.83C5.65 3.12 4.41 2.36 3.27 2.36c-1.52 0-3.04.79-4.04 2.19C-.896 6.035-.97 8.35.29 10.39c.67 1.09 1.54 1.95 2.68 2.69 1.01.66 2.08 1.13 3.21 1.34.42.08.84.12 1.27.12.39 0 .78-.03 1.16-.09.11-.02.22-.04.33-.06-.01-.06-.01-.11-.02-.17a4.95 4.95 0 01-1.52-3.41h-5.2a3.86 3.86 0 013.33-3.75 3.63 3.63 0 013.35 1.34c.05.06.1.12.16.18.06-.01.12-.02.18-.03-.23-1.68-.89-3.19-1.78-4.25z"/>
+  </svg>
+);
+
 
 interface AuthFormProps {
   mode: "login" | "register";
@@ -25,7 +37,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
   const { toast } = useToast();
 
   const socialButtons = [
-    { name: "Google", icon: Chrome, action: () => toast({title: "Social Login", description: "Continuing with Google (placeholder)..."}) },
+    { name: "Google", icon: GoogleIcon, action: () => toast({title: "Social Login", description: "Continuing with Google (placeholder)..."}) },
     { name: "Apple", icon: AppleIcon, action: () => toast({title: "Social Login", description: "Continuing with Apple (placeholder)..."}) },
   ];
 
@@ -141,7 +153,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
 
   return (
-    <Card className="w-full max-w-md shadow-xl">
+    <Card className="w-full max-w-md shadow-xl rounded-xl">
       <CardHeader className="text-center">
         <CardTitle className="text-3xl font-headline animated-text-gradient">
           {mode === "login" ? "Welcome to LMDpro" : "Join LMDpro"}

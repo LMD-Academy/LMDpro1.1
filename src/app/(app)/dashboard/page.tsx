@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, BookOpen, CheckCircle, Clock, BarChart3, Star, Lightbulb, TrendingUp, Zap, Activity } from "lucide-react";
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/chart";
 import { PieChart, Pie, Cell } from "recharts";
 import { getAllCourses } from "@/lib/course-data";
+import { BookMarked } from "lucide-react";
 
 const allCourses = getAllCourses();
 const ongoingCourses = allCourses.slice(0, 3).map((c, i) => ({ ...c, progress: [45, 70, 80][i] }));
@@ -146,7 +147,7 @@ export default function DashboardPage() {
       <section>
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
             <h2 className="text-3xl font-headline font-semibold animated-text-gradient">Continue Learning</h2>
-            <Link href="/my-learning?filter=inprogress" passHref>
+            <Link href="/courses?filter=inprogress" passHref>
                  <Button variant="link" className="text-primary self-start sm:self-center">View All <ArrowRight className="ml-1 h-4 w-4" /></Button>
             </Link>
         </div>
@@ -195,7 +196,7 @@ export default function DashboardPage() {
       {/* Achievements & Activity Feed Section */}
       <section className="grid gap-8 lg:grid-cols-2">
         <div>
-            <h2 className="text-2xl font-headline font-semibold mb-4 animated-text-gradient">Achievements & Favorites</h2>
+            <h2 className="text-2xl font-headline font-semibold mb-4 animated-text-gradient">Achievements & Bookmarks</h2>
             <div className="space-y-6">
                 <Card className="shadow-md">
                     <CardHeader>
@@ -211,12 +212,12 @@ export default function DashboardPage() {
                 </Card>
                 <Card className="shadow-md">
                     <CardHeader>
-                        <CardTitle className="font-headline text-lg flex items-center gap-2"><Star className="text-yellow-400 h-5 w-5"/>Favorite Courses</CardTitle>
+                        <CardTitle className="font-headline text-lg flex items-center gap-2"><BookMarked className="text-primary h-5 w-5"/>Bookmarked Courses</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                        {favoriteCourses.length > 0 ? favoriteCourses.map(course => (
+                         {favoriteCourses.length > 0 ? favoriteCourses.map(course => (
                             <p key={course.id} className="text-sm p-2 border rounded-md bg-muted/30">{course.title}</p>
-                        )) : <p className="text-sm text-muted-foreground">You haven&apos;t favorited any courses yet.</p>}
+                        )) : <p className="text-sm text-muted-foreground">You haven&apos;t bookmarked any courses yet.</p>}
                     </CardContent>
                 </Card>
             </div>
