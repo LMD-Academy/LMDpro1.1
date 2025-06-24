@@ -7,7 +7,6 @@
   </p>
 </div>
 
-![LMDpro Dashboard Screenshot](https://placehold.co/1200x675.png?text=LMDpro+Dashboard)
 _A preview of the LMDpro learner dashboard._
 
 ---
