@@ -7,7 +7,6 @@
   </p>
 </div>
 
-_A preview of the LMDpro learner dashboard._
 
 ---
 
@@ -47,7 +46,7 @@ The platform is designed with a "dual operating system" in mind:
 
 | Dashboard | Course Catalog | Resume Builder |
 | :---: | :---: | :---: |
-| ![Dashboard](https://placehold.co/1200x800.png?text=Dashboard) | ![Course Catalog](https://placehold.co/1200x800.png?text=Course+Catalog) | ![Resume Builder](https://placehold.co/1200x800.png?text=Resume+Builder) |
+| ![Dashboard]([https://placehold.co/1200x800.png?text=Dashboard](https://9000-firebase-studio-1750210494469.cluster-jbb3mjctu5cbgsi6hwq6u4btwe.cloudworkstations.dev/dashboard)) | ![Course Catalog](https://placehold.co/1200x800.png?text=Course+Catalog) | ![Resume Builder](https://placehold.co/1200x800.png?text=Resume+Builder) |
 
 | IAM Course Creator | Pricing Page |
 | :---: | :---: |
